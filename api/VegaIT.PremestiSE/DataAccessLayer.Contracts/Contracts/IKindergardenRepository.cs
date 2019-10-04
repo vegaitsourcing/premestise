@@ -1,6 +1,8 @@
-﻿namespace DataAccessLayer.Contracts.Contracts
+﻿using DataAccessLayer.Contracts.Domain;
+
+namespace DataAccessLayer.Contracts.Contracts
 {
-    public interface IKindergardenRepository
+    public interface IKindergardenRepository : IRepository<Kindergarden>
     {
         
     }

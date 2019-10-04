@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer;
 using DataAccessLayer.Contracts.Domain;
+using DataAccessLayer.Implementation;
 using System;
 using System.Collections.Generic;
 
@@ -17,9 +18,15 @@ namespace ConsoleTestAPI
                 Console.WriteLine(item.ParentName, item.ChildName);
 
             }
-            Console.ReadLine();*/
+           */
+            KindergardenRepository k = new KindergardenRepository();
+            //Console.WriteLine(k.GetById(1).LocationType);
 
-           
+            IEnumerable<Kindergarden> kin = k.GetAll();
+            foreach (var item in kin)
+            {
+                Console.WriteLine(item.City);
+            }
             Console.ReadLine();
 
         }
