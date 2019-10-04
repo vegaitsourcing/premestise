@@ -22,7 +22,7 @@ namespace BusinessLogicLayer.RepositoryServices
 
         public override IEnumerable<Request> GetAll()
         {
-            throw new NotImplementedException();
+            return _repository.GetAll();
         }
 
         public override Request Create(Request model)

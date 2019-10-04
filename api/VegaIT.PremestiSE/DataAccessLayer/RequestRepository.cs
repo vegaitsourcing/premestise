@@ -3,11 +3,10 @@ using DataAccessLayer.Contracts.Domain;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Text;
 
 namespace DataAccessLayer
 {
-    public class RequestRepository : IRepository<Request>
+    public class RequestRepository : IRequestRepository
     {
         private SqlConnection _connection;
 
