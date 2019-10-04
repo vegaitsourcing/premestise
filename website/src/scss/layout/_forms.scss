@@ -12,3 +12,31 @@ textarea {
 		color: $black;
 	}
 }
+
+input[type='text'] {
+	border: 1px solid $black-2;
+	height: 50px;
+	margin: 15px 0;
+	max-width: 280px;
+	width: 100%;
+}
+
+select {
+	border: 1px solid $black-2;
+	height: 50px;
+	margin: 15px 0;
+	max-width: 360px;
+	width: 100%;
+}
+
+.form-left {
+	.parent-input {
+		max-width: 330px;
+		margin-right: 26px;
+	}
+
+	.child-input {
+		max-width: 200px;
+		margin-right: 0;
+	}
+}

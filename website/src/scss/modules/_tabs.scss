@@ -1,0 +1,54 @@
+//---------- tabs
+//------------------------------------------------------------------------------
+
+.tabs {
+	display: flex;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.tabs__link {
+	background: $silver-light;
+	color: $light-blue;
+	display: inline-block;
+	font-family: $font-default;
+	font-size: 24px;
+	font-weight: 600;
+	padding: 10px 15px;
+	width: 33.33%;
+	cursor: pointer;
+	transition: $easeing $trans;
+	&.current {
+		background: $white;
+		color: $black-2;
+	}
+	@include hover {
+		background-color: $white;
+		color: $black-2;
+	}
+	[class^='font-ico'] {
+		margin-right: 5px;
+	}
+}
+
+.tab-content {
+	display: none;
+	background: #ededed;
+	padding: 15px;
+	&.current {
+		display: inherit;
+	}
+}
+
+
+.form-wrap {
+	display: flex;
+}
+
+.form-left {
+	width: 50%;
+}
+.form-right {
+	width: 50%;
+}
