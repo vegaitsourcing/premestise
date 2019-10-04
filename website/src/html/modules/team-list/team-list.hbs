@@ -1,0 +1,13 @@
+<div class="team-list">
+	<div class="wrap">
+		<h2>{{title}}</h2>
+
+		{{#if people}}
+			<ul>
+				{{#each people}}
+					<li>{{this.name}} {{this.surname}}</li>
+				{{/each}}
+			</ul>
+		{{/if}}
+	</div>
+</div><!-- .team-list -->

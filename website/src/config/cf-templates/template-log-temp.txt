@@ -1,0 +1,11 @@
+
+------------------------------------------------------------------------
+
+CREATED TEMPLATE -------------------------------------- @{str}
+
+
+- created  HBS file: 'template.hbs'  in dir 'src/html/templates/@{str}'
+
+- created JSON file: 'data.json' in dir 'src/html/templates/@{str}'
+
+------------------------------------------------------------------------

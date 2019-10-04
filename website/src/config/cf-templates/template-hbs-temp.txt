@@ -1,0 +1,11 @@
+{{#> master data}}
+	{{#*inline "template-content"}}
+
+		{{> header header}}
+
+		Page - @{template}
+
+		{{> footer footer}}
+
+	{{/inline}}
+{{/master}}

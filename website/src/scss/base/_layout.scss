@@ -1,0 +1,23 @@
+//----------  layout
+//------------------------------------------------------------------------------
+
+body {
+	font-family: $font-default;
+	font-size: 14px;
+	font-weight: 400;
+	color: $black;
+}
+
+.scroll-disabled {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	overflow-y: scroll;
+}
+
+.wrap {
+	margin: 0 auto;
+	max-width: 1280px;
+	padding: 0 20px;
+	width: 100%;
+}
