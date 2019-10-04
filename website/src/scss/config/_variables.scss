@@ -1,13 +1,19 @@
 //----------  variables
 //------------------------------------------------------------------------------
 
-$font-default: Arial, sans-serif;
+$font-default: 'Open Sans', Arial, sans-serif;
 
 // Colors
 $white: #fff;
 $black: #000;
 $orange: #f1592a;
 
+$black-2: #2d3436;
+
+$light-blue: #67d5f4;
+$blue-1: #0984e3;
+
+$silver-light: #f8f8f8;
 
 $site-colors: (
 	'black': $black,
@@ -46,3 +52,6 @@ $container-max-widths: (
 
 $grid-columns: 12 !default;
 $grid-gutter-width: 30px !default;
+
+$easeing: ease;
+$trans: 0.3s;

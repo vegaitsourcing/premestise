@@ -9,6 +9,127 @@ textarea {
 	height: 25px;
 	padding: 0 10px;
 	&::placeholder {
-		color: $black;
+		color: $black-2;
+		font-style: italic;
+	}
+}
+
+.input {
+	border: 1px solid $black-2;
+	height: 50px;
+	margin: 15px 0;
+	max-width: 280px;
+	width: 100%;
+}
+
+select {
+	border: 1px solid $black-2;
+	height: 50px;
+	margin: 15px 0;
+	max-width: 360px;
+	padding: 0 15px;
+	width: 100%;
+}
+
+.form-left {
+	.parent-input {
+		max-width: 330px;
+		margin-right: 26px;
+	}
+
+	.child-input {
+		max-width: 200px;
+		margin-right: 0;
+	}
+}
+
+.input__support-text {
+	color: $blue-1;
+	margin-left: 15px;
+}
+
+.input-icon__text {
+	color: $blue-1;
+	font-size: 12px;
+}
+
+.input__phone {
+	max-width: 200px;
+	margin-right: 26px;
+}
+.input__email {
+	max-width: 360px;
+}
+
+.input--without-icon {
+	select {
+		max-width: 100%;
+		width: 100%;
+	}
+}
+
+
+.checkbox {
+	display: block;
+	position: relative;
+	padding-left: 45px;
+	margin-bottom: 12px;
+	margin-top: 20px;
+	cursor: pointer;
+	font-size: 12px;
+	color: $black-2;
+	user-select: none;
+	input {
+		position: absolute;
+		opacity: 0;
+		cursor: pointer;
+		height: 0;
+		width: 0;
+		&:checked {
+			~ .checkmark {
+				&::after {
+					display: block;
+				}
+			}
+		}
+	}
+	.checkmark {
+		&::after {
+			background-color: $blue-1;
+			left: 5px;
+			top: 5px;
+			width: 19px;
+			height: 19px;
+		}
+	}
+	@include hover {
+		.checkmark {
+			&::after {
+				display: block;
+			}
+		}
+	}
+}
+
+.checkmark {
+	border: 1px solid $black-2;
+	position: absolute;
+	top: -8px;
+	left: 0;
+	height: 30px;
+	width: 30px;
+	background-color: $white;
+	&:hover {
+		.input {
+			~ .checkmark {
+				background-color: #ccc;
+			}
+		}
+	}
+	&::after {
+		content: '';
+		position: absolute;
+		display: none;
+		transition: $easeing $trans;
 	}
 }

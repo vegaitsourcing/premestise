@@ -6,3 +6,6 @@ isBeta.init();
 
 import slider from './_project/slider';
 slider.init();
+
+import tabs from './_project/tabs';
+tabs.init();
