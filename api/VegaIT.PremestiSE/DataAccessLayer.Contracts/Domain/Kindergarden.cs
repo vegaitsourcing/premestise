@@ -4,18 +4,19 @@ using System.Text;
 
 namespace DataAccessLayer.Contracts.Domain
 {
+    public enum LocationType
+    {
+        Base,
+        Remote
+    }
     public class Kindergarden
     {
 
-        public enum LocationType
-        {
-            Base,
-            Remote
-        }
+      
 
-        public class Request
-        {
+
             public int Id { get; set; }
+            public string Municipality{ get; set; }
             public string Government { get; set; }
             public string City { get; set; }
             public string Name { get; set; }
@@ -27,6 +28,6 @@ namespace DataAccessLayer.Contracts.Domain
             public decimal Longitude { get; set; }
             public decimal Latitude { get; set; }
 
-        }
+        
     }
 }
