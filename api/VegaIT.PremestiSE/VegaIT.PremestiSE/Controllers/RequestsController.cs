@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BusinessLogicLayer.Contracts.RepositoryServices;
 using DataAccessLayer.Contracts.Domain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,20 +14,20 @@ namespace VegaIT.PremestiSE.Controllers
     public class RequestsController : Controller
     {
 
-        //private IRequestService _requestService;
-     
+        private readonly IRequestService _requestService;
 
-        //public RequestsController(IRequestService requestService)
-        //{
-        //    _requestService = requestService;
 
-        //}
+        public RequestsController(IRequestService requestService)
+        {
+            _requestService = requestService;
+
+        }
+
         // GET: api/Requests
         [HttpGet]
         public IEnumerable<Request> GetAll()
         {
-            return null;
-            //return _requestService.GetAll();
+            return _requestService.GetAll();
         }
 
         // GET: api/Requests/5
@@ -35,21 +36,21 @@ namespace VegaIT.PremestiSE.Controllers
         {
             return null;
         }
-        
+
         // POST: api/Requests
         [HttpPost]
         public Request Post([FromBody]Request value)
         {
             return null;
         }
-        
+
         // PUT: api/Requests/5
         [HttpPut("{id}")]
         public Request Put(int id, [FromBody]Request value)
         {
             return null;
         }
-        
+
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
         public void Delete(int id)
