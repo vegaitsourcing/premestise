@@ -1,7 +1,10 @@
 //----------  header
 //------------------------------------------------------------------------------
 .header {
-	padding: 10px 0;
+	padding: 28px 0;
+	background-color: transparent;
+	position: relative;
+	z-index: 2;
 }
 .header__container {
 	display: flex;
@@ -9,23 +12,27 @@
 	align-items: center;
 }
 .header__logo {
-	width: 50px;
+	width: 230px;
+	height: 78px;
 }
+
+
 .nav__list {
 	display: flex;
 	justify-content: flex-end;
+
 }
 .nav__item {
-	border-left: 1px solid $black;
-	&:first-child {
-		border-left: 0;
+	font-size: 20px;
+	&:not(:last-child) {
+		margin-right: 57px;
 	}
 }
 .nav__link {
-	padding: 0 10px;
-	color: $black;
+	color: $white;
 	display: block;
 	@include hover {
 		text-decoration: underline;
+		
 	}
 }
