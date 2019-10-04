@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+<<<<<<< HEAD
   <ItemGroup>
     <Folder Include="Domain\" />
   </ItemGroup>
@@ -14,4 +15,6 @@
     </Reference>
   </ItemGroup>
 
+=======
+>>>>>>> bd9edc2aefd1bf342612d675b48e25aceab6b8e8
 </Project>
