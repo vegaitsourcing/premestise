@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayer", "DataAcce
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogicLayer", "BusinessLogicLayer\BusinessLogicLayer.csproj", "{5E4EDE76-3A26-4F89-978C-6E3A7B970145}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogicLayer.Contracts", "BusinessLogicLayer.Contracts\BusinessLogicLayer.Contracts.csproj", "{6AF8406B-5E6A-4AC3-BFD2-0B9C34AD0CB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogicLayer.Contracts", "BusinessLogicLayer.Contracts\BusinessLogicLayer.Contracts.csproj", "{6AF8406B-5E6A-4AC3-BFD2-0B9C34AD0CB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer.Contracts", "DataAccessLayer.Contracts\DataAccessLayer.Contracts.csproj", "{0A89C5A3-566B-432C-A822-FF1307C09699}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayer.Contracts", "DataAccessLayer.Contracts\DataAccessLayer.Contracts.csproj", "{0A89C5A3-566B-432C-A822-FF1307C09699}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTestAPI", "ConsoleTestAPI\ConsoleTestAPI.csproj", "{085F7249-F681-426C-9197-FA7A4ABED889}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{0A89C5A3-566B-432C-A822-FF1307C09699}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A89C5A3-566B-432C-A822-FF1307C09699}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A89C5A3-566B-432C-A822-FF1307C09699}.Release|Any CPU.Build.0 = Release|Any CPU
+		{085F7249-F681-426C-9197-FA7A4ABED889}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{085F7249-F681-426C-9197-FA7A4ABED889}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{085F7249-F681-426C-9197-FA7A4ABED889}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{085F7249-F681-426C-9197-FA7A4ABED889}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
