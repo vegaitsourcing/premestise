@@ -1,7 +1,14 @@
-﻿namespace DataAccessLayer.Contracts.Contracts
+﻿using System.Collections.Generic;
+
+namespace DataAccessLayer.Contracts.Contracts
 {
-    public interface IRepository
+    public interface IRepository<T>
     {
-        
+        void Create(T entity);
+
+        IEnumerable<T> GetAll();
+
+
+
     }
 }
