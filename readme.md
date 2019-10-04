@@ -1,0 +1,1 @@
+Premesti se aplikacija
