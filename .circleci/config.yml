@@ -5,5 +5,5 @@ jobs:
       - image: mcr.microsoft.com/dotnet/core/sdk:2.2
     steps:
       - checkout
-      - run: cd api && dotnet restore
-      - run: cd api && dotnet build
+      - run: cd api/VegaIT.PremestiSE && dotnet restore
+      - run: cd api/VegaIT.PremestiSE && dotnet build
