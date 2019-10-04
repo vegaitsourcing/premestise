@@ -3,7 +3,7 @@ using DataAccessLayer.Contracts.Domain;
 
 namespace BusinessLogicLayer.Contracts.RepositoryServices
 {
-    public interface IMatchesRepositoryService : IRepositoryService<Match, Tuple<int, int>>
+    public interface IMatchesService : IRepositoryService<Match, Tuple<int, int>>
     {
     }
 }

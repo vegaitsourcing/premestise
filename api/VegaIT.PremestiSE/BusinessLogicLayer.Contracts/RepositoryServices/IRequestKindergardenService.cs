@@ -3,7 +3,7 @@ using System;
 
 namespace BusinessLogicLayer.Contracts.RepositoryServices
 {
-    public interface IRequestKindergardenRepositoryService : IRepositoryService<RequestKindergarden, Tuple<int, int>>
+    public interface IRequestKindergardenService : IRepositoryService<RequestKindergarden, Tuple<int, int>>
     {
     }
 }
