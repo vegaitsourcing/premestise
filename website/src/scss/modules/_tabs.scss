@@ -15,7 +15,7 @@
 	font-family: $font-default;
 	font-size: 24px;
 	font-weight: 600;
-	padding: 10px 15px;
+	padding: 20px 15px;
 	width: 33.33%;
 	cursor: pointer;
 	transition: $easeing $trans;
@@ -34,8 +34,8 @@
 
 .tab-content {
 	display: none;
-	background: #ededed;
-	padding: 15px;
+	background: $white;
+	padding: 60px 30px 30px;
 	&.current {
 		display: inherit;
 	}
