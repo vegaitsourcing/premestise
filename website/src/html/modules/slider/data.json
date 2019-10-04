@@ -1,0 +1,24 @@
+{
+  "images": [
+		{
+			"path": "https://dummyimage.com/600x400/000/fff",
+			"alt": "alternative text"
+		},
+		{
+			"path": "https://dummyimage.com/600x400/000/f00",
+			"alt": "alternative text"
+		},
+		{
+			"path": "https://dummyimage.com/600x400/000/ff0",
+			"alt": "alternative text"
+		},
+		{
+			"path": "https://dummyimage.com/600x400/000/0f0",
+			"alt": "alternative text"
+		},
+		{
+			"path": "https://dummyimage.com/600x400/000/0ff",
+			"alt": "alternative text"
+		}
+	]
+}

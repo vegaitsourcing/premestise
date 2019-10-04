@@ -1,0 +1,15 @@
+{
+	"template": "services",
+	"title": "Services",
+	"data": {
+		"header": {
+			">>": "shared/header/data.json"
+		},
+		"footer": {
+			">>": "shared/footer/data.json"
+		},
+		"teamList": {
+			">>": "modules/team-list/data.json"
+		}
+	}
+}

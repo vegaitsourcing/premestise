@@ -1,0 +1,31 @@
+//----------  header
+//------------------------------------------------------------------------------
+.header {
+	padding: 10px 0;
+}
+.header__container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+.header__logo {
+	width: 50px;
+}
+.nav__list {
+	display: flex;
+	justify-content: flex-end;
+}
+.nav__item {
+	border-left: 1px solid $black;
+	&:first-child {
+		border-left: 0;
+	}
+}
+.nav__link {
+	padding: 0 10px;
+	color: $black;
+	display: block;
+	@include hover {
+		text-decoration: underline;
+	}
+}

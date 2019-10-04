@@ -1,0 +1,72 @@
+@font-face {
+	font-family: 'svgicons';
+	src: url('../assets/fonts/svgicons.woff2?v=1570208224529') format('woff2'),
+		url('../assets/fonts/svgicons.woff?v=1570208224529') format('woff'),
+		url('../assets/fonts/svgicons.ttf?v=1570208224529') format('truetype');
+}
+
+@mixin font-styles {
+	font-family: 'svgicons';
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	// speak: none; // only necessary if not using the private unicode range (firstGlyph option)
+	text-decoration: none;
+	text-transform: none;
+	display: block;
+	line-height: 1;
+}
+
+%font {
+	@include font-styles;
+}
+
+@function font-char($filename) {
+	$char: "";
+
+	@if $filename == ico-chevron-down {
+		$char: '\E001';
+	}
+	@if $filename == ico-dog {
+		$char: '\E002';
+	}
+	@if $filename == ico-download {
+		$char: '\E003';
+	}
+	@if $filename == ico-share {
+		$char: '\E004';
+	}
+
+	@return $char;
+}
+
+@mixin font($filename, $insert: before, $extend: true) {
+	&:#{$insert} {
+		@if $extend {
+			@extend %font;
+		} @else {
+			@include font-styles;
+		}
+		content: font-char($filename);
+	}
+}
+
+[class*='font-ico'] {
+	display: inline-block;
+}
+
+.font-ico-chevron-down {
+	@include font(ico-chevron-down);
+}
+.font-ico-dog {
+	@include font(ico-dog);
+}
+.font-ico-download {
+	@include font(ico-download);
+}
+.font-ico-share {
+	@include font(ico-share);
+}
+

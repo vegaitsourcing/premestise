@@ -1,0 +1,15 @@
+
+------------------------------------------------------------------------
+
+CREATED MODULE -------------------------------------- @{str}
+
+
+- created  HBS file: '@{str}.hbs' in dir 'src/html/modules/@{str}'
+
+- created JSON file: 'data.json' in dir 'src/html/modules/@{str}'
+
+- created SCSS file: '_@{str}.scss' in dir 'src/scss/modules/@{str}'
+
+- updated style.scss file: '@import modules/@{str};' in dir 'src/scss'
+
+------------------------------------------------------------------------
