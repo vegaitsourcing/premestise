@@ -10,7 +10,7 @@ namespace DataAccessLayer.Contracts.Domain
     {
 
         public int Id { get; set; }
-        public int ParentName { get; set; }
+        public string ParentName { get; set; }
         public string ChildName { get; set; }
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
