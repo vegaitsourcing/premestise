@@ -23,6 +23,7 @@ namespace VegaIT.PremestiSE
 
             services.AddSingleton<IRequestService, RequestService>();
             services.AddSingleton<IRequestRepository>(_ => new RequestRepository());
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -25,14 +25,14 @@ namespace VegaIT.PremestiSE.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        [HttpGet("{/count}", Name = "GetCount")]
+        
         public int GetCount()
         {
             return 0;
         }
 
         // GET: api/Matches/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
