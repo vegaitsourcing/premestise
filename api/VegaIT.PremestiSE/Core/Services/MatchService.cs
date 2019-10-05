@@ -1,24 +1,28 @@
 ﻿using Core.Interfaces.Intefaces;
 using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
+using Persistence.Interfaces.Entites.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Transactions;
+using Core.Clients;
 
 namespace Core.Services
 {
     public class MatchService : IMatchService
     {
-        private IMatchRepository _matchRepository;
-        private IPendingRequestRepository _pendingRequestRepository;
+        private readonly IMatchRepository _matchRepository;
+        private readonly IPendingRequestRepository _pendingRequestRepository;
         private readonly IMatchedRequestRepository _matchedRequestRepository;
+        private readonly IMailClient _mailClient;
 
-        public MatchService(IMatchRepository repository, IPendingRequestRepository pending, IMatchedRequestRepository matchedRequestRepository)
+        public MatchService(IMatchRepository matchRepository, IPendingRequestRepository pendingRequestRepository, IMatchedRequestRepository matchedRequestRepository, IMailClient mailClient)
         {
-            _matchRepository = repository;
-            _pendingRequestRepository = pending;
+            _matchRepository = matchRepository;
+            _pendingRequestRepository = pendingRequestRepository;
             _matchedRequestRepository = matchedRequestRepository;
+            _mailClient = mailClient;
         }
 
         public int GetTotalCount()
@@ -29,21 +33,34 @@ namespace Core.Services
         public void TryMatch(int id)
         {
 
-            PendingRequest incomingRequest = _pendingRequestRepository.Get(id);
-            PendingRequest match = FindBestMatch(incomingRequest);
-
-            if (match == null)
-                return;
-
-            _pendingRequestRepository.Delete(incomingRequest.Id);
-            MatchedRequest firstMatchedRequest = _matchedRequestRepository.Create(incomingRequest);
-
-            _pendingRequestRepository.Delete(match.Id);
-            MatchedRequest secondMatchedRequest = _matchedRequestRepository.Create(match);
-
-            _matchRepository.Create(firstMatchedRequest, secondMatchedRequest);
+            using (var transactionScope = new TransactionScope())
+            {
 
 
+                PendingRequest incomingRequest = _pendingRequestRepository.Get(id);
+                _pendingRequestRepository.Verify(id);
+
+                PendingRequest match = FindBestMatch(incomingRequest);
+
+                if (match == null) return;
+
+                _pendingRequestRepository.Delete(incomingRequest.Id);
+                MatchedRequest firstMatchedRequest = _matchedRequestRepository.Create(incomingRequest);
+
+
+
+                _pendingRequestRepository.Delete(match.Id);
+                MatchedRequest secondMatchedRequest = _matchedRequestRepository.Create(match);
+
+                _matchRepository.Create(firstMatchedRequest, secondMatchedRequest);
+
+                _mailClient.Send(firstMatchedRequest.ParentEmail,
+                    $"Found match : {secondMatchedRequest.ParentName}  {secondMatchedRequest.ParentPhoneNumber}");
+                _mailClient.Send(secondMatchedRequest.ParentEmail,
+                    $"Found match : {firstMatchedRequest.ParentName}  {firstMatchedRequest.ParentPhoneNumber}");
+
+                transactionScope.Complete();
+            }
 
         }
 
@@ -69,39 +86,32 @@ namespace Core.Services
 
         public void Unmatch(int id)
         {
-            try
+            using (TransactionScope scope = new TransactionScope())
             {
-                using(TransactionScope scope = new TransactionScope())
+                // delete match and return obj
+                MatchedRequest request = _matchedRequestRepository.Delete(id);
+
+                // convert and save to pending matches -- mozda fali Id ?
+                PendingRequest tempRequest = new PendingRequest()
                 {
-                    // delete match and return obj
-                    MatchedRequest request = _matchedRequestRepository.Delete(id);
+                    ChildBirthDate = request.ChildBirthDate,
+                    FromKindergardenId = request.FromKindergardenId,
+                    KindergardenWishIds = request.KindergardenWishIds,
+                    ChildName = request.ChildName,
+                    ParentEmail = request.ParentEmail,
+                    ParentName = request.ParentName,
+                    ParentPhoneNumber = request.ParentPhoneNumber,
+                    SubmittedAt = request.SubmittedAt,
+                    Verified = true
+                };
 
-                    // convert and save to pending matches -- mozda fali Id ?
-                    PendingRequest tempRequest = new PendingRequest()
-                    {
-                        ChildBirthDate = request.ChildBirthDate,
-                        FromKindergardenId = request.FromKindergardenId,
-                        KindergardenWishIds = request.KindergardenWishIds,
-                        ChildName = request.ChildName,
-                        ParentEmail = request.ParentEmail,
-                        ParentName = request.ParentName,
-                        ParentPhoneNumber = request.ParentPhoneNumber,
-                        SubmittedAt = request.SubmittedAt,
-                        Verified = true
-                    };
+                _pendingRequestRepository.Create(tempRequest);
 
-                    _pendingRequestRepository.Create(tempRequest);
+                // set match status to Failure
+                _matchRepository.SetStatus(id, Status.Failure);
 
-                    // set match status to Failure
-                    _matchRepository.SetStatus(id, Status.Failure);
-
-                    // complete transaction
-                    scope.Complete();
-                }
-            }
-            catch (TransactionAbortedException ex)
-            {
-                throw ex;
+                // complete transaction
+                scope.Complete();
             }
         }
     }

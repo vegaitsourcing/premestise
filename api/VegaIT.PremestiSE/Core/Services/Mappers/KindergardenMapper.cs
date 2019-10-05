@@ -4,6 +4,7 @@ using System.Text;
 using Core.Interfaces.Intefaces;
 using Core.Interfaces.Models;
 using Persistence.Interfaces.Entites;
+using Util;
 
 namespace Core.Services.Mappers
 {
@@ -13,7 +14,7 @@ namespace Core.Services.Mappers
         {
             return new KindergardenDto
             {
-                Id = kindergarden.Id,
+                Id = EncodeDecode.Encode(kindergarden.Id),
                 Name = kindergarden.Name,
                 Longitude = kindergarden.Longitude,
                 Latitude = kindergarden.Latitude

@@ -17,7 +17,12 @@ namespace VegaIT.PremestiSE.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] RequestDto newRequest)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
             RequestDto result = _requestService.CreatePending(newRequest);
+
             return Created(Request.Host + Request.Path + result.Id, result);
         }
 
