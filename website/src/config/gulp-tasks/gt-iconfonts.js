@@ -33,7 +33,9 @@ const svgomg = new svgo({
 		{cleanupEnableBackground: true},
 		{convertStyleToAttrs: true},
 		{convertColors: true},
-		{convertPathData: true},
+		{convertPathData: {
+			noSpaceAfterFlags: false
+		}},
 		{convertTransform: true},
 		{removeUnknownsAndDefaults: true},
 		{removeNonInheritableGroupAttrs: true},
