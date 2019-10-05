@@ -31,7 +31,7 @@ namespace VegaIT.PremestiSE.Controllers
         }
 
         // GET: api/Requests/5
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public Request Get(int id)
         {
             return null;
