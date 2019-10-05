@@ -12,7 +12,7 @@ namespace Persistence.Repositories
         private readonly string _connString = "";
         private readonly IKindergardenRepository _kindergardenRepository = new KindergardenRepository();
 
-        public IEnumerable<PendingRequest> GetAllMatchesForRequest(PendingRequest request)
+        public List<PendingRequest> GetAllMatchesForRequest(PendingRequest request)
         {
             List<PendingRequest> pendingRequests = new List<PendingRequest>();
             using (SqlConnection conn = new SqlConnection())
