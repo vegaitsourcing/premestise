@@ -46,6 +46,11 @@ select {
 .input__support-text {
 	color: $blue-1;
 	margin-left: 15px;
+	[class^='font-ico'] {
+		font-size: 22px;
+		vertical-align: sub;
+		margin-right: 5px;
+	}
 }
 
 .input-icon__text {

@@ -16,9 +16,13 @@
 	font-size: 24px;
 	font-weight: 600;
 	padding: 20px 15px;
+	text-align: center;
 	width: 33.33%;
 	cursor: pointer;
 	transition: $easeing $trans;
+	&:nth-child(2) {
+		margin: 0 10px;
+	}
 	&.current {
 		background: $white;
 		color: $black-2;
@@ -35,7 +39,7 @@
 .tab-content {
 	display: none;
 	background: $white;
-	padding: 60px 30px 30px;
+	padding: 60px 30px;
 	&.current {
 		display: inherit;
 	}
@@ -49,6 +53,102 @@
 .form-left {
 	width: 50%;
 }
+
 .form-right {
 	width: 50%;
+}
+
+.form-buttons {
+	align-items: center;
+	display: flex;
+	justify-content: space-between;
+}
+
+.form-social-links {
+	li {
+		display: inline-block;
+	}
+}
+
+.form-link {
+	color: $blue-1;
+	font-size: 16px;
+	transition: $trans $easeing;
+	[class^='font-ico'] {
+		font-size: 22px;
+		margin-right: 7px;
+	}
+	@include hover {
+		color: $light-blue;
+	}
+	&:first-child {
+		margin-right: 20px;
+	}
+}
+
+.tab-wizard {
+	text-align: center;
+	h3 {
+		color: $black-2;
+		font-size: 32px;
+		font-weight: 600;
+		margin-bottom: 15px;
+		[class^='font-ico'] {
+			color: $light-blue;
+			margin: 0 10px;
+		}
+	}
+	p {
+		color: $black-2;
+		font-size: 24px;
+		font-weight: 600;
+		margin-bottom: 45px;
+	}
+	.btn {
+		display: block;
+		margin: 0 auto;
+		max-width: 170px;
+	}
+}
+
+.tab-years {
+	text-align: center;
+	p {
+		color: $black-2;
+		font-size: 24px;
+		margin-bottom: 20px;
+	}
+	.message {
+		color: $black-2;
+		display: block;
+		font-size: 20px;
+		margin-bottom: 10px;
+		font-weight: 600;
+	}
+	.number-info {
+		color: $black-2;
+		display: block;
+		font-size: 20px;
+	}
+}
+
+.tab-years__list {
+	margin-bottom: 30px;
+	li {
+		display: inline-block;
+		margin: 0 10px;
+	}
+}
+
+.tab-year {
+	color: $blue-1;
+	font-size: 32px;
+	font-weight: 600;
+	transition: $easeing $trans;
+	&.active {
+		color: $black-2;
+	}
+	@include hover {
+		color: $light-blue;
+	}
 }
