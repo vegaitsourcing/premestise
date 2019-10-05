@@ -2,5 +2,74 @@
 //------------------------------------------------------------------------------
 
 .contact-us {
+	background-color: $green-dark;
+	padding-top: 74px;
+	padding-bottom: 160px;
+}
+.contact-us__wrap {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 
+}
+
+.contact-us__heading {
+	font-size: 32px;
+	color: $white;
+	margin-bottom: 61px;
+}
+
+.contact-us__form {
+	padding-left: 384px;
+	margin-bottom: 49px;
+}
+.contact-us__email {
+	display: flex;
+	margin-bottom: 32px;
+}
+
+.contact-us__input {
+	width: 333px;
+	height: 50px;
+	padding-top: 5px;
+	padding-left: 19px;
+	background-color: $white;
+	border: 1px solid $black-2;
+
+	&::placeholder {
+		color: $black-2;
+		font-size: 16px;
+	}
+}
+
+.contact-us__text {
+	width: 30%;
+	color: $white;
+	font-size: 16px;
+	margin-left: 28px;
+}
+
+.contact-us__textarea {
+	width: 70%;
+	padding: 8px 0 0 18px;
+	height: 141px;
+	margin-bottom: 51px;
+
+	&::placeholder {
+		color: $black-2;
+		font-size: 16px;
+	}
+}
+
+.contact-us__facebook {
+	color: $white;
+	font-size: 16px;
+	margin-right: 236px;
+}
+
+.contact-us__btn {
+	width:  241px;
+	height: 47px;
+	box-shadow: 0 3px $black;
 }
