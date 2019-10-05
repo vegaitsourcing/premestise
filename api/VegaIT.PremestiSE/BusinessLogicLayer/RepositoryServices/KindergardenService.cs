@@ -14,17 +14,22 @@ namespace BusinessLogicLayer.RepositoryServices
             _repository = repository;
         }
 
+        public override Kindergarden Get(int id)
+        {
+            Kindergarden kindergarden = _repository.GetById(id);
+
+            if(kindergarden == null)
+            {
+                throw new KeyNotFoundException();
+            }
+        }
+
         public override Kindergarden Create(Kindergarden model)
         {
             throw new System.NotImplementedException();
         }
 
         public override void Delete(int id)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override Kindergarden Get(int id)
         {
             throw new System.NotImplementedException();
         }

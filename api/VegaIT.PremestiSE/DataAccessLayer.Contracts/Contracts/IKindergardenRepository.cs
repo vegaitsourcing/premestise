@@ -1,9 +1,11 @@
-﻿using DataAccessLayer.Contracts.Domain;
+﻿using Persistence.Interfaces.Entites;
+using System.Collections.Generic;
 
-namespace DataAccessLayer.Contracts.Contracts
+namespace Persistence.Interfaces.Contracts
 {
-    public interface IKindergardenRepository : IRepository<Kindergarden>
+    public interface IKindergardenRepository
     {
-        
+        Kindergarden GetById(int id);
+        IEnumerable<Kindergarden> GetAll();
     }
 }

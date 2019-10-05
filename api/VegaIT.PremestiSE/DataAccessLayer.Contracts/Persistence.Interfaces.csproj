@@ -2,11 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Persistence.Interfaces</AssemblyName>
+    <RootNamespace>Persistence.Interfaces</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="Domain\" />
-  </ItemGroup>
 
   <ItemGroup>
     <Reference Include="Microsoft.AspNetCore.Mvc.Core">

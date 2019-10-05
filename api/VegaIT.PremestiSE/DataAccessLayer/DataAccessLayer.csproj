@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataAccessLayer.Contracts\DataAccessLayer.Contracts.csproj" />
+    <ProjectReference Include="..\DataAccessLayer.Contracts\Persistence.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

@@ -16,8 +16,8 @@
   <ItemGroup>
     <ProjectReference Include="..\BusinessLogicLayer\BusinessLogicLayer.csproj" />
     <ProjectReference Include="..\BusinessLogicLayer.Contracts\BusinessLogicLayer.Contracts.csproj" />
+    <ProjectReference Include="..\DataAccessLayer.Contracts\Persistence.Interfaces.csproj" />
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj" />
-    <ProjectReference Include="..\DataAccessLayer.Contracts\DataAccessLayer.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

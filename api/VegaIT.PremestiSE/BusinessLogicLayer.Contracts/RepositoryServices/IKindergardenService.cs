@@ -2,7 +2,7 @@
 
 namespace BusinessLogicLayer.Contracts.RepositoryServices
 {
-    public interface IKindergardenService: IRepositoryService<Kindergarden, int>
+    public interface IKindergardenService: IService<Kindergarden>
     {
     }
 }
