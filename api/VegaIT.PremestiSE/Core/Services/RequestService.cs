@@ -8,6 +8,10 @@ namespace Core.Services
 {
     public class RequestService : IRequestService
     {
+        public RequestService()
+        {
+        }
+
         public RequestDto Create(RequestDto newRequest)
         {
             throw new NotImplementedException();

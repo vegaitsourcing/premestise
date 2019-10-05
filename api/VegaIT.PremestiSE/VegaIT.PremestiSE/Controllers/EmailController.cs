@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace VegaIT.PremestiSE.Controllers
 {
+    [ApiController]
     public class EmailController : Controller
     {
         private IMatchService _matchService;
@@ -16,9 +17,10 @@ namespace VegaIT.PremestiSE.Controllers
             _matchService = service;
         }
 
-        [HttpPost]
-        public IActionResult Verify([FromBody]int id)
+        [HttpGet]
+        public IActionResult Verify([FromBody] int id)
         {
+            
             _matchService.TryMatch(id);
             return Ok();
         }
