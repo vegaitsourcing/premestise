@@ -13,16 +13,12 @@ namespace Persistence.Repositories
         private readonly string _connString = "";
         private readonly IKindergardenRepository _kindergardenRepository = new KindergardenRepository();
 
-<<<<<<< HEAD
         public PendingRequestRepository(IConfiguration config)
         {
             _connectionString = config.GetConnectionString("DefaultConnection");
         }
 
         public PendingRequest Create(PendingRequest request)
-=======
-        public IEnumerable<PendingRequest> GetAllMatchesForRequest(PendingRequest request)
->>>>>>> 40f047970f1c2743435fe6ccab5fd2b60d57b5c0
         {
             List<PendingRequest> pendingRequests = new List<PendingRequest>();
             using (SqlConnection conn = new SqlConnection())

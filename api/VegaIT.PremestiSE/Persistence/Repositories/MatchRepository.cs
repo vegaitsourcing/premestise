@@ -12,7 +12,6 @@ namespace Persistence.Repositories
 {
     public class MatchRepository : RequestRepository<MatchedRequest>, IMatchRequestRepository
     {
-<<<<<<< HEAD
         private readonly string _connString;
 
         public MatchRepository(IConfiguration config)
@@ -29,8 +28,6 @@ namespace Persistence.Repositories
                 conn.Open();
                 SqlCommand cmd = conn.CreateCommand();
                 cmd.CommandText = @"SELECT * FROM match;";
-=======
->>>>>>> 40f047970f1c2743435fe6ccab5fd2b60d57b5c0
 
     }
 }

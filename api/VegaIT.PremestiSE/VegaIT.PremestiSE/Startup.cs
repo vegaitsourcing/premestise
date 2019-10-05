@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +10,6 @@ using Core.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-=======
-﻿using Core.Interfaces.Intefaces;
-using Core.Services;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
->>>>>>> 40f047970f1c2743435fe6ccab5fd2b60d57b5c0
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Interfaces.Contracts;
 using Persistence.Repositories;
