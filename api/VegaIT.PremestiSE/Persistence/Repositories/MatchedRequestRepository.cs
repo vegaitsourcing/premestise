@@ -5,6 +5,7 @@ using Persistence.Interfaces.Entites.Exceptions;
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text;
 
 namespace Persistence.Repositories
 {
@@ -34,6 +35,24 @@ namespace Persistence.Repositories
             command.Parameters.Add("@fromKindergardenId", SqlDbType.Int).Value = request.FromKindergardenId;
             command.Parameters.Add("@submittedAt", SqlDbType.NVarChar).Value = request.SubmittedAt.ToString("yyyy-MM-dd HH:mm:ss");
 
+
+            SqlCommand secondCommand = new SqlCommand();
+
+            var values = new StringBuilder();
+            for (var i = 0; i < request.KindergardenWishIds.Count; i++)
+            {
+                values.Append("(@MatchedRequestId, @KindergardenWishId" + i + "), ");
+            }
+
+            secondCommand.CommandText =
+                @"INSERT INTO matched_request_wishes (matched_request_id, kindergarden_wish_id) VALUES" +
+                values.ToString();
+
+            for (var i = 0; i < request.KindergardenWishIds.Count; i++)
+            {
+                secondCommand.Parameters.Add(new SqlParameter("@KindergardenWishId" + i,
+                    request.KindergardenWishIds[i]));
+            }
             using (SqlConnection connection = new SqlConnection())
             {
                 connection.ConnectionString = _connectionString;
@@ -41,15 +60,21 @@ namespace Persistence.Repositories
 
                 SqlTransaction transaction = connection.BeginTransaction();
                 command.Transaction = transaction;
+                secondCommand.Transaction = transaction;
 
                 try
                 {
                     int id = (int)command.ExecuteScalar();
                     request.Id = id;
+
+                    secondCommand.Parameters.Add(new SqlParameter("@MatchedRequestId", request.Id));
+
+                    secondCommand.ExecuteNonQuery();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    throw ex;
+                    transaction.Rollback();
+                    throw;
                 }
             }
 
@@ -61,8 +86,11 @@ namespace Persistence.Repositories
         {
             MatchedRequest matchedRequest = Get(id);
 
-            SqlCommand command = new SqlCommand($"DELETE FROM matched_request WHERE ID = @id");
-            command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+            SqlCommand deleteMatchedRequest = new SqlCommand($"DELETE FROM matched_request WHERE ID = @id");
+            deleteMatchedRequest.Parameters.Add("@id", SqlDbType.Int).Value = id;
+
+            SqlCommand deleteMatchedRequestWishes = new SqlCommand($"DELETE FROM matched_request_wishes WHERE matched_request_id = @id");
+            deleteMatchedRequestWishes.Parameters.Add("@id", SqlDbType.Int).Value = id;
 
             using (SqlConnection connection = new SqlConnection())
             {
@@ -70,14 +98,15 @@ namespace Persistence.Repositories
                 connection.Open();
 
                 SqlTransaction transaction = connection.BeginTransaction();
-                command.Transaction = transaction;
+                deleteMatchedRequest.Transaction = transaction;
 
                 try
                 {
-                    command.ExecuteNonQuery();
+                    deleteMatchedRequest.ExecuteNonQuery();
                 }
                 catch (Exception ex)
                 {
+                    transaction.Rollback();
                     throw ex;
                 }
             }
@@ -85,6 +114,7 @@ namespace Persistence.Repositories
             return matchedRequest;
         }
 
+        // helper
         private MatchedRequest Get(int id)
         {
             using (SqlConnection conn = new SqlConnection())

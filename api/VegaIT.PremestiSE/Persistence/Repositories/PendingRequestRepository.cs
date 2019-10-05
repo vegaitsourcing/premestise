@@ -70,9 +70,10 @@ namespace Persistence.Repositories
 
                     secondCommand.ExecuteNonQuery();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    throw ex;
+                    transaction.Rollback();
+                    throw;
                 }
             }
 
@@ -83,8 +84,11 @@ namespace Persistence.Repositories
 
         public void Delete(int id)
         {
-            SqlCommand command = new SqlCommand($"DELETE FROM pending_request WHERE ID = @id");
-            command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+            SqlCommand deletePendingReqCommand = new SqlCommand($"DELETE FROM pending_request WHERE ID = @id");
+            deletePendingReqCommand.Parameters.Add("@id", SqlDbType.Int).Value = id;
+
+            SqlCommand deletePendingRequestWishes = new SqlCommand($"DELETE FROM pending_request_wishes WHERE pending_request_id = @id");
+            deletePendingRequestWishes.Parameters.Add("@id", SqlDbType.Int).Value = id;
 
             using (SqlConnection connection = new SqlConnection())
             {
@@ -92,14 +96,17 @@ namespace Persistence.Repositories
                 connection.Open();
 
                 SqlTransaction transaction = connection.BeginTransaction();
-                command.Transaction = transaction;
+                deletePendingReqCommand.Transaction = transaction;
+                deletePendingRequestWishes.Transaction = transaction;
 
                 try
                 {
-                    command.ExecuteNonQuery();
+                    deletePendingReqCommand.ExecuteNonQuery();
+                    deletePendingRequestWishes.ExecuteNonQuery();
                 }
                 catch (Exception ex)
                 {
+                    transaction.Rollback();
                     throw ex;
                 }
             }

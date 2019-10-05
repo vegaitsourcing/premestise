@@ -8,4 +8,9 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Persistence.Interfaces\Persistence.Interfaces.csproj" />
+    <ProjectReference Include="..\Persistence\Persistence.csproj" />
+  </ItemGroup>
+
 </Project>

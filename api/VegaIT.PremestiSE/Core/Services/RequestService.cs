@@ -13,20 +13,14 @@ namespace Core.Services
 {
     public class RequestService : IRequestService
     {
-<<<<<<< HEAD
-        public RequestService()
-        {
-        }
 
-        public RequestDto Create(RequestDto newRequest)
-=======
         private readonly IPendingRequestRepository _pendingRequestRepository;
         private readonly IMatchedRequestRepository _matchedRequestRepository;
         private readonly IPendingRequestWishRepository _requestWishRepository;
         private readonly IKindergardenRepository _kindergardenRepository;
 
         public RequestService(IPendingRequestRepository pendingRequestRepository, IKindergardenRepository kindergardenRepository, IPendingRequestWishRepository requestWishRepository, IMatchedRequestRepository matchedRequestRepository)
->>>>>>> 8ada7e94296583719c30af706226be683d0b2cdf
+
         {
             _pendingRequestRepository = pendingRequestRepository;
             _kindergardenRepository = kindergardenRepository;

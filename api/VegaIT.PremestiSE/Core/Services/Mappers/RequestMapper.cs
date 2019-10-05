@@ -37,7 +37,7 @@ namespace Core.Services.Mappers
                 ChildName = requestDto.ChildName,
                 ChildBirthDate = requestDto.ChildBirthDate,
                 FromKindergardenId = requestDto.FromKindergardenId,
-                KindergardenWishIds = requestDto.ToKindergardenIds.ToArray()
+                KindergardenWishIds = requestDto.ToKindergardenIds
             };
         }
     }
