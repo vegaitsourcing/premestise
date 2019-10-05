@@ -2,6 +2,9 @@
 //------------------------------------------------------------------------------
 .accordions {
 	padding-top: 60px;
+	@include media-breakpoint-down(sm) {
+		padding-top: 40px;
+	}
 }
 
 .accordions__wrap {
@@ -41,6 +44,12 @@
 	@include hover {
 		opacity: .7;
 	}
+	@include media-breakpoint-down(md) {
+		font-size: 14px;
+		.font-ico-chevron-down {
+			top: 1px;
+		}
+	}
 }
 
 .accordion__content {
@@ -49,6 +58,9 @@
 	p {
 		max-width: 480px;
 		width: 100%;
+		@include media-breakpoint-down(md) {
+			font-size: 14px;
+		}
 	}
 }
 

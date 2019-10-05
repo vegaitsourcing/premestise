@@ -6,6 +6,9 @@ body {
 	font-size: 14px;
 	font-weight: 400;
 	color: $black;
+	&.menu-open {
+		overflow: hidden;
+	}
 }
 
 .scroll-disabled {

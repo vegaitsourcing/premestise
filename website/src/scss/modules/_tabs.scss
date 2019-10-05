@@ -59,6 +59,9 @@
 	&.current {
 		display: inherit;
 	}
+	@include media-breakpoint-down(md) {
+		padding: 30px 0;
+	}
 }
 
 .form-wrap {
@@ -226,6 +229,7 @@
 
 .pagination__pages a {
 	color: $blue-1;
+	font-size: 20px;
 	font-weight: 600;
 	transition: $trans $easeing;
 	&.pagination__pages--active {

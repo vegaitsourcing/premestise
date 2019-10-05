@@ -1,8 +1,8 @@
 @font-face {
 	font-family: 'svgicons';
-	src: url('../assets/fonts/svgicons.woff2?v=1570278699335') format('woff2'),
-		url('../assets/fonts/svgicons.woff?v=1570278699335') format('woff'),
-		url('../assets/fonts/svgicons.ttf?v=1570278699335') format('truetype');
+	src: url('../assets/fonts/svgicons.woff2?v=1570305716419') format('woff2'),
+		url('../assets/fonts/svgicons.woff?v=1570305716419') format('woff'),
+		url('../assets/fonts/svgicons.ttf?v=1570305716419') format('truetype');
 }
 
 @mixin font-styles {
@@ -50,7 +50,7 @@
 	@if $filename == ico-map-pin {
 		$char: '\E008';
 	}
-	@if $filename == ico-map-test {
+	@if $filename == ico-map-q-pin {
 		$char: '\E009';
 	}
 	@if $filename == ico-map {
@@ -111,8 +111,8 @@
 .font-ico-map-pin {
 	@include font(ico-map-pin);
 }
-.font-ico-map-test {
-	@include font(ico-map-test);
+.font-ico-map-q-pin {
+	@include font(ico-map-q-pin);
 }
 .font-ico-map {
 	@include font(ico-map);

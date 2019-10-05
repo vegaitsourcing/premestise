@@ -4,7 +4,12 @@
 	padding: 28px 0;
 	background-color: transparent;
 	position: relative;
-	z-index: 2;
+	z-index: 5;
+	@include media-breakpoint-down(md) {
+		background-color: $white;
+		box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.2);
+		padding: 15px 0;
+	}
 }
 .header__container {
 	display: flex;
@@ -12,15 +17,29 @@
 	align-items: center;
 }
 .header__logo {
+	display: block;
 	max-width: 230px;
 	height: 78px;
 	width: 100%;
+	@include media-breakpoint-down(md) {
+		display: none;
+	}
+}
+
+.header__logo--mobile {
+	display: none;
+	height: unset;
+	@include media-breakpoint-down(md) {
+		display: block;
+	}
 }
 
 .nav__list {
 	display: flex;
 	justify-content: flex-end;
-
+	@include media-breakpoint-down(md) {
+		display: none;
+	}
 }
 .nav__item {
 	font-size: 20px;
@@ -34,5 +53,92 @@
 	@include hover {
 		text-decoration: underline;
 
+	}
+}
+
+.nav__mobile {
+	background-color: $white;
+	box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
+	display: none;
+	position: absolute;
+	top: 80px;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	transition: $easeing .75s;
+	@include media-breakpoint-down(md) {
+		display: block;
+		transform: translateY(-200%);
+	}
+	&.menu-open {
+		transform: translateY(0);
+	}
+	.form-social-links {
+		display: flex;
+		li {
+			border-bottom: 0;
+			margin: 10px;
+			max-width: 160px;
+		}
+		.form-link {
+			display: block;
+			font-size: 14px;
+			margin-right: 0;
+			padding-left: 30px;
+			position: relative;
+		}
+		[class^='font-ico'] {
+			position: absolute;
+			left: 0;
+			top: 5px;
+		}
+	}
+}
+
+.nav__mobile li {
+	border-bottom: 1px solid $silver-light-2;
+	margin: 20px;
+	padding-bottom: 10px;
+}
+
+.mobile-icon {
+	display: none;
+	cursor: pointer;
+	@include media-breakpoint-down(md) {
+		display: block;
+	}
+}
+
+.mobile-icon__bar {
+	display: block;
+	width: 35px;
+	height: 3px;
+	background-color: $blue-1;
+	margin: 6px 0;
+	transition: $easeing $trans;
+}
+
+.mobile-icon--open {
+	.mobile-icon__bar {
+		&:first-child {
+			transform: rotate(-45deg) translate(-5px, 5px);
+		}
+		&:nth-child(2) {
+			opacity: 0;
+			visibility: hidden;
+		}
+		&:nth-child(3) {
+			transform: rotate(45deg) translate(-8px, -8px);
+		}
+	}
+}
+
+.nav__mobile-link {
+	color: $light-blue;
+	display: block;
+	font-size: 18px;
+	font-weight: 600;
+	[class*='font-ico'] {
+		margin-right: 10px;
 	}
 }

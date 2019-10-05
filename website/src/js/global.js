@@ -12,3 +12,6 @@ tabs.init();
 
 import accordions from './_project/accordions';
 accordions.init();
+
+import openMenu from './_project/menu';
+openMenu.init();

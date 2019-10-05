@@ -21,6 +21,9 @@
 		background-color: #478fa4;
 		opacity: .6;
 	}
+	@include media-breakpoint-down(md) {
+		padding: 139px 0 70px;
+	}
 }
 
 .banner__heading {
@@ -28,13 +31,19 @@
 	color: $white;
 	letter-spacing: 1px;
 	margin-bottom: 6px;
-
+	@include media-breakpoint-down(md) {
+		font-size: 26px;
+		line-height: 30px;
+	}
 }
 
 .banner__paragraf {
 	color: $white;
 	font-size: 16px;
 	margin: 0 44px;
+	@include media-breakpoint-down(md) {
+		margin: 0;
+	}
 }
 
 .banner__holder {
@@ -44,4 +53,8 @@
 	position: relative;
 	z-index: 2;
 	width: 100%;
+	@include media-breakpoint-down(md) {
+		margin: 50px auto 0;
+		padding: 0;
+	}
 }
