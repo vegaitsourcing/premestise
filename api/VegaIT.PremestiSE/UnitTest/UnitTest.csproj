@@ -18,8 +18,4 @@
       <ProjectReference Include="..\VegaIT.PremestiSE\VegaIT.PremestiSE.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Fluent.Mocks" />
-    </ItemGroup>
-
 </Project>
