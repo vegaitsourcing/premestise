@@ -11,7 +11,12 @@ namespace Persistence.Repositories
     public class RequestRepository<T> where T : Request
     {
         private readonly string _connString = "";
-        private readonly IKindergardenRepository _kindergardenRepository = new KindergardenRepository();
+        private readonly IKindergardenRepository _kindergardenRepository;
+
+        public RequestRepository(IKindergardenRepository kindergardenRepository)
+        {
+            _kindergardenRepository = kindergardenRepository;
+        }
 
         public T Create(T request)
         {

@@ -10,7 +10,12 @@ namespace Persistence.Repositories
     public class PendingRequestRepository : RequestRepository<PendingRequest>, IPendingRequestRepository
     {
         private readonly string _connString = "";
-        private readonly IKindergardenRepository _kindergardenRepository = new KindergardenRepository();
+        private readonly IKindergardenRepository _kindergardenRepository;
+
+        public PendingRequestRepository(IKindergardenRepository kindergardenRepository) : base(kindergardenRepository)
+        {
+            _kindergardenRepository = kindergardenRepository;
+        }
 
         public List<PendingRequest> GetAllMatchesForRequest(PendingRequest request)
         {

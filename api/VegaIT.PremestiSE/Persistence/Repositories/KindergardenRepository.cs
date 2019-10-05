@@ -1,4 +1,5 @@
-﻿using Persistence.Interfaces.Contracts;
+﻿using Microsoft.Extensions.Configuration;
+using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
 using Persistence.Interfaces.Entites.Exceptions;
 using System.Collections.Generic;
@@ -9,7 +10,14 @@ namespace Persistence.Repositories
 {
     public class KindergardenRepository : IKindergardenRepository
     {
-        private readonly string _connString = "";
+        private readonly string _connString;
+
+        public KindergardenRepository(IConfiguration config)
+        {
+            _connString = config.GetConnectionString("DefaultConnection");
+
+        }
+
         public List<Kindergarden> GetAll()
         {
             List<Kindergarden> kindergardens = new List<Kindergarden>();
