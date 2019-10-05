@@ -10,8 +10,8 @@
 	background-position: center;
 	margin-top: -134px;
 
-	&::after {
-		content: '';
+	&::after {	
+		content: ''; 
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -28,7 +28,7 @@
 	color: $white;
 	letter-spacing: 1px;
 	margin-bottom: 6px;
-
+	
 }
 
 .banner__paragraf {
@@ -41,5 +41,5 @@
 	padding: 0 308px;
 	position: relative;
 	z-index: 2;
-
+	
 }
