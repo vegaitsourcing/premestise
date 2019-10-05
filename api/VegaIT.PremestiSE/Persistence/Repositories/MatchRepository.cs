@@ -13,9 +13,11 @@ namespace Persistence.Repositories
     public class MatchRepository : RequestRepository<MatchedRequest>, IMatchRequestRepository
     {
         private readonly string _connString;
+        private readonly IKindergardenRepository _kindergardenRepository; 
 
-        public MatchRepository(IConfiguration config)
+        public MatchRepository(IConfiguration config, IKindergardenRepository kindergardenRepository) : base(kindergardenRepository)
         {
+            _kindergardenRepository = kindergardenRepository;
             _connString = config.GetConnectionString("DefaultConnection");
         }
 
@@ -28,6 +30,8 @@ namespace Persistence.Repositories
                 conn.Open();
                 SqlCommand cmd = conn.CreateCommand();
                 cmd.CommandText = @"SELECT * FROM match;";
-
+            }
+            return matchs;
+        }
     }
 }

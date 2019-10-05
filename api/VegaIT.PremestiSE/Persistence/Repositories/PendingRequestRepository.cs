@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
 using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
 
@@ -11,14 +10,14 @@ namespace Persistence.Repositories
     public class PendingRequestRepository : RequestRepository<PendingRequest>, IPendingRequestRepository
     {
         private readonly string _connString = "";
-        private readonly IKindergardenRepository _kindergardenRepository = new KindergardenRepository();
+        private readonly IKindergardenRepository _kindergardenRepository;
 
-        public PendingRequestRepository(IConfiguration config)
+        public PendingRequestRepository(IKindergardenRepository kindergardenRepository) : base(kindergardenRepository)
         {
-            _connectionString = config.GetConnectionString("DefaultConnection");
+            _kindergardenRepository = kindergardenRepository;
         }
 
-        public PendingRequest Create(PendingRequest request)
+        public List<PendingRequest> GetAllMatchesForRequest(PendingRequest request)
         {
             List<PendingRequest> pendingRequests = new List<PendingRequest>();
             using (SqlConnection conn = new SqlConnection())

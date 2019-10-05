@@ -18,7 +18,7 @@ namespace Persistence.Repositories
 
         }
 
-        public IEnumerable<Kindergarden> GetAll()
+        public List<Kindergarden> GetAll()
         {
             List<Kindergarden> kindergardens = new List<Kindergarden>();
             using (SqlConnection conn = new SqlConnection())
