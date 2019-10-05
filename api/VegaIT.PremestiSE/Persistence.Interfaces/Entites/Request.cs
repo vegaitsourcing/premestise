@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Persistence.Interfaces.Entites
 {
@@ -16,6 +17,6 @@ namespace Persistence.Interfaces.Entites
         public string ChildName { get; set; }
         public DateTime ChildBirthDate { get; set; }
 
-        public int[] KindergardenWishIds { get; set; }
+        public List<int> KindergardenWishIds { get; set; }
     }
 }

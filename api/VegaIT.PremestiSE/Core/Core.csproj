@@ -11,10 +11,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Core.Interfaces\Core.Interfaces.csproj" />
     <ProjectReference Include="..\Persistence.Interfaces\Persistence.Interfaces.csproj" />
-<<<<<<< HEAD
+
     <ProjectReference Include="..\Persistence\Persistence.csproj" />
-=======
->>>>>>> 8ada7e94296583719c30af706226be683d0b2cdf
+
   </ItemGroup>
 
 </Project>
