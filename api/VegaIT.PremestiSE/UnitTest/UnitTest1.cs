@@ -6,7 +6,7 @@ namespace UnitTest
     public class UnitTest1
     {
         [Fact]
-        public void givenTrue_assertTrue()
+        public void GivenTrue_AssertTrue()
         {
             Assert.True(true);
         }
