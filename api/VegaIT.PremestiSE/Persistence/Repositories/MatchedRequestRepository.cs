@@ -3,6 +3,7 @@ using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
 using Persistence.Interfaces.Entites.Exceptions;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
@@ -113,8 +114,7 @@ namespace Persistence.Repositories
             return matchedRequest;
         }
 
-        // helper
-        private MatchedRequest Get(int id)
+        public MatchedRequest Get(int id)
         {
             using (SqlConnection conn = new SqlConnection())
             {
@@ -142,6 +142,8 @@ namespace Persistence.Repositories
                 int childBirthDateOrd = reader.GetOrdinal("child_birth_date");
                 int fromKindergardenIdOrd = reader.GetOrdinal("from_kindergarden_id");
 
+                List<int> kindergardenWishIds = GetMatchedWishes(id);
+
                 return new MatchedRequest()
                 {
                     Id = reader.GetInt32(idOrd),
@@ -151,10 +153,37 @@ namespace Persistence.Repositories
                     ParentName = reader.GetString(parentNameOrd),
                     ParentPhoneNumber = reader.GetString(parentPhoneNumberOrd),
                     ChildName = reader.GetString(childNameOrd),
-                    FromKindergardenId = reader.GetInt32(fromKindergardenIdOrd)
+                    FromKindergardenId = reader.GetInt32(fromKindergardenIdOrd),
+                    KindergardenWishIds = kindergardenWishIds
                 };
             }
+        }
 
+        // helper method
+        private List<int> GetMatchedWishes(int id)
+        {
+            List<int> kindergardenWishIds = new List<int>();
+
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = _connectionString;
+                conn.Open();
+
+                string newQuery = @"SELECT kindergarden_wish_id from matched_request_wishes WHERE matched_request_id = @id";
+                using (SqlCommand command = new SqlCommand(newQuery, conn))
+                {
+                    command.Parameters.AddWithValue("@id", id);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            kindergardenWishIds.Add((int)reader["kindergarden_wish_id"]);
+                        }
+                    }
+                }
+
+                return kindergardenWishIds;
+            }
         }
     }
 }

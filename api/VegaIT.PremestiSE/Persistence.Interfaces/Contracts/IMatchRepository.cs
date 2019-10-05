@@ -8,5 +8,7 @@ namespace Persistence.Interfaces.Contracts
         IEnumerable<Match> GetAll();
         Match Create(MatchedRequest firstMatchedRequest, MatchedRequest secondMatchedRequest);
         void DeleteByRequestId(int id);
+
+        void SetStatus(int id, Status status);
     }
 }

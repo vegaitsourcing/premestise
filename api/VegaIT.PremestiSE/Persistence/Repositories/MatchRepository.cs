@@ -110,5 +110,21 @@ namespace Persistence.Repositories
                 cmd.ExecuteNonQuery();
             }
         }
+
+        public void SetStatus(int id, Status status)
+        {
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = _connString;
+                conn.Open();
+
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = @"UPDATE match SET status = @status WHERE id = @id;";
+                cmd.Parameters.Add(new SqlParameter("@Id", id));
+                cmd.Parameters.Add(new SqlParameter("@Status", status));
+
+                cmd.ExecuteNonQuery();
+            }
+        }
     }
 }

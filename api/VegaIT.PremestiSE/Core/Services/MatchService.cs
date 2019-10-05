@@ -4,6 +4,7 @@ using Persistence.Interfaces.Entites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 
 namespace Core.Services
 {
@@ -68,7 +69,40 @@ namespace Core.Services
 
         public void Unmatch(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using(TransactionScope scope = new TransactionScope())
+                {
+                    // delete match and return obj
+                    MatchedRequest request = _matchedRequestRepository.Delete(id);
+
+                    // convert and save to pending matches -- mozda fali Id ?
+                    PendingRequest tempRequest = new PendingRequest()
+                    {
+                        ChildBirthDate = request.ChildBirthDate,
+                        FromKindergardenId = request.FromKindergardenId,
+                        KindergardenWishIds = request.KindergardenWishIds,
+                        ChildName = request.ChildName,
+                        ParentEmail = request.ParentEmail,
+                        ParentName = request.ParentName,
+                        ParentPhoneNumber = request.ParentPhoneNumber,
+                        SubmittedAt = request.SubmittedAt,
+                        Verified = true
+                    };
+
+                    _pendingRequestRepository.Create(tempRequest);
+
+                    // set match status to Failure
+                    _matchRepository.SetStatus(id, Status.Failure);
+
+                    // complete transaction
+                    scope.Complete();
+                }
+            }
+            catch (TransactionAbortedException ex)
+            {
+                throw ex;
+            }
         }
     }
 }
