@@ -2,7 +2,9 @@
 using Core.Interfaces.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Core.Services.Mappers;
 using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
 
@@ -19,12 +21,10 @@ namespace Core.Services
 
         public IEnumerable<KindergardenDto> GetAll()
         {
-            var kindergardens = _kindergardenRepository.GetAll();
-            foreach (var kindergarden in kindergardens)
-            {
-                yield return KindergardenDto.FromKindergarden(kindergarden);
-            }
+            var kindergardens = _kindergardenRepository.GetAll()
+                                                       .Select(new KindergardenMapper().DtoFromEntity);
 
+            return kindergardens;
         }
     }
 }
