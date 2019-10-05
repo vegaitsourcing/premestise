@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Persistence.Interfaces.Entites;
+using Util;
 
 namespace Core.Interfaces.Models
 {
     public class RequestDto
     {
+    
+        
         public static RequestDto FromRequestEntity(Request request)
         {
+            
             return new RequestDto()
             {
-                Id  = request.Id,
+                Id  = EncodeDecode.Encode(request.Id),
                 Email = request.ParentEmail,
                 ParentName = request.ParentName,
                 PhoneNumber =  request.ParentPhoneNumber,
@@ -23,7 +26,7 @@ namespace Core.Interfaces.Models
 
        
 
-        public int Id { get; set; }
+        public string Id { get; set; }
         public string Email { get; set; }
         public string ParentName { get; set; }
         public string PhoneNumber { get; set; }

@@ -13,10 +13,11 @@ namespace Core.Services
         private IPendingRequestRepository _pendingRequestRepository;
         private IMatchedRequestRepository _matchedRequestRepository;
 
-        public MatchService(IMatchRepository repository, IPendingRequestRepository pending)
+        public MatchService(IMatchedRequestRepository repository, IPendingRequestRepository pending, IMatchRepository matchRepository)
         {
-            _matchRepository = repository;
+            _matchedRequestRepository = repository;
             _pendingRequestRepository = pending;
+            _matchRepository = matchRepository;
         }
 
         public int GetTotalCount()
