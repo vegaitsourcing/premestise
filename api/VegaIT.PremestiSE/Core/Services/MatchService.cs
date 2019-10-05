@@ -1,6 +1,7 @@
 ﻿using Core.Interfaces.Intefaces;
 using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
+using Persistence.Interfaces.Entites.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,10 @@ namespace Core.Services
         private IPendingRequestRepository _pendingRequestRepository;
         private readonly IMatchedRequestRepository _matchedRequestRepository;
 
-        public MatchService(IMatchRepository repository, IPendingRequestRepository pending, IMatchedRequestRepository matchedRequestRepository)
+        public MatchService(IMatchRepository matchRepository, IPendingRequestRepository pendingRequestRepository, IMatchedRequestRepository matchedRequestRepository)
         {
-            _matchRepository = repository;
-            _pendingRequestRepository = pending;
+            _matchRepository = matchRepository;
+            _pendingRequestRepository = pendingRequestRepository;
             _matchedRequestRepository = matchedRequestRepository;
         }
 
@@ -30,10 +31,11 @@ namespace Core.Services
         {
 
             PendingRequest incomingRequest = _pendingRequestRepository.Get(id);
+            _pendingRequestRepository.Verify(id);
+
             PendingRequest match = FindBestMatch(incomingRequest);
 
-            if (match == null)
-                return;
+            if (match == null) return;
 
             _pendingRequestRepository.Delete(incomingRequest.Id);
             MatchedRequest firstMatchedRequest = _matchedRequestRepository.Create(incomingRequest);
@@ -71,7 +73,7 @@ namespace Core.Services
         {
             try
             {
-                using(TransactionScope scope = new TransactionScope())
+                using (TransactionScope scope = new TransactionScope())
                 {
                     // delete match and return obj
                     MatchedRequest request = _matchedRequestRepository.Delete(id);

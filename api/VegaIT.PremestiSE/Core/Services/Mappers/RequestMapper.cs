@@ -5,6 +5,7 @@ using System.Text;
 using Core.Interfaces.Intefaces;
 using Core.Interfaces.Models;
 using Persistence.Interfaces.Entites;
+using Util;
 
 namespace Core.Services.Mappers
 {
@@ -14,7 +15,7 @@ namespace Core.Services.Mappers
         {
             return new RequestDto
             {
-                Id = request.Id,
+                Id = EncodeDecode.Encode(request.Id),
                 Email = request.ParentEmail,
                 ParentName = request.ParentName,
                 PhoneNumber = request.ParentPhoneNumber,
@@ -30,7 +31,7 @@ namespace Core.Services.Mappers
         {
             return new Request
             {
-                Id = requestDto.Id,
+                Id = EncodeDecode.Decode(requestDto.Id),
                 ParentEmail = requestDto.Email,
                 ParentName = requestDto.ParentName,
                 ParentPhoneNumber = requestDto.PhoneNumber,
