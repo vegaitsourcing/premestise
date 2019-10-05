@@ -5,12 +5,25 @@
 	background-color: $green-dark;
 	padding-top: 74px;
 	padding-bottom: 50px;
+
+	@include media-breakpoint-down (sm) {
+		padding-top: 27px;
+		padding-bottom: 7px;
+	}
 }
 .contact-us__wrap {
+	max-width: 633px;
+	width: 100%;
+	margin: 0 auto;
+	padding: 0;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+
+	@include media-breakpoint-down (sm) {
+		padding: 0 22px;
+	}
 
 }
 
@@ -18,15 +31,24 @@
 	font-size: 32px;
 	color: $white;
 	margin-bottom: 61px;
+
+	@include media-breakpoint-down (sm) {
+		margin-bottom: 19px;
+		font-size: 18px;
+		align-self: end;
+	}
 }
 
 .contact-us__form {
-	padding-left: 384px;
 	margin-bottom: 49px;
 }
 .contact-us__email {
 	display: flex;
 	margin-bottom: 32px;
+
+	@include media-breakpoint-down (sm) {
+		margin-bottom: 13px;
+	}
 }
 
 .contact-us__input {
@@ -41,17 +63,44 @@
 		color: $black-2;
 		font-size: 16px;
 	}
+
+	@include  media-breakpoint-down (sm) {
+		width: 100%;
+		height: 38px;
+		padding-top: 0;
+		padding-left: 6px;
+		&::placeholder {
+			color: $black-2;
+			font-size: 14px;
+		}
+	} 
 }
 
 .contact-us__text {
-	width: 30%;
+	max-width: 43%;
 	color: $white;
 	font-size: 16px;
 	margin-left: 28px;
+	@include  media-breakpoint-down (sm) {
+		display: none;
+	} 
+}
+
+.contact-us__text--hidden {
+	display: none;
+
+	@include  media-breakpoint-down (sm) {
+		display: inline-block;
+		width: 100%;
+		color: $white;
+		font-size: 12px;
+		margin-bottom: 31px;
+
+	} 
 }
 
 .contact-us__textarea {
-	width: 70%;
+	width: 100%;
 	padding: 8px 0 0 18px;
 	height: 141px;
 	margin-bottom: 51px;
@@ -60,16 +109,55 @@
 		color: $black-2;
 		font-size: 16px;
 	}
+
+	@include  media-breakpoint-down (sm) {
+		height: 297px;
+		margin-bottom: 5px;
+		padding: 4px 0 0 5px;
+
+	} 
 }
 
 .contact-us__facebook {
 	color: $white;
 	font-size: 16px;
 	margin-right: 236px;
+
+	@include media-breakpoint-down (sm) {
+		display: none;
+	}
 }
 
+.contact-us__facebook--hidden {
+	display: none;
+
+	@include media-breakpoint-down (sm) {
+		display: inline-block;
+		color: $white;
+		width: 108px;
+		font-size: 12px;
+		margin-right: 16px;
+	}
+	
+}
+.contact-us__icon-hidden {
+	display: none;
+
+	@include media-breakpoint-down (sm) {
+		display: inline-block;
+		width: 15px;
+		height: 30px;
+		margin-right: 16px;
+	}
+}
 .contact-us__btn {
 	width:  241px;
 	height: 47px;
 	box-shadow: 0 3px $black;
+
+	@include media-breakpoint-down (sm) {
+		width: 149px;
+		font-size: 14px;
+		height: 41px;
+	}
 }
