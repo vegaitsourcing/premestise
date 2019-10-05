@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Transactions;
+using Core.Clients;
 using Core.Services.Mappers;
 using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
@@ -16,16 +17,18 @@ namespace Core.Services
 
         private readonly IPendingRequestRepository _pendingRequestRepository;
         private readonly IMatchedRequestRepository _matchedRequestRepository;
+        private readonly IMailClient _mailClient;
         private readonly IPendingRequestWishRepository _requestWishRepository;
         private readonly IKindergardenRepository _kindergardenRepository;
 
-        public RequestService(IPendingRequestRepository pendingRequestRepository, IKindergardenRepository kindergardenRepository, IPendingRequestWishRepository requestWishRepository, IMatchedRequestRepository matchedRequestRepository)
+        public RequestService(IPendingRequestRepository pendingRequestRepository, IKindergardenRepository kindergardenRepository, IPendingRequestWishRepository requestWishRepository, IMatchedRequestRepository matchedRequestRepository, IMailClient mailClient)
 
         {
             _pendingRequestRepository = pendingRequestRepository;
             _kindergardenRepository = kindergardenRepository;
             _requestWishRepository = requestWishRepository;
             _matchedRequestRepository = matchedRequestRepository;
+            _mailClient = mailClient;
         }
 
         public RequestDto CreatePending(RequestDto newRequest)
@@ -37,8 +40,10 @@ namespace Core.Services
             var pendingRequestToAdd = requestMapper.DtoToEntity(newRequest);
 
             var addedPendingRequest = _pendingRequestRepository.Create(pendingRequestToAdd as PendingRequest);
+            var addedPendingRequestDto = requestMapper.DtoFromEntity(addedPendingRequest);
+            _mailClient.Send(addedPendingRequestDto.Email, $"VERIFICATION : {addedPendingRequestDto.Id}");
 
-            return requestMapper.DtoFromEntity(addedPendingRequest);
+            return addedPendingRequestDto;
         }
 
         public void DeletePending(int id)

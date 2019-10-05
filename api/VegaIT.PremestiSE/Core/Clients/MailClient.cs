@@ -24,7 +24,7 @@ namespace Core.Clients
             _defaultEmail = config.GetSection("DefaultEmail").Value;
         }
 
-        public void Send(string fromEmail, string message)
+        public void Send(string toEmail, string message)
         {
             var user = new
             {
@@ -34,16 +34,18 @@ namespace Core.Clients
             using (var smtpClient = _smtpClientFactory.CreateDefaultClient())
             {
 
-                MailAddress receiverEmail = new MailAddress(_defaultEmail);
+                MailAddress receiverEmail = new MailAddress(toEmail);
 
                 string subject = NewMessageOnPremestiSe;
-                string content = $"Message: {message}|from:{fromEmail}";
+                string content = $"Message: {message}|from:{_defaultEmail}";
 
 
-                using (MailMessage mail = new MailMessage(user.Mail, receiverEmail) { Subject = subject, Body = content })
+                using (MailMessage mail = new MailMessage(new MailAddress(_defaultEmail), receiverEmail) { Subject = subject, Body = content })
                 {
                     smtpClient.Send(mail);
                 }
+
+                
             }
         }
     }

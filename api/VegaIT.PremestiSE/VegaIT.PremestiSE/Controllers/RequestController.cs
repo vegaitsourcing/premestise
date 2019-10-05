@@ -22,6 +22,7 @@ namespace VegaIT.PremestiSE.Controllers
                 return BadRequest();
             }
             RequestDto result = _requestService.CreatePending(newRequest);
+
             return Created(Request.Host + Request.Path + result.Id, result);
         }
 
