@@ -1,4 +1,3 @@
-version: 2
 jobs: 
   build: 
     docker:
@@ -7,3 +6,19 @@ jobs:
       - checkout
       - run: cd api/VegaIT.PremestiSE && dotnet restore
       - run: cd api/VegaIT.PremestiSE && dotnet build
+
+  test: 
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:2.2
+    steps:
+      - checkout
+      - run: cd api/VegaIT.PremestiSE/UnitTest && dotnet restore
+      - run: cd api/VegaIT.PremestiSE/UnitTest && dotnet test
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build

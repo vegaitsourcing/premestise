@@ -3,10 +3,8 @@ using Persistence.Interfaces.Entites;
 
 namespace Persistence.Interfaces.Contracts
 {
-    public interface IPendingRequestRepository
+    public interface IPendingRequestRepository : IRequestRepository<PendingRequest>
     {
-        PendingRequest Create(PendingRequest request);
-        IEnumerable<PendingRequest> GetAllMatchesFor(PendingRequest request);
-        void Delete(int id);
+        IEnumerable<PendingRequest> GetAllMatchesForRequest(PendingRequest request);
     }
 }

@@ -8,80 +8,54 @@ using Persistence.Interfaces.Entites;
 
 namespace Persistence.Repositories
 {
-    public class PendingRequestRepository : IPendingRequestRepository
+    public class PendingRequestRepository : RequestRepository<PendingRequest>, IPendingRequestRepository
     {
-        private readonly string _connectionString;
+        private readonly string _connString = "";
+        private readonly IKindergardenRepository _kindergardenRepository = new KindergardenRepository();
 
+<<<<<<< HEAD
         public PendingRequestRepository(IConfiguration config)
         {
             _connectionString = config.GetConnectionString("DefaultConnection");
         }
 
         public PendingRequest Create(PendingRequest request)
+=======
+        public IEnumerable<PendingRequest> GetAllMatchesForRequest(PendingRequest request)
+>>>>>>> 40f047970f1c2743435fe6ccab5fd2b60d57b5c0
         {
-            request.SubmittedAt = DateTime.Now;
-
-            SqlCommand command = new SqlCommand();
-            command.CommandText = $@"INSERT INTO pending_request (parent_email, parent_phone_number, child_name, child_birth_date, from_kindergarden_id, submitted_at) 
-                                    VALUES (@email, @phoneNumber, @childName, @childBirthDate, @fromKindergardenId, @submittedAt)
-                                    SELECT SCOPE_IDENTITY()";
-
-            command.Parameters.Add("@title", SqlDbType.NVarChar).Value = request.ParentEmail;
-            command.Parameters.Add("@childName", SqlDbType.NVarChar).Value = request.ParentPhoneNumber;
-            command.Parameters.Add("@childName", SqlDbType.NVarChar).Value = request.ChildName;
-            command.Parameters.Add("@childBirthDate", SqlDbType.DateTime).Value = request.ChildBirthDate;
-            command.Parameters.Add("@fromKindergardenId", SqlDbType.Int).Value = request.FromKindergardenId;
-            command.Parameters.Add("@submittedAt", SqlDbType.NVarChar).Value = request.SubmittedAt.ToString("yyyy-MM-dd HH:mm:ss");
-
-            using (SqlConnection connection = new SqlConnection())
+            List<PendingRequest> pendingRequests = new List<PendingRequest>();
+            using (SqlConnection conn = new SqlConnection())
             {
-                connection.ConnectionString = _connectionString;
-                connection.Open();
+                conn.ConnectionString = _connString;
+                conn.Open();
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = @"SELECT * FROM pending_request a, pending_request b WHERE a.from_kindergarden = b.to_kindergarden AND a.to_kindergarden = b.from_kindergarden;";
 
-                SqlTransaction transaction = connection.BeginTransaction();
-                command.Transaction = transaction;
+                using (SqlDataAdapter dataAdapter = new SqlDataAdapter())
+                {
+                    DataSet dataSet = new DataSet();
 
-                try
-                {
-                    int id = (int)command.ExecuteScalar();
-                    request.Id = id;
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
+                    dataAdapter.SelectCommand = cmd;
+                    dataAdapter.Fill(dataSet, "pending_request");
+
+                    foreach (DataRow row in dataSet.Tables["pending_request"].Rows)
+                    {
+                        pendingRequests.Add(new PendingRequest
+                        {
+                            Id = (int)row["id"],
+                            FromKindergarden = _kindergardenRepository.GetById((int)row["from_kindergarden_id"]),
+                            SubmittedAt = (DateTime)row["submitted_at"],
+                            ParentEmail = (string)row["parent_email"],
+                            ParentName = (string)row["parent_name"],
+                            ParentPhoneNumber = (string)row["parent_phone_number"],
+                            ChildName = (string)row["child_name"],
+                            ChildBirthDate = (DateTime)row["child_birth_date"]
+                        });
+                    }
                 }
             }
-
-            return request;
-        }
-
-        public void Delete(int id)
-        {
-            SqlCommand command = new SqlCommand($"DELETE FROM pending_request WHERE ID = @id");
-            command.Parameters.Add("@id", SqlDbType.Int).Value = id;
-
-            using (SqlConnection connection = new SqlConnection())
-            {
-                connection.ConnectionString = _connectionString;
-                connection.Open();
-
-                SqlTransaction transaction = connection.BeginTransaction();
-                command.Transaction = transaction;
-
-                try
-                {
-                    command.ExecuteNonQuery();
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-            }
-        }
-
-        public IEnumerable<PendingRequest> GetAllMatchesFor(PendingRequest request)
-        {
-            throw new System.NotImplementedException();
+            return pendingRequests;
         }
     }
 }
