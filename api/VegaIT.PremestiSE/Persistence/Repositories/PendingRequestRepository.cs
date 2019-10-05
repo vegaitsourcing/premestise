@@ -70,9 +70,10 @@ namespace Persistence.Repositories
 
                     secondCommand.ExecuteNonQuery();
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    throw ex;
+                    transaction.Rollback();
+                    throw;
                 }
             }
 
