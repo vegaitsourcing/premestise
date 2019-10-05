@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text;
 using Microsoft.Extensions.Configuration;
 using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
@@ -26,12 +27,30 @@ namespace Persistence.Repositories
                                     VALUES (@email, @phoneNumber, @childName, @childBirthDate, @fromKindergardenId, @submittedAt)
                                     SELECT SCOPE_IDENTITY()";
 
-            command.Parameters.Add("@title", SqlDbType.NVarChar).Value = request.ParentEmail;
-            command.Parameters.Add("@childName", SqlDbType.NVarChar).Value = request.ParentPhoneNumber;
+            command.Parameters.Add("@email", SqlDbType.NVarChar).Value = request.ParentEmail;
+            command.Parameters.Add("@phoneNumber", SqlDbType.NVarChar).Value = request.ParentPhoneNumber;
             command.Parameters.Add("@childName", SqlDbType.NVarChar).Value = request.ChildName;
             command.Parameters.Add("@childBirthDate", SqlDbType.DateTime).Value = request.ChildBirthDate;
             command.Parameters.Add("@fromKindergardenId", SqlDbType.Int).Value = request.FromKindergardenId;
             command.Parameters.Add("@submittedAt", SqlDbType.NVarChar).Value = request.SubmittedAt.ToString("yyyy-MM-dd HH:mm:ss");
+
+            SqlCommand secondCommand = new SqlCommand();
+            var values = new StringBuilder();
+            for (var i = 0; i < request.KindergardenWishIds.Length; i++)
+            {
+                values.Append("(@PendingRequestId, @KindergardenWishId" + i + "), ");
+            }
+
+            secondCommand.CommandText =
+                @"INSERT INTO pending_request_wishes (pending_request_id, kindergarden_wish_id) VALUES" +
+                values.ToString();
+
+            for (var i = 0; i < request.KindergardenWishIds.Length; i++)
+            {
+                secondCommand.Parameters.Add(new SqlParameter("@KindergardenWishId" + i,
+                    request.KindergardenWishIds[i]));
+            }
+
 
             using (SqlConnection connection = new SqlConnection())
             {
@@ -40,11 +59,16 @@ namespace Persistence.Repositories
 
                 SqlTransaction transaction = connection.BeginTransaction();
                 command.Transaction = transaction;
+                secondCommand.Transaction = transaction;
 
                 try
                 {
                     int id = (int)command.ExecuteScalar();
                     request.Id = id;
+
+                    secondCommand.Parameters.Add(new SqlParameter("@PendingRequestId", request.Id));
+
+                    secondCommand.ExecuteNonQuery();
                 }
                 catch (Exception ex)
                 {
@@ -54,6 +78,8 @@ namespace Persistence.Repositories
 
             return request;
         }
+
+
 
         public void Delete(int id)
         {

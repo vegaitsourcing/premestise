@@ -19,20 +19,20 @@ namespace VegaIT.PremestiSE.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] RequestDto newRequest)
         {
-            RequestDto result = _requestService.Create(newRequest);
+            RequestDto result = _requestService.CreatePending(newRequest);
             return Created(Request.Host + Request.Path + result.Id, result);
         }
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok(_requestService.GetAll());
+            return Ok(_requestService.GetAllPending());
         }
 
         [HttpDelete]
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id)
         {
-            _requestService.Delete(id);
+            _requestService.DeletePending(id);
             return NoContent();
         }
     }

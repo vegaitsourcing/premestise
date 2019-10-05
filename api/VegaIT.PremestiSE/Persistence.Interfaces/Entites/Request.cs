@@ -5,6 +5,7 @@ namespace Persistence.Interfaces.Entites
     public class Request
     {
         public int Id { get; set; }
+
         public int FromKindergardenId { get; set; }
         public DateTime SubmittedAt { get; set; }
 
