@@ -10,29 +10,42 @@
 
 .tabs__link {
 	background: $silver-light;
-	color: $light-blue;
+	color: $blue-1;
 	display: inline-block;
 	font-family: $font-default;
 	font-size: 24px;
 	font-weight: 600;
 	padding: 20px 15px;
+	position: relative;
 	text-align: center;
 	width: 33.33%;
 	cursor: pointer;
 	transition: $easeing $trans;
+	[class^='font-ico'] {
+		margin-right: 5px;
+	}
 	&:nth-child(2) {
 		margin: 0 10px;
 	}
 	&.current {
 		background: $white;
 		color: $black-2;
+		&::after {
+			content: '';
+			position: absolute;
+			width: 100%;
+			height: 4px;
+			left: 0;
+			bottom: 0;
+			background-color: $light-blue;
+		}
+		[class^='font-ico'] {
+			color: $light-blue;
+		}
 	}
 	@include hover {
 		background-color: $white;
 		color: $black-2;
-	}
-	[class^='font-ico'] {
-		margin-right: 5px;
 	}
 }
 
