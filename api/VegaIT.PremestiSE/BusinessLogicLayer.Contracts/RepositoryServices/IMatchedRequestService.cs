@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BusinessLogicLayer.Contracts.RepositoryServices
 {
-    public interface IKindergardenService : IService<Kindergarden>
+    public interface IMatchedRequestService : IService<MatchedRequest>
     {
     }
 }

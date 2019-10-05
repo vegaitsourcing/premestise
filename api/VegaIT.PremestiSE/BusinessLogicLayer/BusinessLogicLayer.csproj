@@ -9,4 +9,8 @@
     <ProjectReference Include="..\DataAccessLayer.Contracts\Persistence.Interfaces.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="RepositoryServices\" />
+  </ItemGroup>
+
 </Project>

@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BusinessLogicLayer.Contracts.RepositoryServices;
-using BusinessLogicLayer.RepositoryServices;
-using DataAccessLayer;
-using DataAccessLayer.Contracts.Contracts;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -21,8 +18,6 @@ namespace VegaIT.PremestiSE
         {
             services.AddMvc();
 
-            services.AddSingleton<IRequestService, RequestService>();
-            services.AddSingleton<IRequestRepository>(_ => new RequestRepository());
 
         }
 
@@ -34,10 +29,7 @@ namespace VegaIT.PremestiSE
                 app.UseDeveloperExceptionPage();
             }
 
-            app.Run(async (context) =>
-            {
-                await context.Response.WriteAsync("Hello World!");
-            });
+            app.UseMvc();
         }
     }
 }
