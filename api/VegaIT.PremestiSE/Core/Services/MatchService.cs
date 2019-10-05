@@ -24,7 +24,7 @@ namespace Core.Services
             List<PendingRequest> allPendingRequests = _pendingRequestRepository.GetAllMatchesForRequest(pendingRequest);
             foreach (var current in allPendingRequests)
             {
-                if (toKindergardenList.Find(k => k.Id == current.Id) != null 
+                if (toKindergardenList.Find(k => k.Id == current.Id) != null
                     && _kindergardenRepository.GetToByRequestId(current.Id).Find(k => k.Id == pendingRequest.Id) != null)
                     return new Match
                     {
