@@ -114,7 +114,49 @@ namespace Persistence.Repositories
 
         public IEnumerable<PendingRequest> GetAllMatchesFor(PendingRequest request)
         {
-            throw new System.NotImplementedException();
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = _connectionString;
+                conn.Open();
+
+                SqlCommand cmd = conn.CreateCommand();
+                StringBuilder toValues = new StringBuilder();
+                for (var i = 0; i < request.KindergardenWishIds.Length; i++)
+                {
+                    if (i < request.KindergardenWishIds.Length - 1)
+                    {
+                        toValues.Append("@From" + i + ", ");
+
+                    }
+                    else
+                    {
+                        toValues.Append("@From" + i);
+                    }
+
+                }
+                cmd.CommandText = @"SELECT * FROM pending_request AS PR INNER JOIN pending_request_wishes AS Wishes"
+                                + @" ON Pr.id == Wishes.pending_request_id "
+                                + @" WHERE Wishes.kindergarden_wish_id = @fromKindergardenId AND Pr.from_kindergarden_id IN ("
+                                + toValues + ");";
+
+                for (var i = 0; i < request.KindergardenWishIds.Length; i++)
+                {
+                        cmd.Parameters.Add("@From" + i, SqlDbType.Int).Value = request.KindergardenWishIds[i];
+                }
+
+                cmd.Parameters.Add(new SqlParameter("fromKindergardenId", request.FromKindergardenId));
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (!reader.Read())
+                {
+                    throw new EntityNotFoundException();
+                }
+
+
+                return null;
+
+            }
         }
     }
 }
