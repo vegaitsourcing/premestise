@@ -61,8 +61,11 @@ namespace Persistence.Repositories
         {
             MatchedRequest matchedRequest = Get(id);
 
-            SqlCommand command = new SqlCommand($"DELETE FROM matched_request WHERE ID = @id");
-            command.Parameters.Add("@id", SqlDbType.Int).Value = id;
+            SqlCommand deleteMatchedRequest = new SqlCommand($"DELETE FROM matched_request WHERE ID = @id");
+            deleteMatchedRequest.Parameters.Add("@id", SqlDbType.Int).Value = id;
+
+            SqlCommand deleteMatchedRequestWishes = new SqlCommand($"DELETE FROM matched_request_wishes WHERE matched_request_id = @id");
+            deleteMatchedRequestWishes.Parameters.Add("@id", SqlDbType.Int).Value = id;
 
             using (SqlConnection connection = new SqlConnection())
             {
@@ -70,14 +73,15 @@ namespace Persistence.Repositories
                 connection.Open();
 
                 SqlTransaction transaction = connection.BeginTransaction();
-                command.Transaction = transaction;
+                deleteMatchedRequest.Transaction = transaction;
 
                 try
                 {
-                    command.ExecuteNonQuery();
+                    deleteMatchedRequest.ExecuteNonQuery();
                 }
                 catch (Exception ex)
                 {
+                    transaction.Rollback();
                     throw ex;
                 }
             }
@@ -85,6 +89,7 @@ namespace Persistence.Repositories
             return matchedRequest;
         }
 
+        // helper
         private MatchedRequest Get(int id)
         {
             using (SqlConnection conn = new SqlConnection())
