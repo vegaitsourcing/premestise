@@ -1,0 +1,25 @@
+//---------- success-banner
+//------------------------------------------------------------------------------
+
+.success-banner {
+	background-color: $light-blue;
+	padding: 69px 0 64px;
+}
+
+.success-banner__wrap {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.succeess-banner__number {
+	color: $white;
+	font-size: 48px;
+	font-weight: 700;
+}
+
+.succeess-banner__paragraf {
+	color: $white;
+	font-size: 32px;
+	font-weight: 700;
+}

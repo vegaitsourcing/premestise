@@ -8,8 +8,8 @@
 
 .footer__wrap {
 	display: flex;
-    justify-content: space-between;
-    align-items: center;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .footer__logo {
@@ -30,14 +30,14 @@
 .footer__link--right {
 	margin-right: 10px;
 
-    &::after {
-	    content: '';
-        position: absolute;
-	    border-right: 1px solid $black;
-	    display: block;
-	    top: 2px;
+	&::after {
+		content: '';
+		position: absolute;
+		border-right: 1px solid $black;
+		display: block;
+		top: 2px;
 		right: 304px;
-	    height: 80%;
+		height: 80%;
   
    }
 }
