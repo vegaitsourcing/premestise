@@ -114,6 +114,51 @@ namespace Persistence.Repositories
             }
         }
 
+        //public IEnumerable<PendingRequest> GetAll()
+        //{
+        //    List<Kindergarden> kindergardens = new List<Kindergarden>();
+        //    using (SqlConnection conn = new SqlConnection())
+        //    {
+        //        conn.ConnectionString = _connectionString;
+        //        conn.Open();
+        //        SqlCommand cmd = conn.CreateCommand();
+        //        cmd.CommandText = @"SELECT * FROM Pending_Request;";
+
+        //        using (SqlDataAdapter dataAdapter = new SqlDataAdapter())
+        //        {
+        //            DataSet dataSet = new DataSet();
+
+        //            dataAdapter.SelectCommand = cmd;
+        //            dataAdapter.Fill(dataSet, "Kindergarden");
+
+        //            foreach (DataRow row in dataSet.Tables["Kindergarden"].Rows)
+        //            {
+        //                kindergardens.Add(new Kindergarden
+        //                {
+        //                    Id = (int)row["id"],
+        //                    Municipality = (string)row["municipality"],
+        //                    Government = (string)row["government"],
+        //                    City = (string)row["city"],
+        //                    Name = (string)row["name"],
+        //                    Department = (string)row["department"],
+        //                    Street = (string)row["street"],
+        //                    StreetNumber = (string)row["street_number"],
+        //                    PostalCode = (string)row["postal_code"],
+        //                    LocationType = (bool)row["location_type"] ? LocationType.Base : LocationType.Remote,
+        //                    Longitude = row["longitude"] == System.DBNull.Value ? null : (decimal?)row["longitude"],
+        //                    Latitude = row["latitude"] == System.DBNull.Value ? null : (decimal?)row["latitude"],
+        //                });
+        //            }
+        //        }
+        //    }
+        //    return kindergardens;
+        //}
+
+        public IEnumerable<PendingRequest> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
         public PendingRequest Get(int id)
         {
 

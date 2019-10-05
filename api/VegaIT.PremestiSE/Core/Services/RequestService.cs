@@ -62,7 +62,8 @@ namespace Core.Services
 
         public IEnumerable<RequestDto> GetAllPending()
         {
-            throw new NotImplementedException();
+            //_pendingRequestRepository.GetAll();
+            return null;
         }
     }
 }

@@ -5,6 +5,8 @@ namespace Persistence.Interfaces.Contracts
 {
     public interface IPendingRequestRepository
     {
+        IEnumerable<PendingRequest> GetAll();
+
         PendingRequest Get(int id);
         PendingRequest Create(PendingRequest request);
         IEnumerable<PendingRequest> GetAllMatchesFor(PendingRequest request);
