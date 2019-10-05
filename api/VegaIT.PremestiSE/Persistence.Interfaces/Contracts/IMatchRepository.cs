@@ -3,10 +3,7 @@ using System.Collections.Generic;
 
 namespace Persistence.Interfaces.Contracts
 {
-    public interface IMatchRepository
+    public interface IMatchRequestRepository : IRequestRepository<MatchedRequest>
     {
-        IEnumerable<Match> GetAll();
-        Match Create(MatchedRequest firstMatchedRequest, MatchedRequest secondMatchedRequest);
-        void DeleteByRequestId(int id);
     }
 }

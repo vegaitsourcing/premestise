@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Core.Interfaces.Intefaces;
+﻿using Core.Interfaces.Intefaces;
 using Core.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Interfaces.Contracts;
 using Persistence.Repositories;
@@ -28,9 +23,8 @@ namespace VegaIT.PremestiSE
 
 
             services.AddScoped<IKindergardenRepository, KindergardenRepository>();
-            services.AddScoped<IMatchRepository, MatchRepository>();
+            services.AddScoped<IMatchRequestRepository, MatchRepository>();
             services.AddScoped<IPendingRequestRepository, PendingRequestRepository>();
-            services.AddScoped<IMatchRepository, MatchRepository>();
 
 
 
