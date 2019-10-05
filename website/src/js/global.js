@@ -9,3 +9,6 @@ slider.init();
 
 import tabs from './_project/tabs';
 tabs.init();
+
+import accordions from './_project/accordions';
+accordions.init();

@@ -19,7 +19,7 @@
 
 .footer__rights {
 	font-size: 12px;
-	position: relative;	
+	position: relative;
 }
 
 .footer__link {
@@ -38,12 +38,12 @@
 		top: 2px;
 		right: 304px;
 		height: 80%;
-  
+
    }
 }
 
 .footer__link--left {
-	margin-left: 7px; 
+	margin-left: 7px;
 
 	&::before {
 		content: '';
@@ -53,6 +53,6 @@
 		top: 3px;
 		right: 79px;
 		height: 80%;
-	  
+
 	   }
 }
