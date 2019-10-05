@@ -44,9 +44,6 @@ namespace Core.Services
             MatchedRequest secondMatchedRequest = _matchedRequestRepository.Create(match);
 
             _matchRepository.Create(firstMatchedRequest, secondMatchedRequest);
-
-
-
         }
 
         private PendingRequest FindBestMatch(PendingRequest request)
@@ -71,39 +68,32 @@ namespace Core.Services
 
         public void Unmatch(int id)
         {
-            try
+            using (TransactionScope scope = new TransactionScope())
             {
-                using (TransactionScope scope = new TransactionScope())
+                // delete match and return obj
+                MatchedRequest request = _matchedRequestRepository.Delete(id);
+
+                // convert and save to pending matches -- mozda fali Id ?
+                PendingRequest tempRequest = new PendingRequest()
                 {
-                    // delete match and return obj
-                    MatchedRequest request = _matchedRequestRepository.Delete(id);
+                    ChildBirthDate = request.ChildBirthDate,
+                    FromKindergardenId = request.FromKindergardenId,
+                    KindergardenWishIds = request.KindergardenWishIds,
+                    ChildName = request.ChildName,
+                    ParentEmail = request.ParentEmail,
+                    ParentName = request.ParentName,
+                    ParentPhoneNumber = request.ParentPhoneNumber,
+                    SubmittedAt = request.SubmittedAt,
+                    Verified = true
+                };
 
-                    // convert and save to pending matches -- mozda fali Id ?
-                    PendingRequest tempRequest = new PendingRequest()
-                    {
-                        ChildBirthDate = request.ChildBirthDate,
-                        FromKindergardenId = request.FromKindergardenId,
-                        KindergardenWishIds = request.KindergardenWishIds,
-                        ChildName = request.ChildName,
-                        ParentEmail = request.ParentEmail,
-                        ParentName = request.ParentName,
-                        ParentPhoneNumber = request.ParentPhoneNumber,
-                        SubmittedAt = request.SubmittedAt,
-                        Verified = true
-                    };
+                _pendingRequestRepository.Create(tempRequest);
 
-                    _pendingRequestRepository.Create(tempRequest);
+                // set match status to Failure
+                _matchRepository.SetStatus(id, Status.Failure);
 
-                    // set match status to Failure
-                    _matchRepository.SetStatus(id, Status.Failure);
-
-                    // complete transaction
-                    scope.Complete();
-                }
-            }
-            catch (TransactionAbortedException ex)
-            {
-                throw ex;
+                // complete transaction
+                scope.Complete();
             }
         }
     }
