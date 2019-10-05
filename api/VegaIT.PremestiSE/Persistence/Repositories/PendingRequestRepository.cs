@@ -188,7 +188,7 @@ namespace Persistence.Repositories
                 cmd.CommandText = @"SELECT PR.id FROM pending_request AS PR INNER JOIN pending_request_wishes AS Wishes"
                                 + @" ON Pr.id == Wishes.pending_request_id "
                                 + @" WHERE Wishes.kindergarden_wish_id = @fromKindergardenId AND Pr.from_kindergarden_id IN ("
-                                + toValues + ");";
+                                + toValues + ") AND verified = 1;";
 
                 for (var i = 0; i < request.KindergardenWishIds.Count; i++)
                 {
