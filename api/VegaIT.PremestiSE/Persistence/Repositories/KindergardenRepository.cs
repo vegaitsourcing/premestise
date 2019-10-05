@@ -15,8 +15,8 @@ namespace Persistence.Repositories
             List<Kindergarden> kindergardens = new List<Kindergarden>();
             using (SqlConnection conn = new SqlConnection())
             {
-                conn.Open();
                 conn.ConnectionString = _connString;
+                conn.Open();
                 SqlCommand cmd = conn.CreateCommand();
                 cmd.CommandText = @"SELECT * FROM kindergarden;";
 
@@ -24,9 +24,9 @@ namespace Persistence.Repositories
                 DataSet dataSet = new DataSet();
 
                 dataAdapter.SelectCommand = cmd;
-                dataAdapter.Fill(dataSet, "kindergardens");
+                dataAdapter.Fill(dataSet, "kindergarden");
 
-                foreach (DataRow row in dataSet.Tables["kindergardens"].Rows)
+                foreach (DataRow row in dataSet.Tables["kindergarden"].Rows)
                 {
                     kindergardens.Add(new Kindergarden
                     {
@@ -52,8 +52,8 @@ namespace Persistence.Repositories
         {
             using (SqlConnection conn = new SqlConnection())
             {
-                conn.Open();
                 conn.ConnectionString = _connString;
+                conn.Open();
 
                 SqlCommand cmd = conn.CreateCommand();
 
