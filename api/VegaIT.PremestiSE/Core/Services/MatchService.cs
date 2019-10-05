@@ -11,7 +11,8 @@ namespace Core.Services
     {
         private IMatchRepository _matchRepository;
         private IPendingRequestRepository _pendingRequestRepository;
-        
+        private IMatchedRequestRepository _matchedRequestRepository;
+
         public MatchService(IMatchRepository repository, IPendingRequestRepository pending)
         {
             _matchRepository = repository;
@@ -25,41 +26,33 @@ namespace Core.Services
 
         public void TryMatch(int id)
         {
-            //IncomingRequest = _pendingRequest.Get(id);
-            //AllPossibleMatchedRequests = _pendingRequest
-            //    .GetAll()
-            //    .OrderBy(pr => pr.SubmittedAt)
-            //    .Where(pr =>
-            //        pr.ToKindergardenWishes.Contains(IncomingRequest.FromKinderdenId) &&
-            //        IncomingRequest.ToKindergardenWishes.Contains(pr.FromKindergardenId)
-            //    );
 
-            //var finalMatch;
-
-            //for(WishId in IncomingRequest.ToKindergardenWishIds.OrderBy(id => id ASC))
-            //{
-            //    finalMatch = AllPossibleMatchedRequests.Where(pr => pr.FromKindergarndenId == WishId).FirstOrDefault();
-            //    if (firstMatch)
-            //        break;
-            //}
-
-            PendingRequest match = FindBestMatch(id);
+            PendingRequest incomingRequest = _pendingRequestRepository.Get(id);
+            PendingRequest match = FindBestMatch(incomingRequest);
 
             if (match == null)
                 return;
 
-            // TODO: Notify, convert, match
+            _pendingRequestRepository.Delete(incomingRequest.Id);
+            MatchedRequest firstMatchedRequest = _matchedRequestRepository.Create(incomingRequest);
+
+            _pendingRequestRepository.Delete(match.Id);
+            MatchedRequest secondMatchedRequest = _matchedRequestRepository.Create(match);
+
+            _matchRepository.Create(firstMatchedRequest, secondMatchedRequest);
+
+            
+
         }
 
-        private PendingRequest FindBestMatch(int id)
+        private PendingRequest FindBestMatch(PendingRequest request)
         {
-            PendingRequest incomingRequest = _pendingRequestRepository.Get(id);
 
             IEnumerable<PendingRequest> possibleMatches = _pendingRequestRepository
-                .GetAllMatchesFor(incomingRequest)
+                .GetAllMatchesFor(request)
                 .OrderBy(possibleMatch => possibleMatch.SubmittedAt);
 
-            foreach (var wishId in incomingRequest.KindergardenWishIds.OrderByDescending(wishId => wishId))
+            foreach (var wishId in request.KindergardenWishIds.OrderByDescending(wishId => wishId))
             {
                 PendingRequest match = possibleMatches
                     .Where(possibleMatch => possibleMatch.FromKindergardenId == wishId)

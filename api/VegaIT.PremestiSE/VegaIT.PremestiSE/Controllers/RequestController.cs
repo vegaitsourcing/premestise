@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace VegaIT.PremestiSE.Controllers
 {
+    [ApiController]
     public class RequestController : Controller
     {
         private IRequestService _requestService;

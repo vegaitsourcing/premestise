@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
+using Persistence.Interfaces.Entites.Exceptions;
 
 namespace Persistence.Repositories
 {
@@ -23,8 +24,8 @@ namespace Persistence.Repositories
             request.SubmittedAt = DateTime.Now;
 
             SqlCommand command = new SqlCommand();
-            command.CommandText = $@"INSERT INTO pending_request (parent_email, parent_phone_number, child_name, child_birth_date, from_kindergarden_id, submitted_at) 
-                                    VALUES (@email, @phoneNumber, @childName, @childBirthDate, @fromKindergardenId, @submittedAt)
+            command.CommandText = $@"INSERT INTO pending_request (parent_email, parent_phone_number, child_name, child_birth_date, from_kindergarden_id, submitted_at, verified) 
+                                    VALUES (@email, @phoneNumber, @childName, @childBirthDate, @fromKindergardenId, @submittedAt, @verified)
                                     SELECT SCOPE_IDENTITY()";
 
             command.Parameters.Add("@email", SqlDbType.NVarChar).Value = request.ParentEmail;
@@ -33,6 +34,7 @@ namespace Persistence.Repositories
             command.Parameters.Add("@childBirthDate", SqlDbType.DateTime).Value = request.ChildBirthDate;
             command.Parameters.Add("@fromKindergardenId", SqlDbType.Int).Value = request.FromKindergardenId;
             command.Parameters.Add("@submittedAt", SqlDbType.NVarChar).Value = request.SubmittedAt.ToString("yyyy-MM-dd HH:mm:ss");
+            command.Parameters.AddWithValue("@verified", false);
 
             SqlCommand secondCommand = new SqlCommand();
             var values = new StringBuilder();
@@ -128,7 +130,7 @@ namespace Persistence.Repositories
                     SqlDataReader reader = command.ExecuteReader();
                     if (!reader.Read())
                     {
-                        throw new EntryPointNotFoundException("Item don't exist in database");
+                        throw new EntityNotFoundException();
                     }
                     pending = new PendingRequest();
                     pending.Id = (int)reader["id"];
@@ -164,6 +166,23 @@ namespace Persistence.Repositories
         public IEnumerable<PendingRequest> GetAllMatchesFor(PendingRequest request)
         {
             throw new System.NotImplementedException();
+        }
+
+        public void Verify(int id)
+        {
+            using(SqlConnection connection = new SqlConnection())
+            {
+                connection.ConnectionString = _connectionString;
+                connection.Open();
+
+                string query = @"update table pending_request set verified= @verified where id=@id";
+                using(SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@verified", true);
+                    command.Parameters.AddWithValue("@id", id);
+                }
+
+            }
         }
     }
 }

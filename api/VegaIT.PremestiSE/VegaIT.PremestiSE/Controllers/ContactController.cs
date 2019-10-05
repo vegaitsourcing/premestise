@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace VegaIT.PremestiSE.Controllers
 {
+    [ApiController]
     public class ContactController : Controller
     {
         [HttpPost]
