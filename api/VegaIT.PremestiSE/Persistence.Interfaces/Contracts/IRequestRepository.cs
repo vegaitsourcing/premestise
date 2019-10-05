@@ -9,5 +9,6 @@ namespace Persistence.Interfaces.Contracts
     {
         T Create(T request);
         void Delete(T request);
+        T GetById(int id);
     }
 }

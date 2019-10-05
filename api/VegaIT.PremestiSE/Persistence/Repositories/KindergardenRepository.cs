@@ -28,29 +28,31 @@ namespace Persistence.Repositories
                 SqlCommand cmd = conn.CreateCommand();
                 cmd.CommandText = @"SELECT * FROM kindergarden;";
 
-                SqlDataAdapter dataAdapter = new SqlDataAdapter();
-                DataSet dataSet = new DataSet();
-
-                dataAdapter.SelectCommand = cmd;
-                dataAdapter.Fill(dataSet, "kindergarden");
-
-                foreach (DataRow row in dataSet.Tables["kindergarden"].Rows)
+                using (SqlDataAdapter dataAdapter = new SqlDataAdapter())
                 {
-                    kindergardens.Add(new Kindergarden
+                    DataSet dataSet = new DataSet();
+
+                    dataAdapter.SelectCommand = cmd;
+                    dataAdapter.Fill(dataSet, "kindergarden");
+
+                    foreach (DataRow row in dataSet.Tables["kindergarden"].Rows)
                     {
-                        Id = (int)row["id"],
-                        Municipality = (string)row["municipality"],
-                        Government = (string)row["goverment"],
-                        City = (string)row["city"],
-                        Name = (string)row["name"],
-                        Department = (string)row["department"],
-                        Street = (string)row["street"],
-                        StreetNumber = (string)row["street_number"],
-                        PostalCode = (string)row["postal_code"],
-                        LocationType = (int)row["location_type"] == 0 ? LocationType.Base : LocationType.Remote,
-                        Longitude = (decimal)row["longitude"],
-                        Latitude = (decimal)row["latitude"],
-                    });
+                        kindergardens.Add(new Kindergarden
+                        {
+                            Id = (int)row["id"],
+                            Municipality = (string)row["municipality"],
+                            Government = (string)row["goverment"],
+                            City = (string)row["city"],
+                            Name = (string)row["name"],
+                            Department = (string)row["department"],
+                            Street = (string)row["street"],
+                            StreetNumber = (string)row["street_number"],
+                            PostalCode = (string)row["postal_code"],
+                            LocationType = (int)row["location_type"] == 0 ? LocationType.Base : LocationType.Remote,
+                            Longitude = (decimal)row["longitude"],
+                            Latitude = (decimal)row["latitude"],
+                        });
+                    }
                 }
             }
             return kindergardens;
@@ -65,7 +67,7 @@ namespace Persistence.Repositories
 
                 SqlCommand cmd = conn.CreateCommand();
 
-                cmd.CommandText = @"SELECT * FROM kindergardens WHERE id=@Id;";
+                cmd.CommandText = @"SELECT * FROM kindergarden WHERE id=@Id;";
                 cmd.Parameters.Add(new SqlParameter("Id", id));
 
                 SqlDataReader reader = cmd.ExecuteReader();
@@ -104,6 +106,46 @@ namespace Persistence.Repositories
                     Latitude = reader.GetDecimal(latitudeOrd)
                 };
             }
+        }
+
+        public List<Kindergarden> GetToByRequestId(int id)
+        {
+            List<Kindergarden> kindergardens = new List<Kindergarden>();
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = _connString;
+                conn.Open();
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = @"SELECT * FROM kindergarden WHERE id IN (SELECT kindergarden_request_id FROM pending_request_wishes WHERE pending_request_id=id);";
+
+                using (SqlDataAdapter dataAdapter = new SqlDataAdapter())
+                {
+                    DataSet dataSet = new DataSet();
+
+                    dataAdapter.SelectCommand = cmd;
+                    dataAdapter.Fill(dataSet, "kindergarden");
+
+                    foreach (DataRow row in dataSet.Tables["kindergarden"].Rows)
+                    {
+                        kindergardens.Add(new Kindergarden
+                        {
+                            Id = (int)row["id"],
+                            Municipality = (string)row["municipality"],
+                            Government = (string)row["goverment"],
+                            City = (string)row["city"],
+                            Name = (string)row["name"],
+                            Department = (string)row["department"],
+                            Street = (string)row["street"],
+                            StreetNumber = (string)row["street_number"],
+                            PostalCode = (string)row["postal_code"],
+                            LocationType = (int)row["location_type"] == 0 ? LocationType.Base : LocationType.Remote,
+                            Longitude = (decimal)row["longitude"],
+                            Latitude = (decimal)row["latitude"],
+                        });
+                    }
+                }
+            }
+            return kindergardens;
         }
     }
 }

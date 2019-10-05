@@ -5,6 +5,6 @@ namespace Persistence.Interfaces.Contracts
 {
     public interface IPendingRequestRepository : IRequestRepository<PendingRequest>
     {
-        IEnumerable<PendingRequest> GetAllMatchesForRequest(PendingRequest request);
+        List<PendingRequest> GetAllMatchesForRequest(PendingRequest request);
     }
 }
