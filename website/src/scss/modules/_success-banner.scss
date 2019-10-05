@@ -10,16 +10,21 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	.font-ico-circle {
+		color: $white;
+		font-size: 40px;
+		margin: 0 15px;
+	}
 }
 
 .succeess-banner__number {
 	color: $white;
 	font-size: 48px;
-	font-weight: 700;
+	font-weight: 600;
 }
 
 .succeess-banner__paragraf {
 	color: $white;
 	font-size: 32px;
-	font-weight: 700;
+	font-weight: 600;
 }
