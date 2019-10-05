@@ -12,12 +12,10 @@ namespace VegaIT.PremestiSE.Controllers
     public class EmailController : Controller
     {
         private readonly IMatchService _matchService;
-        private readonly IRequestService _requestService;
 
-        public EmailController(IMatchService service, IRequestService requestService)
+        public EmailController(IMatchService service)
         {
             _matchService = service;
-            _requestService = requestService;
         }
 
         [HttpGet]
