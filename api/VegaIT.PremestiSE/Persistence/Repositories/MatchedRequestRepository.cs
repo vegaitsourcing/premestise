@@ -19,9 +19,9 @@ namespace Persistence.Repositories
 
         }
 
-        public MatchedRequest Create(MatchedRequest request)
+        public MatchedRequest Create(Request request)
         {
-            request.SubmittedAt = DateTime.Now;
+            request.SubmittedAt = request.SubmittedAt;
 
             SqlCommand command = new SqlCommand();
             command.CommandText = $@"INSERT INTO matched_request (parent_email, parent_phone_number, child_name, child_birth_date, from_kindergarden_id, submitted_at) 
@@ -77,8 +77,7 @@ namespace Persistence.Repositories
                     throw;
                 }
             }
-
-            return request;
+            return request as MatchedRequest;
         }
 
 

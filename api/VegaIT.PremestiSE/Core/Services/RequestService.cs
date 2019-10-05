@@ -46,18 +46,6 @@ namespace Core.Services
             _pendingRequestRepository.Delete(id);
         }
 
-        public RequestDto CreateMatched(RequestDto newRequest)
-        {
-            var requestMapper = new RequestMapper();
-
-            if (newRequest.ToKindergardenIds == null)
-                newRequest.ToKindergardenIds = new List<int>(0);
-            var matchedRequestToAdd = requestMapper.DtoToEntity(newRequest);
-
-            var addedPendingRequest = _matchedRequestRepository.Create(matchedRequestToAdd as MatchedRequest);
-
-            return requestMapper.DtoFromEntity(addedPendingRequest);
-        }
 
         public void DeleteMatched(int id)
         {

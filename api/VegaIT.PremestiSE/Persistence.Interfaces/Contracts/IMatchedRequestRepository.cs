@@ -4,7 +4,7 @@ namespace Persistence.Interfaces.Contracts
 {
     public interface IMatchedRequestRepository
     {
-        MatchedRequest Create(PendingRequest request);
+        MatchedRequest Create(Request request);
         MatchedRequest Delete(int id);
     }
 }
