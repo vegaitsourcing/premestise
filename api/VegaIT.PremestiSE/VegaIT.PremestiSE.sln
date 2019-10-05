@@ -1,19 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29306.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VegaIT.PremestiSE", "VegaIT.PremestiSE\VegaIT.PremestiSE.csproj", "{757A1026-620F-45D2-A5B0-9EA7178ECB7C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayer", "DataAccessLayer\DataAccessLayer.csproj", "{F466E6F0-CD3D-41F2-B158-4EB919DA58D4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogicLayer", "BusinessLogicLayer\BusinessLogicLayer.csproj", "{5E4EDE76-3A26-4F89-978C-6E3A7B970145}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogicLayer.Contracts", "BusinessLogicLayer.Contracts\BusinessLogicLayer.Contracts.csproj", "{6AF8406B-5E6A-4AC3-BFD2-0B9C34AD0CB1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence.Interfaces", "DataAccessLayer.Contracts\Persistence.Interfaces.csproj", "{0A89C5A3-566B-432C-A822-FF1307C09699}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence.Interfaces", "Persistence.Interfaces\Persistence.Interfaces.csproj", "{0B951927-914C-4C81-B667-C5F726342687}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleTestAPI", "ConsoleTestAPI\ConsoleTestAPI.csproj", "{085F7249-F681-426C-9197-FA7A4ABED889}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "Persistence\Persistence.csproj", "{95A13C6F-7E74-420F-AB30-352D2371CA6C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +23,6 @@ Global
 		{757A1026-620F-45D2-A5B0-9EA7178ECB7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{757A1026-620F-45D2-A5B0-9EA7178ECB7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{757A1026-620F-45D2-A5B0-9EA7178ECB7C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F466E6F0-CD3D-41F2-B158-4EB919DA58D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F466E6F0-CD3D-41F2-B158-4EB919DA58D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F466E6F0-CD3D-41F2-B158-4EB919DA58D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F466E6F0-CD3D-41F2-B158-4EB919DA58D4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5E4EDE76-3A26-4F89-978C-6E3A7B970145}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5E4EDE76-3A26-4F89-978C-6E3A7B970145}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E4EDE76-3A26-4F89-978C-6E3A7B970145}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -37,14 +31,14 @@ Global
 		{6AF8406B-5E6A-4AC3-BFD2-0B9C34AD0CB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AF8406B-5E6A-4AC3-BFD2-0B9C34AD0CB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AF8406B-5E6A-4AC3-BFD2-0B9C34AD0CB1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0A89C5A3-566B-432C-A822-FF1307C09699}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0A89C5A3-566B-432C-A822-FF1307C09699}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0A89C5A3-566B-432C-A822-FF1307C09699}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0A89C5A3-566B-432C-A822-FF1307C09699}.Release|Any CPU.Build.0 = Release|Any CPU
-		{085F7249-F681-426C-9197-FA7A4ABED889}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{085F7249-F681-426C-9197-FA7A4ABED889}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{085F7249-F681-426C-9197-FA7A4ABED889}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{085F7249-F681-426C-9197-FA7A4ABED889}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B951927-914C-4C81-B667-C5F726342687}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B951927-914C-4C81-B667-C5F726342687}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B951927-914C-4C81-B667-C5F726342687}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B951927-914C-4C81-B667-C5F726342687}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95A13C6F-7E74-420F-AB30-352D2371CA6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95A13C6F-7E74-420F-AB30-352D2371CA6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95A13C6F-7E74-420F-AB30-352D2371CA6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95A13C6F-7E74-420F-AB30-352D2371CA6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

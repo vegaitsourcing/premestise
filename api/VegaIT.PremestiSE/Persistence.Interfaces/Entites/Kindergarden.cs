@@ -15,7 +15,7 @@
         public string Name { get; set; }
         public string Department { get; set; }
         public string Street { get; set; }
-        public string Street_Number { get; set; }
+        public string StreetNumber { get; set; }
         public string PostalCode { get; set; }
         public LocationType LocationType { get; set; }
         public decimal Longitude { get; set; }
