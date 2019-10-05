@@ -1,6 +1,7 @@
 ﻿using Core.Interfaces.Intefaces;
 using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
+using Persistence.Interfaces.Entites.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,10 +30,11 @@ namespace Core.Services
         {
 
             PendingRequest incomingRequest = _pendingRequestRepository.Get(id);
+            _pendingRequestRepository.Verify(id);
+
             PendingRequest match = FindBestMatch(incomingRequest);
 
-            if (match == null)
-                return;
+            if (match == null) return;
 
             _pendingRequestRepository.Delete(incomingRequest.Id);
             MatchedRequest firstMatchedRequest = _matchedRequestRepository.Create(incomingRequest);
