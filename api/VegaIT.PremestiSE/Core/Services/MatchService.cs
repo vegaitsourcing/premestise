@@ -35,8 +35,6 @@ namespace Core.Services
 
             using (var transactionScope = new TransactionScope())
             {
-
-
                 PendingRequest incomingRequest = _pendingRequestRepository.Get(id);
                 _pendingRequestRepository.Verify(id);
 
@@ -46,9 +44,7 @@ namespace Core.Services
 
                 _pendingRequestRepository.Delete(incomingRequest.Id);
                 MatchedRequest firstMatchedRequest = _matchedRequestRepository.Create(incomingRequest);
-
-
-
+                
                 _pendingRequestRepository.Delete(match.Id);
                 MatchedRequest secondMatchedRequest = _matchedRequestRepository.Create(match);
 
@@ -66,7 +62,6 @@ namespace Core.Services
 
         private PendingRequest FindBestMatch(PendingRequest request)
         {
-
             IEnumerable<PendingRequest> possibleMatches = _pendingRequestRepository
                 .GetAllMatchesFor(request)
                 .OrderBy(possibleMatch => possibleMatch.SubmittedAt);

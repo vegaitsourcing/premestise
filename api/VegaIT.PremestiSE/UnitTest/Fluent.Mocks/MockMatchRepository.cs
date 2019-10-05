@@ -10,24 +10,24 @@ namespace UnitTest.Fluent.Mocks
 {
     public class MockMatchRepository : Mock<IMatchRepository>
     {
-        MockMatchRepository GetAll(IEnumerable<Match> matches)
+        public MockMatchRepository GetAll(IEnumerable<Match> matches)
         {
             Setup(x => x.GetAll()).Returns(matches);
             return this;
         }
 
-        MockMatchRepository GetAllEmpty()
+        public MockMatchRepository GetAllEmpty()
         {
             return GetAll(Enumerable.Empty<Match>());
         }
 
-        MockMatchRepository Create(Match returnedMatch)
+        public MockMatchRepository Create(Match returnedMatch)
         {
             Setup(x => x.Create(It.IsAny<MatchedRequest>(), It.IsAny<MatchedRequest>())).Returns(returnedMatch);
             return this;
         }
 
-        MockMatchRepository DeleteByRequestIdAny()
+        public MockMatchRepository DeleteByRequestIdAny()
         {
             Setup(x => x.DeleteByRequestId(It.IsAny<int>()));
             return this;
