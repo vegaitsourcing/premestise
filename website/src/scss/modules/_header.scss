@@ -12,10 +12,10 @@
 	align-items: center;
 }
 .header__logo {
-	width: 230px;
+	max-width: 230px;
 	height: 78px;
+	width: 100%;
 }
-
 
 .nav__list {
 	display: flex;
@@ -33,6 +33,6 @@
 	display: block;
 	@include hover {
 		text-decoration: underline;
-		
+
 	}
 }

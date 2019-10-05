@@ -104,7 +104,9 @@
 }
 
 .form-buttons__left {
-	order: 2;
+	@include media-breakpoint-down(md) {
+		order: 2;
+	}
 }
 
 .form-social-links {
@@ -197,4 +199,60 @@
 	@include hover {
 		color: $light-blue;
 	}
+}
+
+//Pagination
+.pagination {
+	display: block;
+	margin-top: 50px;
+	text-align: center;
+	width: 100%;
+}
+
+.pagination__pages {
+	align-items: center;
+	display: inline-block;
+	font-size: 24px;
+	margin: 0 auto;
+	padding: 0 35px;
+	position: relative;
+	text-align: center;
+}
+
+.pagination__pages li {
+	display: inline-block;
+	margin: 0 10px;
+}
+
+.pagination__pages a {
+	color: $blue-1;
+	font-weight: 600;
+	transition: $trans $easeing;
+	&.pagination__pages--active {
+		color: $black-2;
+	}
+	@include hover {
+		color: $light-blue;
+	}
+}
+
+
+.pagination-directions {
+	display: block;
+	font-size: 24px;
+	width: 100%;
+}
+
+.pagination-directions__left {
+	position: absolute;
+	top: 2px;
+	left: 0;
+	transform: rotate(90deg);
+}
+
+.pagination-directions__right {
+	position: absolute;
+	top: 2px;
+	right: 0;
+	transform: rotate(-90deg);
 }
