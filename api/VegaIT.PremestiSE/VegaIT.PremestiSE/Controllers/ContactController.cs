@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Clients;
 using Microsoft.AspNetCore.Mvc;
 
 namespace VegaIT.PremestiSE.Controllers
@@ -9,6 +10,13 @@ namespace VegaIT.PremestiSE.Controllers
     [ApiController]
     public class ContactController : Controller
     {
+        private readonly IMailClient _mailClient;
+
+        public ContactController(IMailClient mailClient)
+        {
+            _mailClient = mailClient;
+        }
+
         [HttpPost]
         public IActionResult Index( )
         {
@@ -18,10 +26,9 @@ namespace VegaIT.PremestiSE.Controllers
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(message))
                 return BadRequest();
 
-        
-          // TODO: use EmailClient
-
-          return Ok();
+            _mailClient.Send(email, message);
+            
+            return Ok();
         }
     }
 }

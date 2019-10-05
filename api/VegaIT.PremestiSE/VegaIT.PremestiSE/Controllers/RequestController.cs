@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Core.Interfaces.Intefaces;
+﻿using Core.Interfaces.Intefaces;
 using Core.Interfaces.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace VegaIT.PremestiSE.Controllers
 {
     [ApiController]
+    [Route("api/request")]
     public class RequestController : Controller
     {
-        private IRequestService _requestService;
+        private readonly IRequestService _requestService;
         public RequestController(IRequestService service)
         {
             _requestService = service;

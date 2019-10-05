@@ -10,7 +10,7 @@ namespace VegaIT.PremestiSE.Controllers
     [ApiController]
     public class EmailController : Controller
     {
-        private IMatchService _matchService;
+        private readonly IMatchService _matchService;
 
         public EmailController(IMatchService service)
         {

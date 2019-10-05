@@ -29,21 +29,23 @@ namespace Persistence.Repositories
                 SqlCommand cmd = conn.CreateCommand();
                 cmd.CommandText = @"SELECT * FROM match;";
 
-                SqlDataAdapter dataAdapter = new SqlDataAdapter();
-                DataSet dataSet = new DataSet();
-
-                dataAdapter.SelectCommand = cmd;
-                dataAdapter.Fill(dataSet, "match");
-
-                foreach (DataRow row in dataSet.Tables["match"].Rows)
+                using (SqlDataAdapter dataAdapter = new SqlDataAdapter())
                 {
-                    matchs.Add(new Match
+                    DataSet dataSet = new DataSet();
+
+                    dataAdapter.SelectCommand = cmd;
+                    dataAdapter.Fill(dataSet, "match");
+
+                    foreach (DataRow row in dataSet.Tables["match"].Rows)
                     {
-                        Id = (int)row["id"],
-                        FirstMatchedRequest = null,
-                        SecondMatchedRequest = null,
-                        MatchedAt = (DateTime)row["matched_at"]
-                    });
+                        matchs.Add(new Match
+                        {
+                            Id = (int)row["id"],
+                            FirstMatchedRequest = null,
+                            SecondMatchedRequest = null,
+                            MatchedAt = (DateTime)row["matched_at"]
+                        });
+                    }
                 }
             }
             return matchs;

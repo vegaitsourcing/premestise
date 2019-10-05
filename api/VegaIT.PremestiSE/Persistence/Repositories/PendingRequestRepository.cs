@@ -225,13 +225,13 @@ namespace Persistence.Repositories
 
         public void Verify(int id)
         {
-            using(SqlConnection connection = new SqlConnection())
+            using (SqlConnection connection = new SqlConnection())
             {
                 connection.ConnectionString = _connectionString;
                 connection.Open();
 
                 string query = @"update table pending_request set verified= @verified where id=@id";
-                using(SqlCommand command = new SqlCommand(query, connection))
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@verified", true);
                     command.Parameters.AddWithValue("@id", id);

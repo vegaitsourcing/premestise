@@ -11,12 +11,13 @@ namespace Core.Services
     {
         private IMatchRepository _matchRepository;
         private IPendingRequestRepository _pendingRequestRepository;
-        private IMatchedRequestRepository _matchedRequestRepository;
+        private readonly IMatchedRequestRepository _matchedRequestRepository;
 
-        public MatchService(IMatchRepository repository, IPendingRequestRepository pending)
+        public MatchService(IMatchRepository repository, IPendingRequestRepository pending, IMatchedRequestRepository matchedRequestRepository)
         {
             _matchRepository = repository;
             _pendingRequestRepository = pending;
+            _matchedRequestRepository = matchedRequestRepository;
         }
 
         public int GetTotalCount()
@@ -41,7 +42,7 @@ namespace Core.Services
 
             _matchRepository.Create(firstMatchedRequest, secondMatchedRequest);
 
-            
+
 
         }
 
