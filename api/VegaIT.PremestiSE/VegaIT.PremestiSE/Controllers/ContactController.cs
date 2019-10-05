@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace VegaIT.PremestiSE.Controllers
 {
     [ApiController]
+    [Route("api/contact")]
     public class ContactController : Controller
     {
         private readonly IMailClient _mailClient;

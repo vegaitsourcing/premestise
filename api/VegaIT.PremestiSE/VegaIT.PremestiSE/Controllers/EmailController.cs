@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace VegaIT.PremestiSE.Controllers
 {
     [ApiController]
+    [Route("api/email")]
     public class EmailController : Controller
     {
         private readonly IMatchService _matchService;

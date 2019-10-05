@@ -18,7 +18,7 @@
         public string StreetNumber { get; set; }
         public string PostalCode { get; set; }
         public LocationType LocationType { get; set; }
-        public decimal Longitude { get; set; }
-        public decimal Latitude { get; set; }
+        public decimal? Longitude { get; set; }
+        public decimal? Latitude { get; set; }
     }
 }

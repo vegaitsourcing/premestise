@@ -18,15 +18,13 @@ namespace Core.Services
         private readonly IPendingRequestRepository _pendingRequestRepository;
         private readonly IMatchedRequestRepository _matchedRequestRepository;
         private readonly IMailClient _mailClient;
-        private readonly IPendingRequestWishRepository _requestWishRepository;
         private readonly IKindergardenRepository _kindergardenRepository;
 
-        public RequestService(IPendingRequestRepository pendingRequestRepository, IKindergardenRepository kindergardenRepository, IPendingRequestWishRepository requestWishRepository, IMatchedRequestRepository matchedRequestRepository, IMailClient mailClient)
+        public RequestService(IPendingRequestRepository pendingRequestRepository, IKindergardenRepository kindergardenRepository, IMatchedRequestRepository matchedRequestRepository, IMailClient mailClient)
 
         {
             _pendingRequestRepository = pendingRequestRepository;
             _kindergardenRepository = kindergardenRepository;
-            _requestWishRepository = requestWishRepository;
             _matchedRequestRepository = matchedRequestRepository;
             _mailClient = mailClient;
         }

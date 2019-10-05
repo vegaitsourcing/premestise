@@ -26,31 +26,31 @@ namespace Persistence.Repositories
                 conn.ConnectionString = _connString;
                 conn.Open();
                 SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = @"SELECT * FROM kindergarden;";
+                cmd.CommandText = @"SELECT * FROM Kindergarden;";
 
                 using (SqlDataAdapter dataAdapter = new SqlDataAdapter())
                 {
                     DataSet dataSet = new DataSet();
 
                     dataAdapter.SelectCommand = cmd;
-                    dataAdapter.Fill(dataSet, "kindergarden");
+                    dataAdapter.Fill(dataSet, "Kindergarden");
 
-                    foreach (DataRow row in dataSet.Tables["kindergarden"].Rows)
+                    foreach (DataRow row in dataSet.Tables["Kindergarden"].Rows)
                     {
                         kindergardens.Add(new Kindergarden
                         {
                             Id = (int)row["id"],
                             Municipality = (string)row["municipality"],
-                            Government = (string)row["goverment"],
+                            Government = (string)row["government"],
                             City = (string)row["city"],
                             Name = (string)row["name"],
                             Department = (string)row["department"],
                             Street = (string)row["street"],
                             StreetNumber = (string)row["street_number"],
                             PostalCode = (string)row["postal_code"],
-                            LocationType = (int)row["location_type"] == 0 ? LocationType.Base : LocationType.Remote,
-                            Longitude = (decimal)row["longitude"],
-                            Latitude = (decimal)row["latitude"],
+                            LocationType = (bool)row["location_type"] ? LocationType.Base : LocationType.Remote,
+                            Longitude = row["longitude"] == System.DBNull.Value ? null : (decimal?)row["longitude"],
+                            Latitude = row["latitude"] == System.DBNull.Value ? null : (decimal?)row["latitude"],
                         });
                     }
                 }
