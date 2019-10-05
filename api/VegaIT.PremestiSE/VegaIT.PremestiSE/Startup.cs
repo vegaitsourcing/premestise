@@ -44,6 +44,12 @@ namespace VegaIT.PremestiSE
             services.AddScoped<IKindergardenRepository, KindergardenRepository>();
             services.AddScoped<IMatchRepository, MatchRepository>();
             services.AddScoped<IPendingRequestRepository, PendingRequestRepository>();
+            services.AddScoped<IMatchedRequestRepository, MatchedRequestRepository>();
+
+            services.AddScoped<ISmtpClientFactory, SmtpClientFactory>();
+            services.AddScoped<ISmtpClientWrapper, SmtpClientWrapper>();
+
+
 
             services.AddScoped<IMailClient, MailClient>();
             services.AddScoped<IKindergardenRepository, KindergardenRepository>();
