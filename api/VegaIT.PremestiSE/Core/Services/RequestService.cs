@@ -13,12 +13,14 @@ namespace Core.Services
 {
     public class RequestService : IRequestService
     {
+
         private readonly IPendingRequestRepository _pendingRequestRepository;
         private readonly IMatchedRequestRepository _matchedRequestRepository;
         private readonly IPendingRequestWishRepository _requestWishRepository;
         private readonly IKindergardenRepository _kindergardenRepository;
 
         public RequestService(IPendingRequestRepository pendingRequestRepository, IKindergardenRepository kindergardenRepository, IPendingRequestWishRepository requestWishRepository, IMatchedRequestRepository matchedRequestRepository)
+
         {
             _pendingRequestRepository = pendingRequestRepository;
             _kindergardenRepository = kindergardenRepository;

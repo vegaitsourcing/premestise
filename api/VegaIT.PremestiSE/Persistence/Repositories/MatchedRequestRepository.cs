@@ -39,7 +39,7 @@ namespace Persistence.Repositories
             SqlCommand secondCommand = new SqlCommand();
 
             var values = new StringBuilder();
-            for (var i = 0; i < request.KindergardenWishIds.Length; i++)
+            for (var i = 0; i < request.KindergardenWishIds.Count; i++)
             {
                 values.Append("(@MatchedRequestId, @KindergardenWishId" + i + "), ");
             }
@@ -48,7 +48,7 @@ namespace Persistence.Repositories
                 @"INSERT INTO matched_request_wishes (matched_request_id, kindergarden_wish_id) VALUES" +
                 values.ToString();
 
-            for (var i = 0; i < request.KindergardenWishIds.Length; i++)
+            for (var i = 0; i < request.KindergardenWishIds.Count; i++)
             {
                 secondCommand.Parameters.Add(new SqlParameter("@KindergardenWishId" + i,
                     request.KindergardenWishIds[i]));
