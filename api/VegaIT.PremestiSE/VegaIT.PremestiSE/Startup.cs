@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
+using Core.Clients;
 using Core.Interfaces.Intefaces;
 using Core.Services;
 using Microsoft.AspNetCore.Builder;
@@ -38,7 +41,9 @@ namespace VegaIT.PremestiSE
             services.AddScoped<IMatchRepository, MatchRepository>();
             services.AddScoped<IPendingRequestRepository, PendingRequestRepository>();
             services.AddScoped<IMatchRepository, MatchRepository>();
-            
+
+            services.AddScoped<IMailClient, MailClient>();
+            services.AddSingleton<SmtpClientFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
