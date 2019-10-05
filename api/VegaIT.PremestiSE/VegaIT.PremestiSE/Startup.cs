@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Core.Interfaces.Intefaces;
+using Core.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Persistence.Interfaces.Contracts;
+using Persistence.Repositories;
 
 namespace VegaIT.PremestiSE
 {
@@ -17,6 +20,18 @@ namespace VegaIT.PremestiSE
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            
+
+            services.AddScoped<IKindergardenService, KindergardenService>();
+            services.AddScoped<IMatchService, MatchService>();
+            services.AddScoped<IRequestService, RequestService>();
+
+
+            services.AddScoped<IKindergardenRepository, KindergardenRepository>();
+            services.AddScoped<IMatchRepository, MatchRepository>();
+            services.AddScoped<IPendingRequestRepository, PendingRequestRepository>();
+            services.AddScoped<IMatchRepository, MatchRepository>();
+
 
 
         }
