@@ -23,12 +23,21 @@ textarea {
 }
 
 select {
+	appearance: none;
 	border: 1px solid $black-2;
+	cursor: pointer;
 	height: 50px;
 	margin: 15px 0;
 	max-width: 360px;
 	padding: 0 15px;
 	width: 100%;
+	background-image: url('../../../assets/svg/ico-chevron-down-blue.svg');
+	background-repeat: no-repeat;
+	background-position: 96%;
+	background-size: 20px;
+	@include media-breakpoint-down(lg) {
+		max-width: 400px;
+	}
 }
 
 .form-left {
@@ -41,6 +50,15 @@ select {
 		max-width: 200px;
 		margin-right: 0;
 	}
+	@include media-breakpoint-down(lg) {
+		.parent-input {
+			max-width: 400px;
+		}
+
+		.child-input {
+			max-width: 400px;
+		}
+	}
 }
 
 .input__support-text {
@@ -50,6 +68,10 @@ select {
 		font-size: 22px;
 		vertical-align: sub;
 		margin-right: 5px;
+	}
+	@include media-breakpoint-down(lg) {
+		display: block;
+		margin-left: 0;
 	}
 }
 
@@ -61,15 +83,24 @@ select {
 .input__phone {
 	max-width: 200px;
 	margin-right: 26px;
+	@include media-breakpoint-down(lg) {
+		max-width: 400px;
+	}
 }
 .input__email {
-	max-width: 360px;
+	max-width: 380px;
+	@include media-breakpoint-down(lg) {
+		max-width: 400px;
+	}
 }
 
 .input--without-icon {
 	select {
 		max-width: 100%;
 		width: 100%;
+		@include media-breakpoint-down(lg) {
+			max-width: 400px;
+		}
 	}
 }
 
@@ -103,8 +134,8 @@ select {
 			background-color: $blue-1;
 			left: 5px;
 			top: 5px;
-			width: 19px;
-			height: 19px;
+			width: 18px;
+			height: 18px;
 		}
 	}
 	@include hover {
@@ -113,6 +144,9 @@ select {
 				display: block;
 			}
 		}
+	}
+	@include media-breakpoint-down(md) {
+		margin-top: 40px;
 	}
 }
 

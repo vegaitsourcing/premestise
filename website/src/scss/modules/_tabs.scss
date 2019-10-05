@@ -47,6 +47,9 @@
 		background-color: $white;
 		color: $black-2;
 	}
+	@include media-breakpoint-down(lg) {
+		font-size: 18px;
+	}
 }
 
 .tab-content {
@@ -60,25 +63,56 @@
 
 .form-wrap {
 	display: flex;
+	@include media-breakpoint-down(md) {
+		display: block;
+	}
 }
 
 .form-left {
 	width: 50%;
+	@include media-breakpoint-down(md) {
+		margin: 0 auto;
+		max-width: 400px;
+		width: 100%;
+	}
 }
 
 .form-right {
 	width: 50%;
+	@include media-breakpoint-down(md) {
+		margin: 0 auto;
+		max-width: 400px;
+		width: 100%;
+	}
 }
 
 .form-buttons {
 	align-items: center;
 	display: flex;
 	justify-content: space-between;
+	.btn {
+		padding: 13px 30px;
+	}
+	.font-ico-envelope {
+		margin-right: 7px;
+		vertical-align: text-top;
+	}
+	@include media-breakpoint-down(md) {
+		flex-direction: column;
+		margin-top: 30px;
+	}
+}
+
+.form-buttons__left {
+	order: 2;
 }
 
 .form-social-links {
 	li {
 		display: inline-block;
+	}
+	@include media-breakpoint-down(md) {
+		margin-top: 30px;
 	}
 }
 

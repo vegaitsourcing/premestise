@@ -10,8 +10,8 @@
 	background-position: center;
 	margin-top: -134px;
 
-	&::after {	
-		content: ''; 
+	&::after {
+		content: '';
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -28,7 +28,7 @@
 	color: $white;
 	letter-spacing: 1px;
 	margin-bottom: 6px;
-	
+
 }
 
 .banner__paragraf {
@@ -38,8 +38,10 @@
 }
 
 .banner__holder {
-	padding: 0 308px;
+	margin: 0 auto;
+	max-width: 830px;
+	padding: 0 20px;
 	position: relative;
 	z-index: 2;
-	
+	width: 100%;
 }

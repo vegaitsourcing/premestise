@@ -23,6 +23,7 @@ input[type='submit'] {
 
 .btn {
 	background-color: $blue-1;
+	box-shadow: 0 3px $black;
 	color: $white;
 	font-size: 20px;
 	font-weight: 600;
