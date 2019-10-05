@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
 
@@ -10,6 +11,11 @@ namespace Persistence.Repositories
     public class PendingRequestRepository : IPendingRequestRepository
     {
         private readonly string _connectionString;
+
+        public PendingRequestRepository(IConfiguration config)
+        {
+            _connectionString = config.GetConnectionString("DefaultConnection");
+        }
 
         public PendingRequest Create(PendingRequest request)
         {

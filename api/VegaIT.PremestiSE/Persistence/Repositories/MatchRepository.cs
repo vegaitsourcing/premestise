@@ -1,4 +1,5 @@
-﻿using Persistence.Interfaces.Contracts;
+﻿using Microsoft.Extensions.Configuration;
+using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
 using Persistence.Interfaces.Entites.Exceptions;
 using System;
@@ -11,7 +12,13 @@ namespace Persistence.Repositories
 {
     public class MatchRepository : IMatchRepository
     {
-        private readonly string _connString = "";
+        private readonly string _connString;
+
+        public MatchRepository(IConfiguration config)
+        {
+            _connString = config.GetConnectionString("DefaultConnection");
+        }
+
         public IEnumerable<Match> GetAll()
         {
             List<Match> matchs = new List<Match>();

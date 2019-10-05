@@ -1,4 +1,5 @@
-﻿using Persistence.Interfaces.Contracts;
+﻿using Microsoft.Extensions.Configuration;
+using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
 using Persistence.Interfaces.Entites.Exceptions;
 using System;
@@ -9,7 +10,13 @@ namespace Persistence.Repositories
 {
     public class MatchedRequestRepository : IMatchedRequestRepository
     {
-        private readonly string _connectionString = "";
+        private readonly string _connectionString;
+
+        public MatchedRequestRepository(IConfiguration config)
+        {
+            _connectionString = config.GetConnectionString("DefaultConnection");
+
+        }
 
         public MatchedRequest Create(MatchedRequest request)
         {
