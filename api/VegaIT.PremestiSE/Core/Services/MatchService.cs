@@ -43,8 +43,6 @@ namespace Core.Services
 
             _matchRepository.Create(firstMatchedRequest, secondMatchedRequest);
 
-
-
         }
 
         private PendingRequest FindBestMatch(PendingRequest request)

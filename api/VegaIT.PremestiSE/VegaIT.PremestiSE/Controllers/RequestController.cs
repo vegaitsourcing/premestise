@@ -18,6 +18,7 @@ namespace VegaIT.PremestiSE.Controllers
         public IActionResult Create([FromBody] RequestDto newRequest)
         {
             RequestDto result = _requestService.CreatePending(newRequest);
+
             return Created(Request.Host + Request.Path + result.Id, result);
         }
 
