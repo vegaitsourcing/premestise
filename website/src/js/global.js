@@ -14,6 +14,4 @@ import accordions from './_project/accordions';
 accordions.init();
 
 import openMenu from './_project/menu';
-
-import scrollTo from './_project/scrollToSection';
-scrollTo.init();
+openMenu.init();
