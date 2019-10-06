@@ -1,0 +1,14 @@
+PRONADJENO PODUDARANJE: 
+
+Postovani _,
+
+Pronasli smo potencijalni premestaj za vase dete.
+
+	ImeDeteta		ImeDrugogDeteta
+
+	IzObdanista	-->	UObdaniste		
+	
+Kontakt informacije drugog roditelja
+
+	<DUGME> Dogovor Uspesan</DUGME>
+	<DUGME> Dogovor Neuspesan, Vrati Me U Sistem</DUGME>
