@@ -1,0 +1,54 @@
+//---------- success-banner
+//------------------------------------------------------------------------------
+
+.success-banner {
+	background-color: $light-blue;
+	padding: 69px 0 64px;
+	@include  media-breakpoint-down(sm) {
+		padding: 30px 20px;
+		text-align: center;
+	}
+}
+
+.success-banner__wrap {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	.font-ico-circle {
+		color: $white;
+		font-size: 60px;
+		margin: 0 15px;
+	}
+	@include  media-breakpoint-down(sm) {
+		flex-direction: column;
+		.font-ico-circle {
+			font-size: 40px;
+			vertical-align: sub;
+		}
+	}
+}
+
+.succeess-banner__number {
+	color: $white;
+	font-size: 48px;
+	font-weight: 600;
+
+	@include  media-breakpoint-down(sm) {
+		font-size: 36px;
+		order: 2;
+		margin: 10px 0;
+		text-align: center;
+	}
+}
+
+.succeess-banner__paragraf {
+	color: $white;
+	font-size: 32px;
+	font-weight: 600;
+
+
+	@include  media-breakpoint-down(sm) {
+		font-size: 16px;
+	}
+
+}
