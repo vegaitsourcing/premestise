@@ -1,4 +1,5 @@
-﻿using Core.Interfaces.Models;
+﻿using System;
+using Core.Interfaces.Models;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Net.Mail;
@@ -79,8 +80,11 @@ namespace Core.Clients
              * First parent email
              */
             StringBuilder firstMessageBuilder = new StringBuilder();
-            firstMessageBuilder.Append($"Poštovani, {firstMatch.ParentName} <br>");
-            firstMessageBuilder.Append($"Pronašli smo potencijalni premeštaj za vaše dete. <br>");
+
+
+
+            firstMessageBuilder.Append($"Poštovani, {firstMatch.ParentName} <br/>");
+            firstMessageBuilder.Append($"Pronašli smo potencijalni premeštaj za vaše dete. ${Environment.NewLine}");
 
             firstMessageBuilder.Append($"<table>");
 
