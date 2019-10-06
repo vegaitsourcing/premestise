@@ -33,30 +33,27 @@ namespace Core.Services
         public void TryMatch(int id)
         {
 
-            using (var transactionScope = new TransactionScope())
-            {
-                PendingRequest incomingRequest = _pendingRequestRepository.Get(id);
-                _pendingRequestRepository.Verify(id);
+            PendingRequest incomingRequest = _pendingRequestRepository.Get(id);
+            _pendingRequestRepository.Verify(id);
 
-                PendingRequest match = FindBestMatch(incomingRequest);
+            PendingRequest match = FindBestMatch(incomingRequest);
 
-                if (match == null) return;
+            if (match == null) return;
 
-                _pendingRequestRepository.Delete(incomingRequest.Id);
-                MatchedRequest firstMatchedRequest = _matchedRequestRepository.Create(incomingRequest);
-                
-                _pendingRequestRepository.Delete(match.Id);
-                MatchedRequest secondMatchedRequest = _matchedRequestRepository.Create(match);
+            _pendingRequestRepository.Delete(incomingRequest.Id);
+            MatchedRequest firstMatchedRequest = _matchedRequestRepository.Create(incomingRequest);
 
-                _matchRepository.Create(firstMatchedRequest, secondMatchedRequest);
+            _pendingRequestRepository.Delete(match.Id);
+            MatchedRequest secondMatchedRequest = _matchedRequestRepository.Create(match);
 
-                _mailClient.Send(firstMatchedRequest.ParentEmail,
-                    $"Found match : {secondMatchedRequest.ParentName}  {secondMatchedRequest.ParentPhoneNumber}");
-                _mailClient.Send(secondMatchedRequest.ParentEmail,
-                    $"Found match : {firstMatchedRequest.ParentName}  {firstMatchedRequest.ParentPhoneNumber}");
+            _matchRepository.Create(firstMatchedRequest, secondMatchedRequest);
 
-                transactionScope.Complete();
-            }
+            _mailClient.Send(firstMatchedRequest.ParentEmail,
+                $"Found match : {secondMatchedRequest.ParentName}  {secondMatchedRequest.ParentPhoneNumber}");
+            _mailClient.Send(secondMatchedRequest.ParentEmail,
+                $"Found match : {firstMatchedRequest.ParentName}  {firstMatchedRequest.ParentPhoneNumber}");
+
+
 
         }
 

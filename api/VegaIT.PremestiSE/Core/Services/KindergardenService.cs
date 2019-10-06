@@ -21,8 +21,9 @@ namespace Core.Services
 
         public IEnumerable<KindergardenDto> GetAll()
         {
-            var kindergardens = _kindergardenRepository.GetAll()
-                                                       .Select(new KindergardenMapper().DtoFromEntity);
+            var kindergardens = _kindergardenRepository
+                .GetAll()
+                .Select(new KindergardenMapper().DtoFromEntity);
 
             return kindergardens;
         }

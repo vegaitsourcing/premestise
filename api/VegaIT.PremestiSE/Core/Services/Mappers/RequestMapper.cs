@@ -21,8 +21,8 @@ namespace Core.Services.Mappers
                 PhoneNumber = request.ParentPhoneNumber,
                 ChildName = request.ChildName,
                 ChildBirthDate = request.ChildBirthDate,
-                FromKindergardenId = request.FromKindergardenId,
-                ToKindergardenIds = request.KindergardenWishIds.ToList()
+                FromKindergardenId = EncodeDecode.Encode(request.FromKindergardenId),
+                ToKindergardenIds = request.KindergardenWishIds.Select(EncodeDecode.Encode).ToList()
             };
 
         }
@@ -31,14 +31,13 @@ namespace Core.Services.Mappers
         {
             return new Request
             {
-                Id = EncodeDecode.Decode(requestDto.Id),
                 ParentEmail = requestDto.Email,
                 ParentName = requestDto.ParentName,
                 ParentPhoneNumber = requestDto.PhoneNumber,
                 ChildName = requestDto.ChildName,
                 ChildBirthDate = requestDto.ChildBirthDate,
-                FromKindergardenId = requestDto.FromKindergardenId,
-                KindergardenWishIds = requestDto.ToKindergardenIds
+                FromKindergardenId = EncodeDecode.Decode(requestDto.FromKindergardenId),
+                KindergardenWishIds = requestDto.ToKindergardenIds.Select(EncodeDecode.Decode).ToList()
             };
         }
     }

@@ -34,10 +34,12 @@ namespace Core.Services
             var requestMapper = new RequestMapper();
 
             if (newRequest.ToKindergardenIds == null)
-                newRequest.ToKindergardenIds = new List<int>(0);
+                newRequest.ToKindergardenIds = new List<string>(0);
             var pendingRequestToAdd = requestMapper.DtoToEntity(newRequest);
 
-            var addedPendingRequest = _pendingRequestRepository.Create(pendingRequestToAdd as PendingRequest);
+
+
+            var addedPendingRequest = _pendingRequestRepository.Create(pendingRequestToAdd);
             var addedPendingRequestDto = requestMapper.DtoFromEntity(addedPendingRequest);
             _mailClient.Send(addedPendingRequestDto.Email, $"VERIFICATION : {addedPendingRequestDto.Id}");
 
@@ -62,7 +64,13 @@ namespace Core.Services
 
         public IEnumerable<RequestDto> GetAllPending()
         {
-            throw new NotImplementedException();
+            RequestMapper requestMapper = new RequestMapper();
+
+            return _pendingRequestRepository
+                    .GetAll()
+                    .Where(request => request.Verified)
+                    .Select(requestMapper.DtoFromEntity);
+
         }
     }
 }

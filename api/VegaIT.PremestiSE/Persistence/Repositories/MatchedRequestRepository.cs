@@ -25,12 +25,13 @@ namespace Persistence.Repositories
             request.SubmittedAt = request.SubmittedAt;
 
             SqlCommand command = new SqlCommand();
-            command.CommandText = $@"INSERT INTO matched_request (parent_email, parent_phone_number, child_name, child_birth_date, from_kindergarden_id, submitted_at) 
-                                    VALUES (@email, @phoneNumber, @childName, @childBirthDate, @fromKindergardenId, @submittedAt)
+            command.CommandText = $@"INSERT INTO matched_request (email, parent_name, phone_number, child_name, child_birth_date, from_kindergarden_id, submitted_at) 
+                                    VALUES (@email, @parentName, @parentPhoneNumber, @childName, @childBirthDate, @fromKindergardenId, @submittedAt)
                                     SELECT SCOPE_IDENTITY()";
 
-            command.Parameters.Add("@title", SqlDbType.NVarChar).Value = request.ParentEmail;
-            command.Parameters.Add("@childName", SqlDbType.NVarChar).Value = request.ParentPhoneNumber;
+            command.Parameters.Add("@email", SqlDbType.NVarChar).Value = request.ParentEmail;
+            command.Parameters.Add("@parentPhoneNumber", SqlDbType.NVarChar).Value = request.ParentPhoneNumber;
+            command.Parameters.Add("@parentName", SqlDbType.NVarChar).Value = request.ParentName;
             command.Parameters.Add("@childName", SqlDbType.NVarChar).Value = request.ChildName;
             command.Parameters.Add("@childBirthDate", SqlDbType.DateTime).Value = request.ChildBirthDate;
             command.Parameters.Add("@fromKindergardenId", SqlDbType.Int).Value = request.FromKindergardenId;
@@ -42,7 +43,10 @@ namespace Persistence.Repositories
             var values = new StringBuilder();
             for (var i = 0; i < request.KindergardenWishIds.Count; i++)
             {
-                values.Append("(@MatchedRequestId, @KindergardenWishId" + i + "), ");
+                if(i == request.KindergardenWishIds.Count - 1)
+                    values.Append("(@MatchedRequestId, @KindergardenWishId" + i + ")");
+                else
+                    values.Append("(@MatchedRequestId, @KindergardenWishId" + i + "), ");
             }
 
             secondCommand.CommandText =
@@ -57,6 +61,8 @@ namespace Persistence.Repositories
             using (SqlConnection connection = new SqlConnection())
             {
                 connection.ConnectionString = _connectionString;
+                command.Connection = connection;
+                secondCommand.Connection = connection;
                 connection.Open();
 
                 SqlTransaction transaction = connection.BeginTransaction();
@@ -65,12 +71,14 @@ namespace Persistence.Repositories
 
                 try
                 {
-                    int id = (int)command.ExecuteScalar();
+                    int id = Convert.ToInt32(command.ExecuteScalar());
                     request.Id = id;
 
                     secondCommand.Parameters.Add(new SqlParameter("@MatchedRequestId", request.Id));
 
                     secondCommand.ExecuteNonQuery();
+
+                    transaction.Commit();
                 }
                 catch (Exception)
                 {
@@ -78,7 +86,17 @@ namespace Persistence.Repositories
                     throw;
                 }
             }
-            return request as MatchedRequest;
+            return new MatchedRequest()
+            {
+                Id = request.Id,
+                ParentEmail = request.ParentEmail,
+                ParentName = request.ParentName,
+                ParentPhoneNumber = request.ParentPhoneNumber,
+                ChildName = request.ChildName,
+                ChildBirthDate = request.ChildBirthDate,
+                SubmittedAt = request.SubmittedAt,
+                FromKindergardenId = request.FromKindergardenId
+            };
         }
 
 
@@ -95,14 +113,20 @@ namespace Persistence.Repositories
             using (SqlConnection connection = new SqlConnection())
             {
                 connection.ConnectionString = _connectionString;
+                deleteMatchedRequest.Connection = connection;
+                deleteMatchedRequestWishes.Connection = connection;
                 connection.Open();
 
                 SqlTransaction transaction = connection.BeginTransaction();
                 deleteMatchedRequest.Transaction = transaction;
+                deleteMatchedRequestWishes.Transaction = transaction;
 
                 try
                 {
+                    deleteMatchedRequestWishes.ExecuteNonQuery();
                     deleteMatchedRequest.ExecuteNonQuery();
+                    
+                    transaction.Commit();
                 }
                 catch (Exception ex)
                 {
