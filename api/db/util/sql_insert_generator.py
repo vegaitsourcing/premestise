@@ -22,13 +22,13 @@ class Kindergarden(object):
         self.longitude = str(args[10])
 
     def __str__(self):
-        return f'INSERT INTO kindergarden (city, municipality, government, department, name, street, street_number, postal_code, location_type) VALUES ({self.uprava}, {self.opstina}, {self.naselje}, {self.ustanova}, {self.naziv}, {self.ulica}, {self.broj}, {self.postanski_broj}, {self.location_type}, {self.latitude}, {self.longitude});'
+        return f"INSERT INTO kindergarden (city, municipality, government, department, name, street, street_number, postal_code, location_type, longitude, latitude) VALUES ('{self.uprava}', '{self.opstina}', '{self.naselje}', '{self.ustanova}', '{self.naziv}', '{self.ulica}', '{self.broj}', '{self.postanski_broj}', {self.location_type}, {self.latitude}, {self.longitude});"
         
 obdanista = pd.read_csv('obdanista_csv_cyrillic.csv', delimiter = ',')
 dbRow = obdanista[['uprava','opstina','naselje','ustanova','naziv','ulica','broj','postanski_broj', 'tip_lokacije']]
 kindergardenAddress = obdanista[['ulica', 'broj', 'naselje']]
 with codecs.open('insert.sql', "a", "utf-8-sig") as f:
-    for i in range(1330, len(dbRow)-1):
+    for i in range(0, len(dbRow)-1):
         adressLine = kindergardenAddress.iloc[i].to_string(header=False, index=False).strip()
         point = geo_point_fetcher.getGeoPointFor(adressLine)
         kindergarden = Kindergarden(dbRow.iloc[i], point.latitude if point is not None else "null", point.longitude if point is not None else "null")
