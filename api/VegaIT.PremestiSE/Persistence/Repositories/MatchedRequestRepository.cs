@@ -233,6 +233,7 @@ namespace Persistence.Repositories
                 int childNameOrd = reader.GetOrdinal("child_name");
                 int childBirthDateOrd = reader.GetOrdinal("child_birth_date");
                 int fromKindergardenIdOrd = reader.GetOrdinal("from_kindergarden_id");
+                int matchIdOrd = reader.GetOrdinal("match_id");
 
                 List<int> kindergardenWishIds = GetMatchedWishes(id);
 
@@ -246,7 +247,8 @@ namespace Persistence.Repositories
                     ParentPhoneNumber = reader.GetString(parentPhoneNumberOrd),
                     ChildName = reader.GetString(childNameOrd),
                     FromKindergardenId = reader.GetInt32(fromKindergardenIdOrd),
-                    KindergardenWishIds = kindergardenWishIds
+                    KindergardenWishIds = kindergardenWishIds,
+                    MatchId = reader.GetInt32(matchIdOrd)
                 };
             }
         }

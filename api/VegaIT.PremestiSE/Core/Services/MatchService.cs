@@ -96,15 +96,16 @@ namespace Core.Services
             _pendingRequestRepository.Create(tempRequest);
 
             // set match status to Failure
-            _matchRepository.SetStatus(id, Status.Failure);
+            _matchRepository.SetStatus(request.MatchId, Status.Failure);
 
             // complete transaction
         }
 
         public void ConfirmMatch(int id)
         {
+            MatchedRequest matchedReq = _matchedRequestRepository.Get(id);
             // set match status to Success
-            _matchRepository.SetStatus(id, Status.Success);
+            _matchRepository.SetStatus(matchedReq.MatchId, Status.Success);
         }
     }
 }
