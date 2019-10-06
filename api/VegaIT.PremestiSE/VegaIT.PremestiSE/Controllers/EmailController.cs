@@ -16,20 +16,20 @@ namespace VegaIT.PremestiSE.Controllers
         }
 
         [HttpPost]
-        
+
         [Route("verify")]
         public IActionResult Verify([FromBody] string id)
         {
-            int idAsInt = EncodeDecode.Decode(id);
-            _matchService.TryMatch(idAsInt);
+            int decodedId = HashId.Decode(id);
+            _matchService.TryMatch(decodedId);
             return Ok();
         }
 
         [HttpPost]
         public IActionResult Confirm([FromBody] string id)
         {
-            int idAsInt = EncodeDecode.Decode(id);
-            _matchService.ConfirmMatch(idAsInt);
+            int decodedId = HashId.Decode(id);
+            _matchService.ConfirmMatch(decodedId);
             return Ok();
         }
 
@@ -37,8 +37,8 @@ namespace VegaIT.PremestiSE.Controllers
         [Route("recover")]
         public IActionResult Recover([FromBody] string id)
         {
-            int idAsInt = EncodeDecode.Decode(id);
-            _matchService.Unmatch(idAsInt);
+            int decodedId = HashId.Decode(id);
+            _matchService.Unmatch(decodedId);
             return Ok();
         }
 

@@ -6,27 +6,32 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Util.Exceptions;
 
 namespace VegaIT.PremestiSE
 {
-    public class ExceptionHandler: ExceptionFilterAttribute
+    public class ExceptionHandler : ExceptionFilterAttribute
     {
-         
-        
-            public override void OnException(ExceptionContext context)
+
+
+        public override void OnException(ExceptionContext context)
+        {
+            var exception = context.Exception;
+
+            if (exception is EntityNotFoundException)
             {
-                var exception = context.Exception;
-
-                if (exception is EntityNotFoundException)
-                {
-                    context.HttpContext.Response.StatusCode = 404;
-                }
-               
-
-                var result = JsonConvert.SerializeObject(new { StatusCode = context.HttpContext.Response.StatusCode, Error = exception.Message });
-
-                context.Result = new ObjectResult(result);
+                context.HttpContext.Response.StatusCode = 404;
             }
-        
+            else if (exception is HashIdException)
+            {
+                context.HttpContext.Response.StatusCode = 400;
+            }
+
+
+            var result = JsonConvert.SerializeObject(new { StatusCode = context.HttpContext.Response.StatusCode, Error = exception.Message });
+
+            context.Result = new ObjectResult(result);
+        }
+
     }
 }
