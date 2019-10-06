@@ -39,13 +39,15 @@ namespace Core.Services
 
             if (match == null) return;
 
+            Match addedMatch = _matchRepository.Create();
+
             _pendingRequestRepository.Delete(incomingRequest.Id);
-            MatchedRequest firstMatchedRequest = _matchedRequestRepository.Create(incomingRequest);
+            MatchedRequest firstMatchedRequest = _matchedRequestRepository.Create(incomingRequest, addedMatch.Id);
 
             _pendingRequestRepository.Delete(match.Id);
-            MatchedRequest secondMatchedRequest = _matchedRequestRepository.Create(match);
+            MatchedRequest secondMatchedRequest = _matchedRequestRepository.Create(match, addedMatch.Id);
 
-            _matchRepository.Create(firstMatchedRequest, secondMatchedRequest);
+
 
             _mailClient.Send(firstMatchedRequest.ParentEmail,
                 $"Found match : {secondMatchedRequest.ParentName}  {secondMatchedRequest.ParentPhoneNumber}");
@@ -74,33 +76,29 @@ namespace Core.Services
 
         public void Unmatch(int id)
         {
-            using (TransactionScope scope = new TransactionScope())
+            // delete match and return obj
+            MatchedRequest request = _matchedRequestRepository.Delete(id);
+
+            // convert and save to pending matches
+            PendingRequest tempRequest = new PendingRequest()
             {
-                // delete match and return obj
-                MatchedRequest request = _matchedRequestRepository.Delete(id);
+                ChildBirthDate = request.ChildBirthDate,
+                FromKindergardenId = request.FromKindergardenId,
+                KindergardenWishIds = request.KindergardenWishIds,
+                ChildName = request.ChildName,
+                ParentEmail = request.ParentEmail,
+                ParentName = request.ParentName,
+                ParentPhoneNumber = request.ParentPhoneNumber,
+                SubmittedAt = request.SubmittedAt,
+                Verified = true
+            };
 
-                // convert and save to pending matches
-                PendingRequest tempRequest = new PendingRequest()
-                {
-                    ChildBirthDate = request.ChildBirthDate,
-                    FromKindergardenId = request.FromKindergardenId,
-                    KindergardenWishIds = request.KindergardenWishIds,
-                    ChildName = request.ChildName,
-                    ParentEmail = request.ParentEmail,
-                    ParentName = request.ParentName,
-                    ParentPhoneNumber = request.ParentPhoneNumber,
-                    SubmittedAt = request.SubmittedAt,
-                    Verified = true
-                };
+            _pendingRequestRepository.Create(tempRequest);
 
-                _pendingRequestRepository.Create(tempRequest);
+            // set match status to Failure
+            _matchRepository.SetStatus(id, Status.Failure);
 
-                // set match status to Failure
-                _matchRepository.SetStatus(id, Status.Failure);
-
-                // complete transaction
-                scope.Complete();
-            }
+            // complete transaction
         }
 
         public void ConfirmMatch(int id)

@@ -34,6 +34,7 @@ namespace VegaIT.PremestiSE.Controllers
         }
 
         [HttpPost]
+        [Route("recover")]
         public IActionResult Recover([FromBody] string id)
         {
             int idAsInt = EncodeDecode.Decode(id);

@@ -20,13 +20,80 @@ namespace Persistence.Repositories
 
         }
 
-        public MatchedRequest Create(Request request)
+        public IEnumerable<MatchedRequest> GetAll()
+        {
+            List<MatchedRequest> matchedRequests = new List<MatchedRequest>();
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = _connectionString;
+                conn.Open();
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = @"SELECT * FROM matched_request;";
+
+                using (SqlDataAdapter dataAdapter = new SqlDataAdapter())
+                {
+                    DataSet dataSet = new DataSet();
+
+                    dataAdapter.SelectCommand = cmd;
+                    dataAdapter.Fill(dataSet, "matched_request");
+
+                    foreach (DataRow row in dataSet.Tables["matched_request"].Rows)
+                    {
+                        matchedRequests.Add(new MatchedRequest()
+                        {
+                            Id = (int)row["id"],
+                            MatchId = (int)row["match_id"],
+                            FromKindergardenId = (int)row["from_kindergarden_id"],
+                            SubmittedAt = row["submitted_at"] == System.DBNull.Value ? DateTime.Now : (DateTime)row["submitted_at"],
+                            ParentEmail = row["email"] == System.DBNull.Value ? null : (string)row["email"],
+                            ParentName = row["parent_name"] == System.DBNull.Value ? null : (string)row["parent_name"],
+                            ParentPhoneNumber = row["phone_number"] == System.DBNull.Value ? null : (string)row["phone_number"],
+                            ChildName = row["child_name"] == System.DBNull.Value ? null : (string)row["child_name"],
+                            ChildBirthDate = row["child_birth_date"] == System.DBNull.Value ? DateTime.Now : (DateTime)row["child_birth_date"],
+
+
+                            KindergardenWishIds = GetMachedWishes((int)row["id"])
+                        });
+                    }
+                }
+
+            }
+            return matchedRequests;
+        }
+
+        private List<int> GetMachedWishes(int id)
+        {
+            List<int> kindergardenWishIds = new List<int>();
+
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = _connectionString;
+                conn.Open();
+
+                string newQuery = @"SELECT kindergarden_wish_id from matched_request_wishes WHERE matched_request_id = @id";
+                using (SqlCommand command = new SqlCommand(newQuery, conn))
+                {
+                    command.Parameters.AddWithValue("@id", id);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            kindergardenWishIds.Add((int)reader["kindergarden_wish_id"]);
+                        }
+                    }
+                }
+
+                return kindergardenWishIds;
+            }
+        }
+
+        public MatchedRequest Create(Request request, int matchId)
         {
             request.SubmittedAt = request.SubmittedAt;
 
             SqlCommand command = new SqlCommand();
-            command.CommandText = $@"INSERT INTO matched_request (email, parent_name, phone_number, child_name, child_birth_date, from_kindergarden_id, submitted_at) 
-                                    VALUES (@email, @parentName, @parentPhoneNumber, @childName, @childBirthDate, @fromKindergardenId, @submittedAt)
+            command.CommandText = $@"INSERT INTO matched_request (email, parent_name, phone_number, child_name, child_birth_date, from_kindergarden_id, submitted_at, match_id) 
+                                    VALUES (@email, @parentName, @parentPhoneNumber, @childName, @childBirthDate, @fromKindergardenId, @submittedAt, @matchId)
                                     SELECT SCOPE_IDENTITY()";
 
             command.Parameters.Add("@email", SqlDbType.NVarChar).Value = request.ParentEmail;
@@ -36,6 +103,7 @@ namespace Persistence.Repositories
             command.Parameters.Add("@childBirthDate", SqlDbType.DateTime).Value = request.ChildBirthDate;
             command.Parameters.Add("@fromKindergardenId", SqlDbType.Int).Value = request.FromKindergardenId;
             command.Parameters.Add("@submittedAt", SqlDbType.NVarChar).Value = request.SubmittedAt.ToString("yyyy-MM-dd HH:mm:ss");
+            command.Parameters.Add("@matchId", SqlDbType.Int).Value = matchId;
 
 
             SqlCommand secondCommand = new SqlCommand();
@@ -43,7 +111,7 @@ namespace Persistence.Repositories
             var values = new StringBuilder();
             for (var i = 0; i < request.KindergardenWishIds.Count; i++)
             {
-                if(i == request.KindergardenWishIds.Count - 1)
+                if (i == request.KindergardenWishIds.Count - 1)
                     values.Append("(@MatchedRequestId, @KindergardenWishId" + i + ")");
                 else
                     values.Append("(@MatchedRequestId, @KindergardenWishId" + i + "), ");
@@ -125,7 +193,7 @@ namespace Persistence.Repositories
                 {
                     deleteMatchedRequestWishes.ExecuteNonQuery();
                     deleteMatchedRequest.ExecuteNonQuery();
-                    
+
                     transaction.Commit();
                 }
                 catch (Exception ex)
@@ -159,9 +227,9 @@ namespace Persistence.Repositories
 
                 int idOrd = reader.GetOrdinal("id");
                 int submittedAtOrd = reader.GetOrdinal("submitted_at");
-                int parentEmailOrd = reader.GetOrdinal("parent_email");
+                int parentEmailOrd = reader.GetOrdinal("email");
                 int parentNameOrd = reader.GetOrdinal("parent_name");
-                int parentPhoneNumberOrd = reader.GetOrdinal("parent_phone_number");
+                int parentPhoneNumberOrd = reader.GetOrdinal("phone_number");
                 int childNameOrd = reader.GetOrdinal("child_name");
                 int childBirthDateOrd = reader.GetOrdinal("child_birth_date");
                 int fromKindergardenIdOrd = reader.GetOrdinal("from_kindergarden_id");

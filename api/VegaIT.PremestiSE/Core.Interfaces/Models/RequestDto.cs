@@ -15,7 +15,7 @@ namespace Core.Interfaces.Models
 
             return new RequestDto()
             {
-                Id =  EncodeDecode.Encode(request.Id),
+                Id = EncodeDecode.Encode(request.Id),
                 Email = request.ParentEmail,
                 ParentName = request.ParentName,
                 PhoneNumber = request.ParentPhoneNumber,

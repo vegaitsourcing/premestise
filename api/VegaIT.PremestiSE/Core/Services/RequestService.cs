@@ -59,7 +59,11 @@ namespace Core.Services
 
         public IEnumerable<RequestDto> GetAllMatched()
         {
-            throw new NotImplementedException();
+            RequestMapper requestMapper = new RequestMapper();
+
+            return _matchedRequestRepository
+                .GetAll()
+                .Select(requestMapper.DtoFromEntity);
         }
 
         public IEnumerable<RequestDto> GetAllPending()
