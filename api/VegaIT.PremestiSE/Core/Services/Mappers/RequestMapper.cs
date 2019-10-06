@@ -15,14 +15,14 @@ namespace Core.Services.Mappers
         {
             return new RequestDto
             {
-                Id = EncodeDecode.Encode(request.Id),
+                Id = HashId.Encode(request.Id),
                 Email = request.ParentEmail,
                 ParentName = request.ParentName,
                 PhoneNumber = request.ParentPhoneNumber,
                 ChildName = request.ChildName,
                 ChildBirthDate = request.ChildBirthDate,
-                FromKindergardenId = EncodeDecode.Encode(request.FromKindergardenId),
-                ToKindergardenIds = request.KindergardenWishIds.Select(EncodeDecode.Encode).ToList()
+                FromKindergardenId = HashId.Encode(request.FromKindergardenId),
+                ToKindergardenIds = request.KindergardenWishIds.Select(HashId.Encode).ToList()
             };
 
         }
@@ -36,8 +36,8 @@ namespace Core.Services.Mappers
                 ParentPhoneNumber = requestDto.PhoneNumber,
                 ChildName = requestDto.ChildName,
                 ChildBirthDate = requestDto.ChildBirthDate,
-                FromKindergardenId = EncodeDecode.Decode(requestDto.FromKindergardenId),
-                KindergardenWishIds = requestDto.ToKindergardenIds.Select(EncodeDecode.Decode).ToList()
+                FromKindergardenId = HashId.Decode(requestDto.FromKindergardenId),
+                KindergardenWishIds = requestDto.ToKindergardenIds.Select(HashId.Decode).ToList()
             };
         }
     }

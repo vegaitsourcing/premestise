@@ -9,6 +9,90 @@ textarea {
 	height: 25px;
 	padding: 0 10px;
 	&::placeholder {
-		color: $black;
+		color: $black-2;
+		font-style: italic;
 	}
+}
+
+.input {
+	border: 1px solid $black-2;
+	height: 50px;
+	margin: 15px 0;
+	max-width: 280px;
+	width: 100%;
+}
+
+select {
+	appearance: none;
+	border: 1px solid $black-2;
+	cursor: pointer;
+	height: 50px;
+	margin: 15px 0;
+	max-width: 100%;
+	padding: 0 15px;
+	width: 100%;
+	background-image: url('../../../assets/svg/ico-chevron-down-blue.svg');
+	background-repeat: no-repeat;
+	background-position: 96%;
+	background-size: 20px;
+	@include media-breakpoint-down(md) {
+		font-size: 12px;
+	}
+}
+
+.form-left {
+	.parent-input {
+		max-width: 100%;
+		margin-right: 26px;
+	}
+
+	.child-input {
+		max-width: 100%;
+		margin-right: 0;
+	}
+}
+
+.input__support-text {
+	color: $blue-1;
+	margin-left: 15px;
+	[class^='font-ico'] {
+		font-size: 22px;
+		vertical-align: sub;
+		margin-right: 5px;
+	}
+	@include media-breakpoint-down(lg) {
+		display: block;
+		margin-left: 0;
+	}
+}
+
+.input-icon__text {
+	color: $blue-1;
+	font-size: 12px;
+}
+
+.input__phone {
+	max-width: 50%;
+	margin-right: 26px;
+}
+
+.input__email {
+	max-width: 100%;
+}
+
+.input--without-icon {
+	select {
+		max-width: 100%;
+		width: 100%;
+	}
+}
+
+.input__date {
+	height: 50px;
+	width: 50%;
+}
+
+.form-left__double {
+	align-items: center;
+	display: flex;
 }

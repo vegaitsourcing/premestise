@@ -229,7 +229,7 @@ namespace Persistence.Repositories
                     pending.SubmittedAt = (DateTime)reader["submitted_at"];
                     pending.ParentEmail = reader["email"].ToString();
                     pending.ParentName = reader["parent_name"].ToString();
-                    pending.FromKindergardenId = (int) reader["from_kindergarden_id"];
+                    pending.FromKindergardenId = (int)reader["from_kindergarden_id"];
                     pending.ParentPhoneNumber = reader["phone_number"].ToString();
                     pending.ChildName = reader["child_name"].ToString();
                     pending.ChildBirthDate = (DateTime)reader["child_birth_date"];
@@ -247,7 +247,7 @@ namespace Persistence.Repositories
             using (SqlConnection conn = new SqlConnection())
             {
                 conn.ConnectionString = _connectionString;
-                
+
                 conn.Open();
 
                 SqlCommand cmd = conn.CreateCommand();
@@ -277,7 +277,7 @@ namespace Persistence.Repositories
                                     ON PR.id = WISHES.pending_request_id
                                     WHERE PR.verified = 1
                                     AND WISHES.kindergarden_wish_id = @fromKindergardenId
-                                    AND PR.from_kindergarden_id IN(" + toValues +");";
+                                    AND PR.from_kindergarden_id IN(" + toValues + ");";
 
                 for (var i = 0; i < request.KindergardenWishIds.Count; i++)
                 {

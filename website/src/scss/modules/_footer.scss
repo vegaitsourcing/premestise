@@ -1,7 +1,57 @@
 //----------  footer
 //------------------------------------------------------------------------------
 .footer {
-	background-color: $orange;
-	padding: 30px 0;
-	color: $white;
+	padding: 13px 0;
+	background-color: $white;
+	border-top: 2px solid $light-blue;
+}
+
+.footer__wrap {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+
+
+.footer__logo-img {
+	width: 155px;
+	height: 52px;
+
+	@include  media-breakpoint-down (sm) {
+		display: none;
+	}
+}
+
+.footer__logo-link {
+	margin-right: 20px;
+}
+
+.footer__logo--hidden {
+	display: none;
+	width: 75px;
+	@include  media-breakpoint-down (sm) {
+		display: inline-block;
+	}
+}
+
+.footer__rights {
+	font-size: 12px;
+
+	@include  media-breakpoint-down (sm) {
+		font-size: 10px;
+	}
+}
+
+.footer__link {
+	color: $light-blue;
+	border-bottom: 1px solid $light-blue;
+}
+
+.footer__link--right {
+	position: relative;
+}
+
+.footer__border--left {
+	position: relative;
 }

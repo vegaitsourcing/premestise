@@ -1,0 +1,319 @@
+//---------- tabs
+//------------------------------------------------------------------------------
+
+.tabs {
+	display: flex;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.tabs__link {
+	background: $silver-light;
+	color: $blue-1;
+	display: inline-block;
+	font-family: $font-default;
+	font-size: 24px;
+	font-weight: 600;
+	padding: 20px 15px;
+	position: relative;
+	text-align: center;
+	width: 33.33%;
+	cursor: pointer;
+	transition: $easeing $trans;
+	[class^='font-ico'] {
+		margin-right: 5px;
+	}
+	&:nth-child(2) {
+		margin: 0 10px;
+	}
+	&.current {
+		background: $white;
+		color: $black-2;
+		&::after {
+			content: '';
+			position: absolute;
+			width: 100%;
+			height: 4px;
+			left: 0;
+			bottom: 0;
+			background-color: $light-blue;
+		}
+		[class^='font-ico'] {
+			color: $light-blue;
+		}
+	}
+	@include hover {
+		background-color: $white;
+		color: $black-2;
+	}
+	@include media-breakpoint-down(lg) {
+		font-size: 18px;
+	}
+	@include media-breakpoint-down(md) {
+		font-size: 0;
+		[class^='font-ico-'] {
+			font-size: 20px;
+		}
+	}
+}
+
+.tab-content {
+	display: none;
+	background: $white;
+	padding: 60px 30px;
+	&.current {
+		display: inherit;
+	}
+	@include media-breakpoint-down(md) {
+		padding: 30px 0;
+	}
+}
+
+.tab-title {
+	color: $blue-1;
+	display: none;
+	font-size: 22px;
+	padding-bottom: 25px;
+	text-align: center;
+	@include media-breakpoint-down(md) {
+		display: block;
+	}
+}
+
+.tabs-wrap {
+	overflow: hidden;
+}
+
+.tabs-wrap form {
+	margin: 0 auto;
+	max-width: 1000px;
+	width: 100%;
+}
+
+.form-wrap {
+	display: flex;
+	justify-content: space-between;
+	@include media-breakpoint-down(md) {
+		display: block;
+	}
+}
+
+.form-left {
+	width: 49%;
+	@include media-breakpoint-down(md) {
+		margin: 0 auto;
+		max-width: 400px;
+		width: 100%;
+	}
+}
+
+.form-right {
+	width: 49%;
+	@include media-breakpoint-down(md) {
+		margin: 0 auto;
+		max-width: 400px;
+		width: 100%;
+		.input__support-text {
+			display: block;
+		}
+	}
+}
+
+.input__support-text {
+	@include media-breakpoint-down(md) {
+		display: none;
+	}
+}
+
+.form-buttons {
+	align-items: center;
+	display: flex;
+	justify-content: space-between;
+	.btn {
+		padding: 13px 30px;
+	}
+	.font-ico-envelope {
+		margin-right: 7px;
+		vertical-align: text-top;
+	}
+	@include media-breakpoint-down(md) {
+		flex-direction: column;
+		margin-top: 30px;
+	}
+}
+
+.form-buttons__left {
+	@include media-breakpoint-down(md) {
+		order: 2;
+	}
+}
+
+.form-social-links {
+	li {
+		display: inline-block;
+	}
+	@include media-breakpoint-down(md) {
+		margin-top: 30px;
+	}
+}
+
+.form-link {
+	color: $blue-1;
+	font-size: 16px;
+	transition: $trans $easeing;
+	[class^='font-ico'] {
+		font-size: 22px;
+		margin-right: 7px;
+	}
+	@include hover {
+		color: $light-blue;
+	}
+	&:first-child {
+		margin-right: 20px;
+	}
+}
+
+.tab-wizard {
+	text-align: center;
+	h3 {
+		color: $black-2;
+		font-size: 32px;
+		font-weight: 600;
+		margin-bottom: 15px;
+		[class^='font-ico'] {
+			color: $light-blue;
+			margin: 0 10px;
+		}
+	}
+	p {
+		color: $black-2;
+		font-size: 24px;
+		font-weight: 600;
+		margin-bottom: 45px;
+	}
+	.btn {
+		display: block;
+		margin: 0 auto;
+		max-width: 170px;
+	}
+	@include media-breakpoint-down(md) {
+		h3 {
+			font-size: 22px;
+		}
+		p {
+			font-size: 18px;
+		}
+	}
+}
+.tab-wizard__item {
+	margin: 30px 0;
+}
+
+.tab-years {
+	text-align: center;
+	p {
+		color: $black-2;
+		font-size: 24px;
+		margin-bottom: 20px;
+	}
+	.message {
+		color: $black-2;
+		display: block;
+		font-size: 20px;
+		margin-bottom: 10px;
+		font-weight: 600;
+	}
+	.number-info {
+		color: $black-2;
+		display: block;
+		font-size: 20px;
+	}
+	@include media-breakpoint-down(md) {
+		p {
+			font-size: 18px;
+		}
+	}
+}
+
+.tab-years__list {
+	margin-bottom: 30px;
+	li {
+		display: inline-block;
+		margin: 0 10px;
+	}
+}
+
+.tab-year {
+	color: $blue-1;
+	font-size: 32px;
+	font-weight: 600;
+	transition: $easeing $trans;
+	&.active {
+		color: $black-2;
+	}
+	@include hover {
+		color: $light-blue;
+	}
+	@include media-breakpoint-down(md) {
+		font-size: 22px;
+	}
+}
+
+//Pagination
+.pagination {
+	display: block;
+	margin-bottom: 20px;
+	margin-top: 50px;
+	text-align: center;
+	width: 100%;
+}
+
+.pagination__pages {
+	align-items: center;
+	display: inline-block;
+	font-size: 24px;
+	margin: 0 auto;
+	padding: 0 35px;
+	position: relative;
+	text-align: center;
+}
+
+.pagination__pages li {
+	display: inline-block;
+	margin: 0 10px;
+}
+
+.pagination__pages a {
+	color: $blue-1;
+	font-size: 20px;
+	font-weight: 600;
+	transition: $trans $easeing;
+	&.pagination__pages--active {
+		color: $black-2;
+	}
+	@include hover {
+		color: $light-blue;
+	}
+}
+
+
+.pagination-directions {
+	display: block;
+	font-size: 24px;
+	width: 100%;
+}
+
+.pagination-directions__left {
+	position: absolute;
+	top: 2px;
+	left: 0;
+	transform: rotate(90deg);
+}
+
+.pagination-directions__right {
+	position: absolute;
+	top: 2px;
+	right: 0;
+	transform: rotate(-90deg);
+}

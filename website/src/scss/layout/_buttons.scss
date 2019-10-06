@@ -22,17 +22,17 @@ input[type='submit'] {
 }
 
 .btn {
-	background-color: $black;
+	background-color: $blue-1;
+	box-shadow: 0 3px $black;
 	color: $white;
-	display: inline-block;
-	font-size: 14px;
-	font-weight: bold;
-	height: 40px;
-	line-height: 40px;
-	padding: 0 20px;
-	transition: 0.4s ease-out;
+	font-size: 20px;
+	font-weight: 600;
+	padding: 13px 20px;
+	transition: $easeing $trans;
 	@include hover {
-		background-color: lighten($black, 30%);
-		border-radius: 20px;
+		background-color: $light-blue;
+	}
+	@include media-breakpoint-down(md) {
+		font-size: 18px;
 	}
 }

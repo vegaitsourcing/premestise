@@ -31,9 +31,17 @@ namespace VegaIT.PremestiSE.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        [Route("pending")]
+        public IActionResult GetAllPending()
         {
             return Ok(_requestService.GetAllPending());
+        }
+
+        [HttpGet]
+        [Route("matched")]
+        public IActionResult GetAllMatched()
+        {
+            return Ok(_requestService.GetAllMatched());
         }
 
         [HttpDelete]

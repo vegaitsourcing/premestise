@@ -6,7 +6,7 @@ namespace Persistence.Interfaces.Contracts
     public interface IMatchRepository
     {
         IEnumerable<Match> GetAll();
-        Match Create(MatchedRequest firstMatchedRequest, MatchedRequest secondMatchedRequest);
+        Match Create();
         void DeleteByRequestId(int id);
 
         void SetStatus(int id, Status status);

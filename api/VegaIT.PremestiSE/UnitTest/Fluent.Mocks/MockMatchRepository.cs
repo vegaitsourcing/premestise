@@ -23,7 +23,7 @@ namespace UnitTest.Fluent.Mocks
 
         public MockMatchRepository Create(Match returnedMatch)
         {
-            Setup(x => x.Create(It.IsAny<MatchedRequest>(), It.IsAny<MatchedRequest>())).Returns(returnedMatch);
+            Setup(x => x.Create()).Returns(returnedMatch);
             return this;
         }
 

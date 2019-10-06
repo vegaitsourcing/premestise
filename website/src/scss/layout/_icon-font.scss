@@ -1,8 +1,8 @@
 @font-face {
 	font-family: 'svgicons';
-	src: url('../assets/fonts/svgicons.woff2?v=1570208224529') format('woff2'),
-		url('../assets/fonts/svgicons.woff?v=1570208224529') format('woff'),
-		url('../assets/fonts/svgicons.ttf?v=1570208224529') format('truetype');
+	src: url('../assets/fonts/svgicons.woff2') format('woff2'),
+		url('../assets/fonts/svgicons.woff') format('woff'),
+		url('../assets/fonts/svgicons.ttf') format('truetype');
 }
 
 @mixin font-styles {
@@ -26,17 +26,50 @@
 @function font-char($filename) {
 	$char: "";
 
-	@if $filename == ico-chevron-down {
+	@if $filename == ico-chevron-down-blue {
 		$char: '\E001';
 	}
-	@if $filename == ico-dog {
+	@if $filename == ico-chevron-down {
 		$char: '\E002';
 	}
-	@if $filename == ico-download {
+	@if $filename == ico-circle {
 		$char: '\E003';
 	}
-	@if $filename == ico-share {
+	@if $filename == ico-dog {
 		$char: '\E004';
+	}
+	@if $filename == ico-download {
+		$char: '\E005';
+	}
+	@if $filename == ico-envelope {
+		$char: '\E006';
+	}
+	@if $filename == ico-facebook {
+		$char: '\E007';
+	}
+	@if $filename == ico-map-pin {
+		$char: '\E008';
+	}
+	@if $filename == ico-map-q-pin {
+		$char: '\E009';
+	}
+	@if $filename == ico-map {
+		$char: '\E00A';
+	}
+	@if $filename == ico-messenger {
+		$char: '\E00B';
+	}
+	@if $filename == ico-new-wish {
+		$char: '\E00C';
+	}
+	@if $filename == ico-pin {
+		$char: '\E00D';
+	}
+	@if $filename == ico-share {
+		$char: '\E00E';
+	}
+	@if $filename == ico-test {
+		$char: '\E00F';
 	}
 
 	@return $char;
@@ -57,8 +90,14 @@
 	display: inline-block;
 }
 
+.font-ico-chevron-down-blue {
+	@include font(ico-chevron-down-blue);
+}
 .font-ico-chevron-down {
 	@include font(ico-chevron-down);
+}
+.font-ico-circle {
+	@include font(ico-circle);
 }
 .font-ico-dog {
 	@include font(ico-dog);
@@ -66,7 +105,34 @@
 .font-ico-download {
 	@include font(ico-download);
 }
+.font-ico-envelope {
+	@include font(ico-envelope);
+}
+.font-ico-facebook {
+	@include font(ico-facebook);
+}
+.font-ico-map-pin {
+	@include font(ico-map-pin);
+}
+.font-ico-map-q-pin {
+	@include font(ico-map-q-pin);
+}
+.font-ico-map {
+	@include font(ico-map);
+}
+.font-ico-messenger {
+	@include font(ico-messenger);
+}
+.font-ico-new-wish {
+	@include font(ico-new-wish);
+}
+.font-ico-pin {
+	@include font(ico-pin);
+}
 .font-ico-share {
 	@include font(ico-share);
+}
+.font-ico-test {
+	@include font(ico-test);
 }
 

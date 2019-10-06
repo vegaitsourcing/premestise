@@ -10,24 +10,18 @@ namespace UnitTest.Fluent.Mocks
         /**
          * Change the id of the request. Will mutate the object being passed
          */
-        public MockMatchedRequestRepository CreateChangeIdOfGiven(Request request)
+        MockMatchedRequestRepository CreateChangeIdOfGiven(Request request, int matchId)
         {
             request.Id = new Random().Next();
-            Setup(x => x.Create(request)).Returns(request as MatchedRequest);
+            ((MatchedRequest)request).MatchId = matchId;
+            Setup(x => x.Create(request, matchId)).Returns(request as MatchedRequest);
             return this;
         }
 
-        public MockMatchedRequestRepository CreateReturningRequest(MatchedRequest returnedRequest)
+        MockMatchedRequestRepository CreateReturningRequest(MatchedRequest returnedRequest, int matchId)
         {
-            Setup(x => x.Create(It.IsAny<Request>())).Returns(returnedRequest);
-            return this;
-        }
-        
-        public MockMatchedRequestRepository CreateReturnsEmptyRequestWithRandomId()
-        {
-            var request = new MatchedRequest();
-            request.Id = new Random().Next();
-            Setup(x => x.Create(It.IsAny<Request>())).Returns(request);
+            returnedRequest.MatchId = matchId;
+            Setup(x => x.Create(It.IsAny<Request>(), It.IsAny<int>())).Returns(returnedRequest);
             return this;
         }
 
