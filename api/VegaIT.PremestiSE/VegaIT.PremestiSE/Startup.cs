@@ -65,6 +65,7 @@ namespace VegaIT.PremestiSE
             }
 
             app.UseMvc();
+            app.UseStaticFiles();
         }
     }
 }
