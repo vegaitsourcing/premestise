@@ -32,7 +32,6 @@ namespace Core.Services
 
         public void TryMatch(int id)
         {
-
             PendingRequest incomingRequest = _pendingRequestRepository.Get(id);
             _pendingRequestRepository.Verify(id);
 
@@ -52,14 +51,10 @@ namespace Core.Services
                 $"Found match : {secondMatchedRequest.ParentName}  {secondMatchedRequest.ParentPhoneNumber}");
             _mailClient.Send(secondMatchedRequest.ParentEmail,
                 $"Found match : {firstMatchedRequest.ParentName}  {firstMatchedRequest.ParentPhoneNumber}");
-
-
-
         }
 
         private PendingRequest FindBestMatch(PendingRequest request)
         {
-
             IEnumerable<PendingRequest> possibleMatches = _pendingRequestRepository
                 .GetAllMatchesFor(request)
                 .OrderBy(possibleMatch => possibleMatch.SubmittedAt);
@@ -84,7 +79,7 @@ namespace Core.Services
                 // delete match and return obj
                 MatchedRequest request = _matchedRequestRepository.Delete(id);
 
-                // convert and save to pending matches -- mozda fali Id ?
+                // convert and save to pending matches
                 PendingRequest tempRequest = new PendingRequest()
                 {
                     ChildBirthDate = request.ChildBirthDate,
@@ -106,6 +101,12 @@ namespace Core.Services
                 // complete transaction
                 scope.Complete();
             }
+        }
+
+        public void ConfirmMatch(int id)
+        {
+            // set match status to Success
+            _matchRepository.SetStatus(id, Status.Success);
         }
     }
 }
