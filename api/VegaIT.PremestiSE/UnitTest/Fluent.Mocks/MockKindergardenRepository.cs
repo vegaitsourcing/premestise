@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Core.Interfaces.Models;
 using Moq;
 using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;

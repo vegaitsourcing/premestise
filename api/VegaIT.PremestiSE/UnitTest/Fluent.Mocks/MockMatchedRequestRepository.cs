@@ -25,7 +25,7 @@ namespace UnitTest.Fluent.Mocks
             return this;
         }
 
-        MockMatchedRequestRepository Delete(int id)
+        public MockMatchedRequestRepository Delete(int id)
         {
             var request = new MatchedRequest();
             request.Id = id;
@@ -33,7 +33,7 @@ namespace UnitTest.Fluent.Mocks
             return this;
         }
 
-        MockMatchedRequestRepository DeleteAnySuccess()
+        public MockMatchedRequestRepository DeleteAnySuccess()
         {
             var request = new MatchedRequest();
             request.Id = new Random().Next();
