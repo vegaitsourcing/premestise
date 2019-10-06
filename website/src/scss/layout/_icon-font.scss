@@ -1,8 +1,8 @@
 @font-face {
 	font-family: 'svgicons';
-	src: url('../assets/fonts/svgicons.woff2?v=1570362075346') format('woff2'),
-		url('../assets/fonts/svgicons.woff?v=1570362075346') format('woff'),
-		url('../assets/fonts/svgicons.ttf?v=1570362075346') format('truetype');
+	src: url('../assets/fonts/svgicons.woff2') format('woff2'),
+		url('../assets/fonts/svgicons.woff') format('woff'),
+		url('../assets/fonts/svgicons.ttf') format('truetype');
 }
 
 @mixin font-styles {
