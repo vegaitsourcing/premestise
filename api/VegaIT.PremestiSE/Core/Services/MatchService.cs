@@ -1,12 +1,9 @@
-﻿using Core.Interfaces.Intefaces;
+﻿using Core.Clients;
+using Core.Interfaces.Intefaces;
 using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
-using Persistence.Interfaces.Entites.Exceptions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Transactions;
-using Core.Clients;
 
 namespace Core.Services
 {
@@ -46,8 +43,6 @@ namespace Core.Services
 
             _pendingRequestRepository.Delete(match.Id);
             MatchedRequest secondMatchedRequest = _matchedRequestRepository.Create(match, addedMatch.Id);
-
-
 
             _mailClient.Send(firstMatchedRequest.ParentEmail,
                 $"Found match : {secondMatchedRequest.ParentName}  {secondMatchedRequest.ParentPhoneNumber}");

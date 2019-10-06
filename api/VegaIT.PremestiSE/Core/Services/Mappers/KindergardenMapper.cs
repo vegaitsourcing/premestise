@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Core.Interfaces.Intefaces;
+﻿using Core.Interfaces.Intefaces;
 using Core.Interfaces.Models;
 using Persistence.Interfaces.Entites;
+using System;
 using Util;
 
 namespace Core.Services.Mappers
@@ -15,7 +13,7 @@ namespace Core.Services.Mappers
             return new KindergardenDto
             {
                 Id = HashId.Encode(kindergarden.Id),
-                Name = kindergarden.Name,
+                Name = $"{kindergarden.Name} - ${kindergarden.Street} ${kindergarden.StreetNumber}, ${kindergarden.City}",
                 Longitude = kindergarden.Longitude,
                 Latitude = kindergarden.Latitude
             };

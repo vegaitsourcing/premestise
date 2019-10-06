@@ -9,6 +9,7 @@ using Core.Clients;
 using Core.Services.Mappers;
 using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
+using Util;
 
 namespace Core.Services
 {
@@ -32,16 +33,26 @@ namespace Core.Services
         public RequestDto CreatePending(RequestDto newRequest)
         {   //Kad se kreira pending request treba da se kreira i entry u pending_request_wishes
             var requestMapper = new RequestMapper();
+            var kindergardenMapper = new KindergardenMapper();
 
             if (newRequest.ToKindergardenIds == null)
                 newRequest.ToKindergardenIds = new List<string>(0);
             var pendingRequestToAdd = requestMapper.DtoToEntity(newRequest);
 
+            PendingRequest addedPendingRequest = _pendingRequestRepository.Create(pendingRequestToAdd);
+            RequestDto addedPendingRequestDto = requestMapper.DtoFromEntity(addedPendingRequest);
 
+            Kindergarden fromKindergarden = _kindergardenRepository.GetById(addedPendingRequest.FromKindergardenId);
 
-            var addedPendingRequest = _pendingRequestRepository.Create(pendingRequestToAdd);
-            var addedPendingRequestDto = requestMapper.DtoFromEntity(addedPendingRequest);
-            _mailClient.Send(addedPendingRequestDto.Email, $"VERIFICATION : {addedPendingRequestDto.Id}");
+            List<KindergardenDto> wishes = new List<KindergardenDto>();
+            foreach(var wishId in addedPendingRequest.KindergardenWishIds)
+            {
+                wishes.Add(kindergardenMapper.DtoFromEntity(_kindergardenRepository.GetById(wishId)));
+            }
+
+            _mailClient.SendVerificationMessage(addedPendingRequestDto,
+                                                kindergardenMapper.DtoFromEntity(fromKindergarden),
+                                                wishes);
 
             return addedPendingRequestDto;
         }
