@@ -15,13 +15,13 @@ namespace Core.Interfaces.Models
 
             return new RequestDto()
             {
-                Id =  EncodeDecode.Encode(request.Id),
+                Id = HashId.Encode(request.Id),
                 Email = request.ParentEmail,
                 ParentName = request.ParentName,
                 PhoneNumber = request.ParentPhoneNumber,
                 ChildName = request.ChildName,
                 ChildBirthDate = request.ChildBirthDate,
-                FromKindergardenId = EncodeDecode.Encode(request.FromKindergardenId)
+                FromKindergardenId = HashId.Encode(request.FromKindergardenId)
             };
         }
 

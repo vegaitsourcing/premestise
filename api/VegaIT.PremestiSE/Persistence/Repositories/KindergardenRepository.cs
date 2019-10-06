@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
 using Persistence.Interfaces.Entites.Exceptions;
@@ -78,7 +79,7 @@ namespace Persistence.Repositories
                 }
                 int idOrd = reader.GetOrdinal("id");
                 int municipalityOrd = reader.GetOrdinal("municipality");
-                int governmentOrd = reader.GetOrdinal("goverment");
+                int governmentOrd = reader.GetOrdinal("government");
                 int cityOrd = reader.GetOrdinal("city");
                 int nameOrd = reader.GetOrdinal("name");
                 int departmentOrd = reader.GetOrdinal("department");
@@ -88,6 +89,20 @@ namespace Persistence.Repositories
                 int locationTypeOrd = reader.GetOrdinal("location_type");
                 int longitudeOrd = reader.GetOrdinal("longitude");
                 int latitudeOrd = reader.GetOrdinal("latitude");
+
+                decimal? longitude;
+                decimal? latitude;
+
+                try
+                {
+                    longitude = reader.GetDecimal(longitudeOrd);
+                    latitude = reader.GetDecimal(latitudeOrd);
+                }
+                catch (Exception)
+                {
+                    longitude = null;
+                    latitude = null;
+                }
 
 
                 return new Kindergarden
@@ -101,9 +116,9 @@ namespace Persistence.Repositories
                     Street = reader.GetString(streetOrd),
                     StreetNumber = reader.GetString(streetNumberOrd),
                     PostalCode = reader.GetString(postalCodeOrd),
-                    LocationType = reader.GetInt32(locationTypeOrd) == 0 ? LocationType.Base : LocationType.Remote,
-                    Longitude = reader.GetDecimal(longitudeOrd),
-                    Latitude = reader.GetDecimal(latitudeOrd)
+                    LocationType = reader.GetBoolean(locationTypeOrd) == false ? LocationType.Base : LocationType.Remote,
+                    Longitude = longitude,
+                    Latitude = latitude
                 };
             }
         }

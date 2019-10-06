@@ -28,16 +28,13 @@ select {
 	cursor: pointer;
 	height: 50px;
 	margin: 15px 0;
-	max-width: 360px;
+	max-width: 100%;
 	padding: 0 15px;
 	width: 100%;
 	background-image: url('../../../assets/svg/ico-chevron-down-blue.svg');
 	background-repeat: no-repeat;
 	background-position: 96%;
 	background-size: 20px;
-	@include media-breakpoint-down(lg) {
-		max-width: 400px;
-	}
 	@include media-breakpoint-down(md) {
 		font-size: 12px;
 	}
@@ -45,22 +42,13 @@ select {
 
 .form-left {
 	.parent-input {
-		max-width: 330px;
+		max-width: 100%;
 		margin-right: 26px;
 	}
 
 	.child-input {
-		max-width: 200px;
+		max-width: 100%;
 		margin-right: 0;
-	}
-	@include media-breakpoint-down(lg) {
-		.parent-input {
-			max-width: 400px;
-		}
-
-		.child-input {
-			max-width: 400px;
-		}
 	}
 }
 
@@ -84,94 +72,27 @@ select {
 }
 
 .input__phone {
-	max-width: 200px;
+	max-width: 50%;
 	margin-right: 26px;
-	@include media-breakpoint-down(lg) {
-		max-width: 400px;
-	}
 }
+
 .input__email {
-	max-width: 380px;
-	@include media-breakpoint-down(lg) {
-		max-width: 400px;
-	}
+	max-width: 100%;
 }
 
 .input--without-icon {
 	select {
 		max-width: 100%;
 		width: 100%;
-		@include media-breakpoint-down(lg) {
-			max-width: 400px;
-		}
 	}
 }
 
-
-.checkbox {
-	display: block;
-	position: relative;
-	padding-left: 45px;
-	margin-bottom: 12px;
-	margin-top: 20px;
-	cursor: pointer;
-	font-size: 12px;
-	color: $black-2;
-	user-select: none;
-	input {
-		position: absolute;
-		opacity: 0;
-		cursor: pointer;
-		height: 0;
-		width: 0;
-		&:checked {
-			~ .checkmark {
-				&::after {
-					display: block;
-				}
-			}
-		}
-	}
-	.checkmark {
-		&::after {
-			background-color: $blue-1;
-			left: 5px;
-			top: 5px;
-			width: 18px;
-			height: 18px;
-		}
-	}
-	@include hover {
-		.checkmark {
-			&::after {
-				display: block;
-			}
-		}
-	}
-	@include media-breakpoint-down(md) {
-		margin-top: 40px;
-	}
+.input__date {
+	height: 50px;
+	width: 50%;
 }
 
-.checkmark {
-	border: 1px solid $black-2;
-	position: absolute;
-	top: -8px;
-	left: 0;
-	height: 30px;
-	width: 30px;
-	background-color: $white;
-	&:hover {
-		.input {
-			~ .checkmark {
-				background-color: #ccc;
-			}
-		}
-	}
-	&::after {
-		content: '';
-		position: absolute;
-		display: none;
-		transition: $easeing $trans;
-	}
+.form-left__double {
+	align-items: center;
+	display: flex;
 }

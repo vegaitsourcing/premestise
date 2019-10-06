@@ -1,12 +1,9 @@
-﻿using Core.Interfaces.Intefaces;
+﻿using Core.Clients;
+using Core.Interfaces.Intefaces;
 using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
-using Persistence.Interfaces.Entites.Exceptions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Transactions;
-using Core.Clients;
 
 namespace Core.Services
 {
@@ -39,13 +36,13 @@ namespace Core.Services
 
             if (match == null) return;
 
+            Match addedMatch = _matchRepository.Create();
+
             _pendingRequestRepository.Delete(incomingRequest.Id);
-            MatchedRequest firstMatchedRequest = _matchedRequestRepository.Create(incomingRequest);
+            MatchedRequest firstMatchedRequest = _matchedRequestRepository.Create(incomingRequest, addedMatch.Id);
 
             _pendingRequestRepository.Delete(match.Id);
-            MatchedRequest secondMatchedRequest = _matchedRequestRepository.Create(match);
-
-            _matchRepository.Create(firstMatchedRequest, secondMatchedRequest);
+            MatchedRequest secondMatchedRequest = _matchedRequestRepository.Create(match, addedMatch.Id);
 
             _mailClient.Send(firstMatchedRequest.ParentEmail,
                 $"Found match : {secondMatchedRequest.ParentName}  {secondMatchedRequest.ParentPhoneNumber}");
@@ -72,41 +69,41 @@ namespace Core.Services
             return null;
         }
 
-        public void Unmatch(int id)
+        public int Unmatch(int id)
         {
-            using (TransactionScope scope = new TransactionScope())
+            // delete match and return obj
+            MatchedRequest request = _matchedRequestRepository.Delete(id);
+
+            // convert and save to pending matches
+            PendingRequest tempRequest = new PendingRequest()
             {
-                // delete match and return obj
-                MatchedRequest request = _matchedRequestRepository.Delete(id);
+                ChildBirthDate = request.ChildBirthDate,
+                FromKindergardenId = request.FromKindergardenId,
+                KindergardenWishIds = request.KindergardenWishIds,
+                ChildName = request.ChildName,
+                ParentEmail = request.ParentEmail,
+                ParentName = request.ParentName,
+                ParentPhoneNumber = request.ParentPhoneNumber,
+                SubmittedAt = request.SubmittedAt,
+                Verified = true
+            };
+            _pendingRequestRepository.Verify(id);
 
-                // convert and save to pending matches
-                PendingRequest tempRequest = new PendingRequest()
-                {
-                    ChildBirthDate = request.ChildBirthDate,
-                    FromKindergardenId = request.FromKindergardenId,
-                    KindergardenWishIds = request.KindergardenWishIds,
-                    ChildName = request.ChildName,
-                    ParentEmail = request.ParentEmail,
-                    ParentName = request.ParentName,
-                    ParentPhoneNumber = request.ParentPhoneNumber,
-                    SubmittedAt = request.SubmittedAt,
-                    Verified = true
-                };
+            PendingRequest addedRequest = _pendingRequestRepository.Create(tempRequest);
 
-                _pendingRequestRepository.Create(tempRequest);
+            // set match status to Failure
+            _matchRepository.SetStatus(request.MatchId, Status.Failure);
 
-                // set match status to Failure
-                _matchRepository.SetStatus(id, Status.Failure);
 
-                // complete transaction
-                scope.Complete();
-            }
+            return addedRequest.Id;
+            // complete transaction
         }
 
         public void ConfirmMatch(int id)
         {
+            MatchedRequest matchedReq = _matchedRequestRepository.Get(id);
             // set match status to Success
-            _matchRepository.SetStatus(id, Status.Success);
+            _matchRepository.SetStatus(matchedReq.MatchId, Status.Success);
         }
     }
 }

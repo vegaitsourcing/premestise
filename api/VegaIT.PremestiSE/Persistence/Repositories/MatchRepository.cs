@@ -41,8 +41,6 @@ namespace Persistence.Repositories
                         matchs.Add(new Match
                         {
                             Id = (int)row["id"],
-                            FirstMatchedRequest = null,
-                            SecondMatchedRequest = null,
                             MatchedAt = (DateTime)row["matched_at"]
                         });
                     }
@@ -51,7 +49,7 @@ namespace Persistence.Repositories
             return matchs;
         }
 
-        public Match Create(MatchedRequest firstMatchedRequest, MatchedRequest secondMatchedRequest)
+        public Match Create()
         {
             using (SqlConnection connection = new SqlConnection())
             {
@@ -64,10 +62,8 @@ namespace Persistence.Repositories
 
                 SqlCommand cmd = connection.CreateCommand();
                 cmd.Transaction = transaction;
-                cmd.CommandText = @"INSERT INTO matches (first_matched_request, second_matched_request, matched_at, status) " +
-                    "VALUES (@FirstMatchedRequestId, @SecondMatchedRequestId, @MatchedAt, @Status); SELECT SCOPE_IDENTITY()";
-                cmd.Parameters.Add(new SqlParameter("@FirstMatchedRequestId", firstMatchedRequest.Id));
-                cmd.Parameters.Add(new SqlParameter("@SecondMatchedRequestId", secondMatchedRequest.Id));
+                cmd.CommandText = @"INSERT INTO matches (matched_at, status) " +
+                    "VALUES ( @MatchedAt, @Status); SELECT SCOPE_IDENTITY()";
                 cmd.Parameters.Add(new SqlParameter("@MatchedAt", matched_at.ToString("yyyy-MM-dd HH:mm:ss")));
                 cmd.Parameters.Add(new SqlParameter("@Status", Status.Matched));
 
@@ -78,9 +74,8 @@ namespace Persistence.Repositories
                     return new Match
                     {
                         Id = id,
-                        FirstMatchedRequest = firstMatchedRequest,
-                        SecondMatchedRequest = secondMatchedRequest,
-                        MatchedAt = matched_at
+                        MatchedAt = matched_at,
+                        Status = Status.Matched
                     };
                 }
                 catch (Exception ex)
@@ -114,7 +109,7 @@ namespace Persistence.Repositories
                 conn.Open();
 
                 SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = @"UPDATE match SET status = @status WHERE id = @id;";
+                cmd.CommandText = @"UPDATE matches SET status = @status WHERE id = @id;";
                 cmd.Parameters.Add(new SqlParameter("@Id", id));
                 cmd.Parameters.Add(new SqlParameter("@Status", status));
 

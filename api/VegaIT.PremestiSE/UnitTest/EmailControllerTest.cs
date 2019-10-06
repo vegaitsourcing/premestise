@@ -1,6 +1,7 @@
 ﻿using Core.Interfaces.Intefaces;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using Util;
 using VegaIT.PremestiSE.Controllers;
 using Xunit;
 
@@ -21,9 +22,9 @@ namespace UnitTest
         public void GivenId_WhenVerifyCalled_ShouldReturnOk()
         {
             var id = int.MaxValue;
-            
+
             var result = _emailController.Verify(id.ToString());
-            
+
             _matchService.Verify(service => service.TryMatch(id));
             Assert.Equal(typeof(OkResult), result.GetType());
         }
@@ -31,11 +32,12 @@ namespace UnitTest
         [Fact]
         public void GivenId_WhenRecoverCalled_ShouldReturnOk()
         {
-            var id = int.MaxValue;
-            
+            string id = HashId.Encode(int.MaxValue);
+            int decodedId = HashId.Decode(id);
+
             var result = _emailController.Recover(id);
-            
-            _matchService.Verify(service => service.Unmatch(id));
+
+            _matchService.Verify(service => service.Unmatch(decodedId));
             Assert.Equal(typeof(OkResult), result.GetType());
         }
     }
