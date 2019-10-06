@@ -15,5 +15,5 @@ accordions.init();
 
 import openMenu from './_project/menu';
 
-import scrollTo from './_project/scrollToSection';
-scrollTo.init();
+import Map from './_project/maps';
+Map.init();
