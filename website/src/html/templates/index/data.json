@@ -3,10 +3,6 @@
 	"data": {
 		"header": {
 			">>": "shared/header/data.json"
-		},
-		"basicBlock2": {
-			">>": "modules/basic-block/data.json",
-			"title": "This is changed Title"
 		}
 	}
 }
