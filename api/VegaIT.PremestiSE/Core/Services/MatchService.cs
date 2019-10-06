@@ -4,6 +4,7 @@ using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
 using System.Collections.Generic;
 using System.Linq;
+using Core.Services.Mappers;
 
 namespace Core.Services
 {
@@ -13,13 +14,15 @@ namespace Core.Services
         private readonly IPendingRequestRepository _pendingRequestRepository;
         private readonly IMatchedRequestRepository _matchedRequestRepository;
         private readonly IMailClient _mailClient;
+        private readonly IKindergardenRepository _kindergardenRepository;
 
-        public MatchService(IMatchRepository matchRepository, IPendingRequestRepository pendingRequestRepository, IMatchedRequestRepository matchedRequestRepository, IMailClient mailClient)
+        public MatchService(IMatchRepository matchRepository, IPendingRequestRepository pendingRequestRepository, IMatchedRequestRepository matchedRequestRepository, IMailClient mailClient, IKindergardenRepository kindergardenRepository)
         {
             _matchRepository = matchRepository;
             _pendingRequestRepository = pendingRequestRepository;
             _matchedRequestRepository = matchedRequestRepository;
             _mailClient = mailClient;
+            _kindergardenRepository = kindergardenRepository;
         }
 
         public int GetTotalCount()
@@ -44,10 +47,21 @@ namespace Core.Services
             _pendingRequestRepository.Delete(match.Id);
             MatchedRequest secondMatchedRequest = _matchedRequestRepository.Create(match, addedMatch.Id);
 
-            _mailClient.Send(firstMatchedRequest.ParentEmail,
-                $"Found match : {secondMatchedRequest.ParentName}  {secondMatchedRequest.ParentPhoneNumber}");
-            _mailClient.Send(secondMatchedRequest.ParentEmail,
-                $"Found match : {firstMatchedRequest.ParentName}  {firstMatchedRequest.ParentPhoneNumber}");
+            var requestMapper = new RequestMapper();
+            var kindergardenMapper = new KindergardenMapper();
+            var fromKindergarden =
+                kindergardenMapper.DtoFromEntity(
+                    _kindergardenRepository.GetById(firstMatchedRequest.FromKindergardenId));
+            var toKindergarden = kindergardenMapper.DtoFromEntity(
+                _kindergardenRepository.GetById(secondMatchedRequest.FromKindergardenId));
+
+            var firstMatchDto = requestMapper.DtoFromEntity(firstMatchedRequest);
+            var secondMatchDto = requestMapper.DtoFromEntity(secondMatchedRequest);
+
+            _mailClient.SendFoundMatchMessage(firstMatchDto,
+                                            secondMatchDto,
+                                            fromKindergarden,
+                                            toKindergarden);
         }
 
         private PendingRequest FindBestMatch(PendingRequest request)

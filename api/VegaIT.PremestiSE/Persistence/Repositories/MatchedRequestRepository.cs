@@ -52,39 +52,13 @@ namespace Persistence.Repositories
                             ChildBirthDate = row["child_birth_date"] == System.DBNull.Value ? DateTime.Now : (DateTime)row["child_birth_date"],
 
 
-                            KindergardenWishIds = GetMachedWishes((int)row["id"])
+                            KindergardenWishIds = GetMatchedWishes((int)row["id"])
                         });
                     }
                 }
 
             }
             return matchedRequests;
-        }
-
-        private List<int> GetMachedWishes(int id)
-        {
-            List<int> kindergardenWishIds = new List<int>();
-
-            using (SqlConnection conn = new SqlConnection())
-            {
-                conn.ConnectionString = _connectionString;
-                conn.Open();
-
-                string newQuery = @"SELECT kindergarden_wish_id from matched_request_wishes WHERE matched_request_id = @id";
-                using (SqlCommand command = new SqlCommand(newQuery, conn))
-                {
-                    command.Parameters.AddWithValue("@id", id);
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            kindergardenWishIds.Add((int)reader["kindergarden_wish_id"]);
-                        }
-                    }
-                }
-
-                return kindergardenWishIds;
-            }
         }
 
         public MatchedRequest Create(Request request, int matchId)
@@ -163,7 +137,8 @@ namespace Persistence.Repositories
                 ChildName = request.ChildName,
                 ChildBirthDate = request.ChildBirthDate,
                 SubmittedAt = request.SubmittedAt,
-                FromKindergardenId = request.FromKindergardenId
+                FromKindergardenId = request.FromKindergardenId,
+                KindergardenWishIds = GetMatchedWishes(request.Id)
             };
         }
 
