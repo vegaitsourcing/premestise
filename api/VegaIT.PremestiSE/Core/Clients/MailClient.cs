@@ -40,8 +40,11 @@ namespace Core.Clients
                 string content = $"Message: {message}|from:{_defaultEmail}";
 
 
-                using (MailMessage mail = new MailMessage(new MailAddress(_defaultEmail), receiverEmail) { Subject = subject, Body = content })
+                using (MailMessage mail = new MailMessage(new MailAddress(_defaultEmail), receiverEmail))
                 {
+                    mail.Subject = subject;
+                    mail.Body = content;
+                    mail.IsBodyHtml = true;
                     smtpClient.Send(mail);
                 }
 
