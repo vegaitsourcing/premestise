@@ -23,11 +23,13 @@
 	}
 }
 
-
+.footer__logo-link {
+	margin-right: 20px;
+}
 
 .footer__logo--hidden {
 	display: none;
-
+	width: 75px;
 	@include  media-breakpoint-down (sm) {
 		display: inline-block;
 	}
@@ -47,34 +49,9 @@
 }
 
 .footer__link--right {
-
 	position: relative;
-	padding-right: 10px;
-
-	&::after {
-		content: '';
-		position: absolute;
-		border-right: 1px solid $black;
-		display: block;
-		top: 2px;
-		right: 0;
-		height: 80%;
-
-	}
 }
 
 .footer__border--left {
 	position: relative;
-	padding-right: 6px;
-	&::before {
-		content: '';
-		position: absolute;
-		border-right: 1px solid $black;
-		display: block;
-		top: 3px;
-		right: 0;
-		height: 80%;
-
-	}
-	
 }

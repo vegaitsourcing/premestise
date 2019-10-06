@@ -38,6 +38,9 @@ select {
 	@include media-breakpoint-down(lg) {
 		max-width: 400px;
 	}
+	@include media-breakpoint-down(md) {
+		font-size: 12px;
+	}
 }
 
 .form-left {
