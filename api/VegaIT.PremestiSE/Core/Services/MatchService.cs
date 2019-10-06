@@ -74,7 +74,7 @@ namespace Core.Services
             return null;
         }
 
-        public void Unmatch(int id)
+        public int Unmatch(int id)
         {
             // delete match and return obj
             MatchedRequest request = _matchedRequestRepository.Delete(id);
@@ -92,12 +92,15 @@ namespace Core.Services
                 SubmittedAt = request.SubmittedAt,
                 Verified = true
             };
+            _pendingRequestRepository.Verify(id);
 
-            _pendingRequestRepository.Create(tempRequest);
+            PendingRequest addedRequest = _pendingRequestRepository.Create(tempRequest);
 
             // set match status to Failure
             _matchRepository.SetStatus(request.MatchId, Status.Failure);
 
+
+            return addedRequest.Id;
             // complete transaction
         }
 

@@ -26,6 +26,7 @@ namespace VegaIT.PremestiSE.Controllers
         }
 
         [HttpPost]
+        [Route("confirm")]
         public IActionResult Confirm([FromBody] string id)
         {
             int idAsInt = EncodeDecode.Decode(id);
@@ -38,7 +39,8 @@ namespace VegaIT.PremestiSE.Controllers
         public IActionResult Recover([FromBody] string id)
         {
             int idAsInt = EncodeDecode.Decode(id);
-            _matchService.Unmatch(idAsInt);
+            int newId = _matchService.Unmatch(idAsInt);
+            _matchService.TryMatch(newId);
             return Ok();
         }
 

@@ -109,7 +109,7 @@ namespace Persistence.Repositories
                 conn.Open();
 
                 SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = @"UPDATE match SET status = @status WHERE id = @id;";
+                cmd.CommandText = @"UPDATE matches SET status = @status WHERE id = @id;";
                 cmd.Parameters.Add(new SqlParameter("@Id", id));
                 cmd.Parameters.Add(new SqlParameter("@Status", status));
 

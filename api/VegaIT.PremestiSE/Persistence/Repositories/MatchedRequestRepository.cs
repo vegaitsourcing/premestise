@@ -216,7 +216,7 @@ namespace Persistence.Repositories
                 SqlCommand cmd = conn.CreateCommand();
 
                 cmd.CommandText = @"SELECT * FROM matched_request WHERE id=@Id;";
-                cmd.Parameters.Add(new SqlParameter("Id", id));
+                cmd.Parameters.Add(new SqlParameter("@Id", id));
 
                 SqlDataReader reader = cmd.ExecuteReader();
 
@@ -233,7 +233,7 @@ namespace Persistence.Repositories
                 int childNameOrd = reader.GetOrdinal("child_name");
                 int childBirthDateOrd = reader.GetOrdinal("child_birth_date");
                 int fromKindergardenIdOrd = reader.GetOrdinal("from_kindergarden_id");
-                int matchIdOrd = reader.GetOrdinal("match_id");
+                int matchId = reader.GetOrdinal("match_id");
 
                 List<int> kindergardenWishIds = GetMatchedWishes(id);
 
@@ -248,7 +248,7 @@ namespace Persistence.Repositories
                     ChildName = reader.GetString(childNameOrd),
                     FromKindergardenId = reader.GetInt32(fromKindergardenIdOrd),
                     KindergardenWishIds = kindergardenWishIds,
-                    MatchId = reader.GetInt32(matchIdOrd)
+                    MatchId = reader.GetInt32(matchId)
                 };
             }
         }

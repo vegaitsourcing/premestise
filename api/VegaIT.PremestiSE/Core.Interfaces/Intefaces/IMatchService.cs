@@ -5,6 +5,6 @@
         int GetTotalCount();
         void TryMatch(int id);
         void ConfirmMatch(int id);
-        void Unmatch(int id);
+        int Unmatch(int id);
     }
 }
