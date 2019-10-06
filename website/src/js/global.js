@@ -16,5 +16,11 @@ accordions.init();
 import openMenu from './_project/menu';
 openMenu.init();
 
-import Map from './_project/maps';
-Map.init();
+import map from './_project/maps';
+map.init();
+
+import contact from './_project/contact';
+contact.init();
+
+import request from './_project/requestForm';
+request.notifyMe();
