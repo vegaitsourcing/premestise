@@ -7,25 +7,25 @@ namespace UnitTest.Fluent.Mocks
 {
     public class MockPendingRequestRepository : Mock<IPendingRequestRepository>
     {
-        MockPendingRequestRepository GetAnyId(PendingRequest returnedRequest)
+        public MockPendingRequestRepository GetAnyId(PendingRequest returnedRequest)
         {
             Setup(x => x.Get(It.IsAny<int>())).Returns(returnedRequest);
             return this;
         }
 
-        MockPendingRequestRepository Create(PendingRequest returnedRequest)
+        public MockPendingRequestRepository Create(PendingRequest returnedRequest)
         {
             Setup(x => x.Create(It.IsAny<PendingRequest>())).Returns(returnedRequest);
             return this;
         }
 
-        MockPendingRequestRepository GetAllMatchesFor(IEnumerable<PendingRequest> returnedRequests)
+        public MockPendingRequestRepository GetAllMatchesFor(IEnumerable<PendingRequest> returnedRequests)
         {
             Setup(x => x.GetAllMatchesFor(It.IsAny<PendingRequest>())).Returns(returnedRequests);
             return this;
         }
 
-        MockPendingRequestRepository DeleteAnyId()
+        public MockPendingRequestRepository DeleteAnyId()
         {
             Setup(x => x.Delete(It.IsAny<int>()));
             return this;
