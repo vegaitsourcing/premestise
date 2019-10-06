@@ -1,8 +1,8 @@
 @font-face {
 	font-family: 'svgicons';
-	src: url('../assets/fonts/svgicons.woff2?v=1570305716419') format('woff2'),
-		url('../assets/fonts/svgicons.woff?v=1570305716419') format('woff'),
-		url('../assets/fonts/svgicons.ttf?v=1570305716419') format('truetype');
+	src: url('../assets/fonts/svgicons.woff2') format('woff2'),
+		url('../assets/fonts/svgicons.woff') format('woff'),
+		url('../assets/fonts/svgicons.ttf') format('truetype');
 }
 
 @mixin font-styles {
@@ -59,14 +59,17 @@
 	@if $filename == ico-messenger {
 		$char: '\E00B';
 	}
-	@if $filename == ico-pin {
+	@if $filename == ico-new-wish {
 		$char: '\E00C';
 	}
-	@if $filename == ico-share {
+	@if $filename == ico-pin {
 		$char: '\E00D';
 	}
-	@if $filename == ico-test {
+	@if $filename == ico-share {
 		$char: '\E00E';
+	}
+	@if $filename == ico-test {
+		$char: '\E00F';
 	}
 
 	@return $char;
@@ -119,6 +122,9 @@
 }
 .font-ico-messenger {
 	@include font(ico-messenger);
+}
+.font-ico-new-wish {
+	@include font(ico-new-wish);
 }
 .font-ico-pin {
 	@include font(ico-pin);

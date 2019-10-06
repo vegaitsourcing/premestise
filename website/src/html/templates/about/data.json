@@ -6,9 +6,6 @@
 		},
 		"footer": {
 			">>": "shared/footer/data.json"
-		},
-		"basicBlock": {
-			">>": "modules/basic-block/data.json"
 		}
 	}
 }

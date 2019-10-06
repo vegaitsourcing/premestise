@@ -1,0 +1,43 @@
+//---------- info
+//------------------------------------------------------------------------------
+.info {
+	height: 100vh;
+	position: relative;
+	text-align: center;
+}
+
+.info-wrap {
+	background-color: $light-blue;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	max-width: 600px;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	padding: 25px 35px;
+}
+
+.info-wrap__content {
+	margin: 30px 0;
+	text-align: center;
+	h2 {
+		color: $white;
+		font-size: 26px;
+		padding-bottom: 20px;
+	}
+	p {
+		color: $white;
+		padding-bottom: 20px;
+	}
+	a {
+		border-bottom: 2px solid $white;
+		color: $white;
+		font-size: 18px;
+		font-weight: 600;
+		transition: $easeing $trans;
+		@include hover {
+			color: $blue-1;
+			border-color: $blue-1;
+		}
+	}
+}
