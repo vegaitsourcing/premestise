@@ -14,7 +14,7 @@ namespace Core.Services.Mappers
         {
             return new KindergardenDto
             {
-                Id = EncodeDecode.Encode(kindergarden.Id),
+                Id = HashId.Encode(kindergarden.Id),
                 Name = kindergarden.Name,
                 Longitude = kindergarden.Longitude,
                 Latitude = kindergarden.Latitude
