@@ -22,7 +22,7 @@ namespace UnitTest
         {
             var id = int.MaxValue;
             
-            var result = _emailController.Verify(id);
+            var result = _emailController.Verify(id.ToString());
             
             _matchService.Verify(service => service.TryMatch(id));
             Assert.Equal(typeof(OkResult), result.GetType());
