@@ -41,8 +41,11 @@ const map = {
 			'longitude': 45.2494525,
 			'latitude': 19.8472819
 		};
-		drawLineBeetwenPines(pin3, pin4);
-
+		const list2 = [pin3, pin4];
+		list2.forEach(pin => {
+			L.marker([pin.longitude, pin.latitude]).addTo(map).bindPopup(`<b>${pin.name}</b>`);
+		});
+		drawLineBeetwenPines(...list2);
 	}
 };
 
