@@ -37,7 +37,7 @@ namespace Core.Clients
                 MailAddress receiverEmail = new MailAddress(toEmail);
 
                 string subject = NewMessageOnPremestiSe;
-                string content = $"Message: {message}|from:{_defaultEmail}";
+                string content = $"Message: {message} | from:{_defaultEmail}";
 
 
                 using (MailMessage mail = new MailMessage(new MailAddress(_defaultEmail), receiverEmail))

@@ -5,14 +5,14 @@ USE premestise;
 
 CREATE TABLE kindergarden (
   id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-  municipality VARCHAR(50),
-  government VARCHAR(50),
-  city VARCHAR(50),
-  name VARCHAR(50),
-  department VARCHAR(50),
-  street VARCHAR(50),
-  street_number VARCHAR(50),
-  postal_code VARCHAR(50),
+  municipality NVARCHAR(50),
+  government NVARCHAR(50),
+  city NVARCHAR(50),
+  name NVARCHAR(50),
+  department NVARCHAR(50),
+  street NVARCHAR(50),
+  street_number NVARCHAR(50),
+  postal_code NVARCHAR(50),
   location_type BIT,
   longitude DECIMAL(9, 7),
   latitude DECIMAL(9, 7)
@@ -21,10 +21,10 @@ CREATE TABLE kindergarden (
 CREATE TABLE pending_request (
   id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
   submitted_at DATETIME2,
-  email VARCHAR(255),
-  parent_name VARCHAR(50),
-  phone_number VARCHAR(50),
-  child_name VARCHAR(50),
+  email NVARCHAR(255),
+  parent_name NVARCHAR(50),
+  phone_number NVARCHAR(50),
+  child_name NVARCHAR(50),
   child_birth_date DATETIME2,
   from_kindergarden_id INT,
   verified BIT
@@ -39,10 +39,10 @@ CREATE TABLE pending_request_wishes (
 CREATE TABLE matched_request (
   id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
   submitted_at DATETIME2,
-  email VARCHAR(255),
-  parent_name VARCHAR(50),
-  phone_number VARCHAR(50),
-  child_name VARCHAR(50),
+  email NVARCHAR(255),
+  parent_name NVARCHAR(50),
+  phone_number NVARCHAR(50),
+  child_name NVARCHAR(50),
   child_birth_date DATETIME2,
   from_kindergarden_id INT
 );

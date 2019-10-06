@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core.Interfaces.Intefaces;
+﻿using Core.Interfaces.Intefaces;
 using Microsoft.AspNetCore.Mvc;
 using Util;
 
@@ -31,9 +26,18 @@ namespace VegaIT.PremestiSE.Controllers
         }
 
         [HttpPost]
-        public IActionResult Recover([FromBody] int id)
+        public IActionResult Confirm([FromBody] string id)
         {
-            _matchService.Unmatch(id);
+            int idAsInt = EncodeDecode.Decode(id);
+            _matchService.ConfirmMatch(idAsInt);
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult Recover([FromBody] string id)
+        {
+            int idAsInt = EncodeDecode.Decode(id);
+            _matchService.Unmatch(idAsInt);
             return Ok();
         }
 
