@@ -19,16 +19,17 @@ namespace Persistence.Repositories
             _connectionString = config.GetConnectionString("DefaultConnection");
         }
 
-        public PendingRequest Create(PendingRequest request)
+        public PendingRequest Create(Request request)
         {
             request.SubmittedAt = DateTime.Now;
 
             SqlCommand command = new SqlCommand();
-            command.CommandText = $@"INSERT INTO pending_request (parent_email, parent_phone_number, child_name, child_birth_date, from_kindergarden_id, submitted_at, verified) 
-                                    VALUES (@email, @phoneNumber, @childName, @childBirthDate, @fromKindergardenId, @submittedAt, @verified)
+            command.CommandText = $@"INSERT INTO pending_request (email, parent_name, phone_number, child_name, child_birth_date, from_kindergarden_id, submitted_at, verified) 
+                                    VALUES (@email, @parentName, @phoneNumber, @childName, @childBirthDate, @fromKindergardenId, @submittedAt, @verified);
                                     SELECT SCOPE_IDENTITY()";
 
             command.Parameters.Add("@email", SqlDbType.NVarChar).Value = request.ParentEmail;
+            command.Parameters.Add("@parentName", SqlDbType.NVarChar).Value = request.ParentName;
             command.Parameters.Add("@phoneNumber", SqlDbType.NVarChar).Value = request.ParentPhoneNumber;
             command.Parameters.Add("@childName", SqlDbType.NVarChar).Value = request.ChildName;
             command.Parameters.Add("@childBirthDate", SqlDbType.DateTime).Value = request.ChildBirthDate;
@@ -40,7 +41,12 @@ namespace Persistence.Repositories
             var values = new StringBuilder();
             for (var i = 0; i < request.KindergardenWishIds.Count; i++)
             {
-                values.Append("(@PendingRequestId, @KindergardenWishId" + i + "), ");
+                if (i == request.KindergardenWishIds.Count - 1)
+                    values.Append("(@PendingRequestId, @KindergardenWishId" + i + ")");
+                else
+                {
+                    values.Append("(@PendingRequestId, @KindergardenWishId" + i + "), ");
+                }
             }
 
             secondCommand.CommandText =
@@ -57,6 +63,8 @@ namespace Persistence.Repositories
             using (SqlConnection connection = new SqlConnection())
             {
                 connection.ConnectionString = _connectionString;
+                command.Connection = connection;
+                secondCommand.Connection = connection;
                 connection.Open();
 
                 SqlTransaction transaction = connection.BeginTransaction();
@@ -65,12 +73,14 @@ namespace Persistence.Repositories
 
                 try
                 {
-                    int id = (int)command.ExecuteScalar();
+                    int id = Convert.ToInt32(command.ExecuteScalar());
                     request.Id = id;
 
                     secondCommand.Parameters.Add(new SqlParameter("@PendingRequestId", request.Id));
 
                     secondCommand.ExecuteNonQuery();
+
+                    transaction.Commit();
                 }
                 catch (Exception)
                 {
@@ -79,7 +89,19 @@ namespace Persistence.Repositories
                 }
             }
 
-            return request;
+            return new PendingRequest
+            {
+                Id = request.Id,
+                ParentEmail = request.ParentEmail,
+                ParentName = request.ParentName,
+                ParentPhoneNumber = request.ParentPhoneNumber,
+                ChildName = request.ChildName,
+                ChildBirthDate = request.ChildBirthDate,
+                KindergardenWishIds = request.KindergardenWishIds,
+                FromKindergardenId = request.FromKindergardenId,
+                Verified = false,
+                SubmittedAt = request.SubmittedAt
+            };
         }
 
 
@@ -95,6 +117,8 @@ namespace Persistence.Repositories
             using (SqlConnection connection = new SqlConnection())
             {
                 connection.ConnectionString = _connectionString;
+                deletePendingReqCommand.Connection = connection;
+                deletePendingRequestWishes.Connection = connection;
                 connection.Open();
 
                 SqlTransaction transaction = connection.BeginTransaction();
@@ -103,8 +127,10 @@ namespace Persistence.Repositories
 
                 try
                 {
-                    deletePendingReqCommand.ExecuteNonQuery();
                     deletePendingRequestWishes.ExecuteNonQuery();
+                    deletePendingReqCommand.ExecuteNonQuery();
+
+                    transaction.Commit();
                 }
                 catch (Exception ex)
                 {
@@ -114,60 +140,81 @@ namespace Persistence.Repositories
             }
         }
 
-        //public IEnumerable<PendingRequest> GetAll()
-        //{
-        //    List<Kindergarden> kindergardens = new List<Kindergarden>();
-        //    using (SqlConnection conn = new SqlConnection())
-        //    {
-        //        conn.ConnectionString = _connectionString;
-        //        conn.Open();
-        //        SqlCommand cmd = conn.CreateCommand();
-        //        cmd.CommandText = @"SELECT * FROM Pending_Request;";
-
-        //        using (SqlDataAdapter dataAdapter = new SqlDataAdapter())
-        //        {
-        //            DataSet dataSet = new DataSet();
-
-        //            dataAdapter.SelectCommand = cmd;
-        //            dataAdapter.Fill(dataSet, "Kindergarden");
-
-        //            foreach (DataRow row in dataSet.Tables["Kindergarden"].Rows)
-        //            {
-        //                kindergardens.Add(new Kindergarden
-        //                {
-        //                    Id = (int)row["id"],
-        //                    Municipality = (string)row["municipality"],
-        //                    Government = (string)row["government"],
-        //                    City = (string)row["city"],
-        //                    Name = (string)row["name"],
-        //                    Department = (string)row["department"],
-        //                    Street = (string)row["street"],
-        //                    StreetNumber = (string)row["street_number"],
-        //                    PostalCode = (string)row["postal_code"],
-        //                    LocationType = (bool)row["location_type"] ? LocationType.Base : LocationType.Remote,
-        //                    Longitude = row["longitude"] == System.DBNull.Value ? null : (decimal?)row["longitude"],
-        //                    Latitude = row["latitude"] == System.DBNull.Value ? null : (decimal?)row["latitude"],
-        //                });
-        //            }
-        //        }
-        //    }
-        //    return kindergardens;
-        //}
-
         public IEnumerable<PendingRequest> GetAll()
         {
-            throw new NotImplementedException();
+            List<PendingRequest> pendingRequests = new List<PendingRequest>();
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = _connectionString;
+                conn.Open();
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = @"SELECT * FROM pending_request;";
+
+                using (SqlDataAdapter dataAdapter = new SqlDataAdapter())
+                {
+                    DataSet dataSet = new DataSet();
+
+                    dataAdapter.SelectCommand = cmd;
+                    dataAdapter.Fill(dataSet, "pending_request");
+
+                    foreach (DataRow row in dataSet.Tables["pending_request"].Rows)
+                    {
+                        pendingRequests.Add(new PendingRequest
+                        {
+                            Id = (int)row["id"],
+                            FromKindergardenId = (int)row["from_kindergarden_id"],
+                            SubmittedAt = row["submitted_at"] == System.DBNull.Value ? DateTime.Now : (DateTime)row["submitted_at"],
+                            ParentEmail = row["email"] == System.DBNull.Value ? null : (string)row["email"],
+                            ParentName = row["parent_name"] == System.DBNull.Value ? null : (string)row["parent_name"],
+                            ParentPhoneNumber = row["phone_number"] == System.DBNull.Value ? null : (string)row["phone_number"],
+                            ChildName = row["child_name"] == System.DBNull.Value ? null : (string)row["child_name"],
+                            ChildBirthDate = row["child_birth_date"] == System.DBNull.Value ? DateTime.Now : (DateTime)row["child_birth_date"],
+                            Verified = row["verified"] != System.DBNull.Value && (bool)row["verified"],
+
+                            KindergardenWishIds = GetPendingWishes((int)row["id"])
+                        });
+                    }
+                }
+
+            }
+            return pendingRequests;
+        }
+
+        private List<int> GetPendingWishes(int id)
+        {
+            List<int> kindergardenWishIds = new List<int>();
+
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = _connectionString;
+                conn.Open();
+
+                string newQuery = @"SELECT kindergarden_wish_id from pending_request_wishes WHERE pending_request_id = @id";
+                using (SqlCommand command = new SqlCommand(newQuery, conn))
+                {
+                    command.Parameters.AddWithValue("@id", id);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            kindergardenWishIds.Add((int)reader["kindergarden_wish_id"]);
+                        }
+                    }
+                }
+
+                return kindergardenWishIds;
+            }
         }
 
         public PendingRequest Get(int id)
         {
-
+            PendingRequest pending;
             using (SqlConnection connection = new SqlConnection())
             {
                 connection.ConnectionString = _connectionString;
                 connection.Open();
                 string query = "select * from pending_request where id =@id";
-                PendingRequest pending;
+
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@id", id);
@@ -182,30 +229,17 @@ namespace Persistence.Repositories
                     pending.SubmittedAt = (DateTime)reader["submitted_at"];
                     pending.ParentEmail = reader["email"].ToString();
                     pending.ParentName = reader["parent_name"].ToString();
-                    pending.ParentPhoneNumber = reader["phone-number"].ToString();
+                    pending.FromKindergardenId = (int) reader["from_kindergarden_id"];
+                    pending.ParentPhoneNumber = reader["phone_number"].ToString();
                     pending.ChildName = reader["child_name"].ToString();
                     pending.ChildBirthDate = (DateTime)reader["child_birth_date"];
-
+                    pending.KindergardenWishIds = GetPendingWishes(id);
 
                 }
 
-                string newQuery = @"select kindergarden_wish_id from pending_request_wishes where pending_request_id =@id";
-                using (SqlCommand command = new SqlCommand(newQuery, connection))
-                {
-                    command.Parameters.AddWithValue("@id", id);
-                    pending.KindergardenWishIds = new List<int>();
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            pending.KindergardenWishIds.Add((int)reader["kindergarden_wish_id"]);
-                        }
-                    }
-                }
-                return pending;
             }
 
-
+            return pending;
         }
 
         public IEnumerable<PendingRequest> GetAllMatchesFor(PendingRequest request)
@@ -213,9 +247,11 @@ namespace Persistence.Repositories
             using (SqlConnection conn = new SqlConnection())
             {
                 conn.ConnectionString = _connectionString;
+                
                 conn.Open();
 
                 SqlCommand cmd = conn.CreateCommand();
+
                 StringBuilder toValues = new StringBuilder();
                 for (var i = 0; i < request.KindergardenWishIds.Count; i++)
                 {
@@ -230,29 +266,34 @@ namespace Persistence.Repositories
                     }
 
                 }
-                cmd.CommandText = @"SELECT PR.id FROM pending_request AS PR INNER JOIN pending_request_wishes AS Wishes"
-                                + @" ON Pr.id == Wishes.pending_request_id "
-                                + @" WHERE Wishes.kindergarden_wish_id = @fromKindergardenId AND Pr.from_kindergarden_id IN ("
-                                + toValues + ") AND verified = 1;";
+                //cmd.CommandText = @"SELECT PR.id FROM pending_request AS PR INNER JOIN pending_request_wishes AS Wishes"
+                //                + @" ON PR.id = Wishes.pending_request_id "
+                //                + @"WHERE PR.verified = 1"
+                //                + @" AND Wishes.kindergarden_wish_id = @fromKindergardenId AND PR.from_kindergarden_id IN ("
+                //                + toValues + ") ;";
+
+                cmd.CommandText = @"SELECT PR.id FROM pending_request AS PR
+                                    INNER JOIN pending_request_wishes AS WISHES
+                                    ON PR.id = WISHES.pending_request_id
+                                    WHERE PR.verified = 1
+                                    AND WISHES.kindergarden_wish_id = @fromKindergardenId
+                                    AND PR.from_kindergarden_id IN(" + toValues +");";
 
                 for (var i = 0; i < request.KindergardenWishIds.Count; i++)
                 {
-                    cmd.Parameters.Add("@From" + i, SqlDbType.Int).Value = request.KindergardenWishIds[i];
+                    cmd.Parameters.Add(new SqlParameter("@From" + i, request.KindergardenWishIds[i]));
                 }
 
-                cmd.Parameters.Add(new SqlParameter("fromKindergardenId", request.FromKindergardenId));
-
-                SqlDataReader reader = cmd.ExecuteReader();
-
-                if (!reader.Read())
-                {
-                    throw new EntityNotFoundException();
-                }
+                cmd.Parameters.Add(new SqlParameter("@fromKindergardenId", request.FromKindergardenId));
 
                 List<int> pendingRequestIds = new List<int>();
-                while (reader.Read())
+
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    pendingRequestIds.Add((int)reader["id"]);
+                    while (reader.Read())
+                    {
+                        pendingRequestIds.Add((int)reader["id"]);
+                    }
                 }
 
                 List<PendingRequest> pendingRequests = new List<PendingRequest>(pendingRequestIds.Count);
@@ -275,11 +316,13 @@ namespace Persistence.Repositories
                 connection.ConnectionString = _connectionString;
                 connection.Open();
 
-                string query = @"update table pending_request set verified= @verified where id=@id";
+                string query = @"update pending_request set verified= @verified where id=@id";
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@verified", true);
                     command.Parameters.AddWithValue("@id", id);
+
+                    command.ExecuteNonQuery();
                 }
 
             }

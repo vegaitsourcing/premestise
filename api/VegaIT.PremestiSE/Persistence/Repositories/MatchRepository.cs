@@ -64,21 +64,16 @@ namespace Persistence.Repositories
 
                 SqlCommand cmd = connection.CreateCommand();
                 cmd.Transaction = transaction;
-                cmd.CommandText = @"INSERT INTO match (first_matched_request_id, second_matched_request_id, matched_at) " +
-                    "VALUES (@FirstMatchedRequestId, @SecondMatchedRequestId, @MatchedAt);";
+                cmd.CommandText = @"INSERT INTO matches (first_matched_request, second_matched_request, matched_at, status) " +
+                    "VALUES (@FirstMatchedRequestId, @SecondMatchedRequestId, @MatchedAt, @Status); SELECT SCOPE_IDENTITY()";
                 cmd.Parameters.Add(new SqlParameter("@FirstMatchedRequestId", firstMatchedRequest.Id));
                 cmd.Parameters.Add(new SqlParameter("@SecondMatchedRequestId", secondMatchedRequest.Id));
                 cmd.Parameters.Add(new SqlParameter("@MatchedAt", matched_at.ToString("yyyy-MM-dd HH:mm:ss")));
-                cmd.Transaction = transaction;
-                cmd.ExecuteNonQuery();
-
-                SqlCommand cmdGetId = connection.CreateCommand();
-                cmdGetId.CommandText = @"SELECT CONVERT(int, IDENT_CURRENT('match')) AS id;";
-                cmdGetId.Transaction = transaction;
+                cmd.Parameters.Add(new SqlParameter("@Status", Status.Matched));
 
                 try
                 {
-                    int id = (int)cmdGetId.ExecuteScalar();
+                    int id = Convert.ToInt32(cmd.ExecuteScalar());
                     transaction.Commit();
                     return new Match
                     {

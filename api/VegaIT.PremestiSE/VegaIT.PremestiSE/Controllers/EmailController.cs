@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.Interfaces.Intefaces;
 using Microsoft.AspNetCore.Mvc;
+using Util;
 
 namespace VegaIT.PremestiSE.Controllers
 {
@@ -19,10 +20,13 @@ namespace VegaIT.PremestiSE.Controllers
             _matchService = service;
         }
 
-        [HttpGet]
-        public IActionResult Verify([FromBody] int id)
+        [HttpPost]
+        
+        [Route("verify")]
+        public IActionResult Verify([FromBody] string id)
         {
-            _matchService.TryMatch(id);
+            int idAsInt = EncodeDecode.Decode(id);
+            _matchService.TryMatch(idAsInt);
             return Ok();
         }
 
