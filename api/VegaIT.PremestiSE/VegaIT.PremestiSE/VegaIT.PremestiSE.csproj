@@ -20,4 +20,17 @@
     <ProjectReference Include="..\Persistence\Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <Target Name="BuildFrontend" BeforeTargets="Build">
+    <Message Text="* * * * * * Building Frontend App * * * * * *" Importance="high"/>
+    <Message Text="$(MSBuildProjectDirectory)" Importance="high"/>
+    <Exec WorkingDirectory="$(SolutionDir)../../website" Command="npx gulp build-prod"/>
+    <Message Text="* * * * * * Copying to wwwroot * * * * * *" Importance="high"/>
+    <Exec WorkingDirectory="$(SolutionDir)..\..\website" Command="Xcopy /E /Y $(SolutionDir)..\..\website\dist $(SolutionDir)VegaIT.PremestiSE\wwwroot"/>
+    
+  </Target>
+
 </Project>
