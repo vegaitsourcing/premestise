@@ -62,9 +62,9 @@ namespace Core.Clients
             foreach(var wish in wishes) 
                 builder.AppendLine($"\t {wish.Name}");
 
-            builder.AppendLine($"<strong><a href="{_verificationPageUrl}"> Potvrdi </a></strong>");
+            builder.AppendLine($"<strong><a href=\"{_verificationPageUrl}\"> Potvrdi </a></strong>");
             builder.AppendLine($"ili");
-            builder.AppendLine($"<strong><a href="{_infoNotValidPageUrl}"> Prijavi netacne informacije </a></strong>");
+            builder.AppendLine($"<strong><a href=\"{_infoNotValidPageUrl}\"> Prijavi netacne informacije </a></strong>");
 
             Send(request.Email, builder.ToString());
         }
