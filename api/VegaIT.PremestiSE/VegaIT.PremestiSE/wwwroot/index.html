@@ -136,7 +136,7 @@
 							</div>
 							<div class="form-right">
 								<div class="select-wrap">
-									<select>
+									<select id="firstLocation">
 										<option value="Izaberi trenutnu lokaciju">Izaberi trenutnu lokaciju</option>
 										<option value="Izaberi trenutnu lokaciju">Lokacija 1</option>
 										<option value="Izaberi trenutnu lokaciju">Lokacija 2</option>
@@ -146,7 +146,7 @@
 									</select>
 								</div>
 								<div class="select-wrap">
-									<select>
+									<select id="secondLocation">
 										<option value="Izaberi trenutnu lokaciju">1. Lokacija na koju zelis da se premestis?</option>
 										<option value="Izaberi trenutnu lokaciju">Lokacija 1</option>
 										<option value="Izaberi trenutnu lokaciju">Lokacija 2</option>
@@ -156,7 +156,7 @@
 									</select>
 								</div>
 								<div class="select-wrap">
-									<select>
+									<select id="thirdLocation">
 										<option value="Izaberi trenutnu lokaciju">2. Lokacija na koju zelis da se premestis?</option>
 										<option value="Izaberi trenutnu lokaciju">Lokacija 1</option>
 										<option value="Izaberi trenutnu lokaciju">Lokacija 2</option>
@@ -272,7 +272,7 @@
 			</div>
 		</div>
 	</section>
-	<div id="mapid" height="200px"></div>
+	<div id="mapid" style="height: 200px"></div>
 	<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>
 	<script src="js/maps.js"></script>
 	<div class="success-banner">
@@ -343,17 +343,17 @@
 		<section class="contact-us" data-section-name="form">
 			<div class="contact-us__wrap wrap">
 				<h2 class="contact-us__heading">Pišite nam</h2>
-				<form action="#" class="contact-us__form">
+				<form class="contact-us__form">
 					<div class="contact-us__email">
-						<input class="contact-us__input" type="email" placeholder="E-mail">
+						<input class="contact-us__input" id="email" type="email" placeholder="E-mail">
 						<span class="contact-us__text">Unapred smo zahvalni za sve dobre i loše stvari na sajtu koje nam javite.</span>
 					</div>
-					<textarea class="contact-us__textarea" name="message" placeholder="Text"></textarea>
+					<textarea class="contact-us__textarea" id="emailText" name="message" placeholder="Text"></textarea>
 					<span class="contact-us__text--hidden">Unapred smo zahvalni za sve dobre i loše stvari na sajtu koje nam javite.</span>
 					<div class="contact-us__send">
 						<a href="javascript:;" class="contact-us__facebook"> Ili nas pronađite na Facebook-u: <span class="font-ico-facebook"></span>
 						</a>
-						<button class="contact-us__btn btn">Pošalji</button>
+						<button class="contact-us__btn btn js-submit">Pošalji</button>
 					</div>
 				</form>
 			</div>
