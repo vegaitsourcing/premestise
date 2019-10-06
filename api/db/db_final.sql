@@ -44,7 +44,8 @@ CREATE TABLE matched_request (
   phone_number NVARCHAR(50),
   child_name NVARCHAR(50),
   child_birth_date DATETIME2,
-  from_kindergarden_id INT
+  from_kindergarden_id INT,
+  match_id INT
 );
 
 CREATE TABLE matched_request_wishes (
@@ -55,8 +56,6 @@ CREATE TABLE matched_request_wishes (
 
 CREATE TABLE matches (
   id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-  first_matched_request int,
-  second_matched_request int,
   matched_at DATETIME2,
   status INT
 );
@@ -73,6 +72,4 @@ ALTER TABLE matched_request_wishes ADD FOREIGN KEY (matched_request_id) REFERENC
 
 ALTER TABLE matched_request_wishes ADD FOREIGN KEY (kindergarden_wish_id) REFERENCES kindergarden (id);
 
-ALTER TABLE matches ADD FOREIGN KEY (first_matched_request) REFERENCES matched_request (id);
-
-ALTER TABLE matches ADD FOREIGN KEY (second_matched_request) REFERENCES matched_request (id);
+ALTER TABLE matched_request ADD FOREIGN KEY (match_id) REFERENCES matches (id);
