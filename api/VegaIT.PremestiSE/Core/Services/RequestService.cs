@@ -57,6 +57,27 @@ namespace Core.Services
             return addedPendingRequestDto;
         }
 
+        public WishDto GetLatest()
+        {
+            PendingRequest latestPendingRequest = _pendingRequestRepository.GetLatest();
+            Kindergarden fromKindergarden = _kindergardenRepository.GetById(latestPendingRequest.FromKindergardenId);
+            List<Kindergarden> toKindergardens = _kindergardenRepository.GetToByRequestId(latestPendingRequest.Id);
+
+
+            KindergardenDto fromKindergardenDto = new KindergardenMapper().DtoFromEntity(fromKindergarden);
+            IEnumerable<KindergardenDto> toKindergadenDtos =
+                toKindergardens.Select(new KindergardenMapper().DtoFromEntity);
+
+            return new WishDto
+            {
+                RequestId = latestPendingRequest.Id,
+                ChildBirthDate = latestPendingRequest.ChildBirthDate,
+                FromKindergarden = fromKindergardenDto,
+                ToKindergardens = toKindergadenDtos
+            };
+
+        }
+
         public void DeletePending(int id)
         {
             _pendingRequestRepository.Delete(id);

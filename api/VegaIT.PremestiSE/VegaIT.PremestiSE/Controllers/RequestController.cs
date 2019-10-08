@@ -44,6 +44,13 @@ namespace VegaIT.PremestiSE.Controllers
             return Ok(_requestService.GetAllMatched());
         }
 
+        [HttpGet]
+        [Route("latest")]
+        public IActionResult GetLatest()
+        {
+            return Ok(_requestService.GetLatest());
+        }
+
         [HttpDelete]
         public IActionResult Delete(int id)
         {
