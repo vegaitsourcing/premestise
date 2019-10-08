@@ -10,9 +10,12 @@ namespace VegaIT.PremestiSE.Controllers
     public class RequestController : Controller
     {
         private readonly IRequestService _requestService;
-        public RequestController(IRequestService service)
+        private readonly IMatchService _matchService;
+
+        public RequestController(IRequestService service, IMatchService matchService)
         {
             _requestService = service;
+            _matchService = matchService;
         }
 
         [HttpPost]
@@ -42,6 +45,14 @@ namespace VegaIT.PremestiSE.Controllers
         public IActionResult GetAllMatched()
         {
             return Ok(_requestService.GetAllMatched());
+        }
+
+        [HttpGet]
+        [Route("matched/count")]
+        public IActionResult GetSuccessfulMatchesCount()
+        {
+            int successfulMatchesCount = _matchService.GetTotalCount();
+            return Ok(successfulMatchesCount);
         }
 
         [HttpGet]

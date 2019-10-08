@@ -27,7 +27,11 @@ namespace Core.Services
 
         public int GetTotalCount()
         {
-            return _matchRepository.GetAll().Count();
+            // Ne znam da li, kada na sajtu prikazuje ukupan broj uspjesnih premjestaja, treba
+            // da prikaze samo one koji su mailom potvrdili da su uspjeli da dogovore premjestaj - SUCCESS
+            // ili i one koji su se matchovali ali nisu mailom zvanicno potvrdili (zaboravili su ili sta vec) - MATCHED
+            // Zato sam stavio OR
+            return _matchRepository.GetAll().Count(m => m.Status == Status.Success || m.Status == Status.Matched);
         }
 
         public void TryMatch(int id)
