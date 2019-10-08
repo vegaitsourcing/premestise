@@ -10,22 +10,6 @@ namespace Core.Interfaces.Models
     {
 
 
-        public static RequestDto FromRequestEntity(Request request)
-        {
-
-            return new RequestDto()
-            {
-                Id = HashId.Encode(request.Id),
-                Email = request.ParentEmail,
-                ParentName = request.ParentName,
-                PhoneNumber = request.ParentPhoneNumber,
-                ChildName = request.ChildName,
-                ChildBirthDate = request.ChildBirthDate,
-                FromKindergardenId = HashId.Encode(request.FromKindergardenId)
-            };
-        }
-
-
         [Key]
         public string Id { get; set; }
         [Required]

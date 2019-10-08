@@ -105,6 +105,46 @@ namespace Persistence.Repositories
         }
 
 
+        public PendingRequest GetLatest()
+        {
+            PendingRequest pendingRequest = null;
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = _connectionString;
+                conn.Open();
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = @"SELECT TOP 1 * FROM pending_request WHERE verified = 1 ORDER BY submitted_at DESC;";
+
+                using (SqlDataAdapter dataAdapter = new SqlDataAdapter())
+                {
+                    DataSet dataSet = new DataSet();
+
+                    dataAdapter.SelectCommand = cmd;
+                    dataAdapter.Fill(dataSet, "pending_request");
+
+                    foreach (DataRow row in dataSet.Tables["pending_request"].Rows)
+                    {
+                        pendingRequest = new PendingRequest
+                        {
+                            Id = (int)row["id"],
+                            FromKindergardenId = (int)row["from_kindergarden_id"],
+                            SubmittedAt = row["submitted_at"] == System.DBNull.Value ? DateTime.Now : (DateTime)row["submitted_at"],
+                            ParentEmail = row["email"] == System.DBNull.Value ? null : (string)row["email"],
+                            ParentName = row["parent_name"] == System.DBNull.Value ? null : (string)row["parent_name"],
+                            ParentPhoneNumber = row["phone_number"] == System.DBNull.Value ? null : (string)row["phone_number"],
+                            ChildName = row["child_name"] == System.DBNull.Value ? null : (string)row["child_name"],
+                            ChildBirthDate = row["child_birth_date"] == System.DBNull.Value ? DateTime.Now : (DateTime)row["child_birth_date"],
+                            Verified = row["verified"] != System.DBNull.Value && (bool)row["verified"],
+
+                            KindergardenWishIds = GetPendingWishes((int)row["id"])
+                        };
+                    }
+                }
+
+            }
+            return pendingRequest;
+        }
+
 
         public void Delete(int id)
         {

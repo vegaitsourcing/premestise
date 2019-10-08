@@ -8,6 +8,6 @@ namespace Core.Interfaces.Intefaces
     public interface IKindergardenService
     {
         IEnumerable<KindergardenDto> GetAll();
-
+        IEnumerable<KindergardenDto> GetToKindergardens(int requestId);
     }
 }

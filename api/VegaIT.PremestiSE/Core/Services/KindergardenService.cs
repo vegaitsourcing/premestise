@@ -27,5 +27,12 @@ namespace Core.Services
 
             return kindergardens;
         }
+
+        public IEnumerable<KindergardenDto> GetToKindergardens(int requestId)
+        {
+            KindergardenMapper kindergardenMapper = new KindergardenMapper();
+            return _kindergardenRepository.GetToByRequestId(requestId)
+                                          .Select(kindergardenMapper.DtoFromEntity);
+        }
     }
 }

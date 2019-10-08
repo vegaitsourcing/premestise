@@ -10,6 +10,7 @@ namespace Persistence.Interfaces.Contracts
         PendingRequest Get(int id);
         PendingRequest Create(Request request);
         IEnumerable<PendingRequest> GetAllMatchesFor(PendingRequest request);
+        PendingRequest GetLatest();
         void Delete(int id);
         void Verify(int id);
     }
