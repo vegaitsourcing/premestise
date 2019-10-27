@@ -22,5 +22,5 @@ map.init();
 import contact from './_project/contact';
 contact.init();
 
-import request from './_project/requestForm';
-request.notifyMe();
+// import request from './_project/request-form';
+// request.init();
