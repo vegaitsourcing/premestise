@@ -32,9 +32,9 @@ namespace Persistence.Repositories
             command.Parameters.Add("@parentName", SqlDbType.NVarChar).Value = request.ParentName;
             command.Parameters.Add("@phoneNumber", SqlDbType.NVarChar).Value = request.ParentPhoneNumber;
             command.Parameters.Add("@childName", SqlDbType.NVarChar).Value = request.ChildName;
-            command.Parameters.Add("@childBirthDate", SqlDbType.DateTime).Value = request.ChildBirthDate;
+            command.Parameters.Add("@childBirthDate", SqlDbType.DateTime2).Value = request.ChildBirthDate;
             command.Parameters.Add("@fromKindergardenId", SqlDbType.Int).Value = request.FromKindergardenId;
-            command.Parameters.Add("@submittedAt", SqlDbType.NVarChar).Value = request.SubmittedAt.ToString("yyyy-MM-dd HH:mm:ss");
+            command.Parameters.Add("@submittedAt", SqlDbType.DateTime2).Value = request.SubmittedAt;
             command.Parameters.AddWithValue("@verified", false);
 
             SqlCommand secondCommand = new SqlCommand();
@@ -82,10 +82,10 @@ namespace Persistence.Repositories
 
                     transaction.Commit();
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                     transaction.Rollback();
-                    throw;
+                    throw ex;
                 }
             }
 

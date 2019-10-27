@@ -74,9 +74,9 @@ namespace Persistence.Repositories
             command.Parameters.Add("@parentPhoneNumber", SqlDbType.NVarChar).Value = request.ParentPhoneNumber;
             command.Parameters.Add("@parentName", SqlDbType.NVarChar).Value = request.ParentName;
             command.Parameters.Add("@childName", SqlDbType.NVarChar).Value = request.ChildName;
-            command.Parameters.Add("@childBirthDate", SqlDbType.DateTime).Value = request.ChildBirthDate;
+            command.Parameters.Add("@childBirthDate", SqlDbType.DateTime2).Value = request.ChildBirthDate;
             command.Parameters.Add("@fromKindergardenId", SqlDbType.Int).Value = request.FromKindergardenId;
-            command.Parameters.Add("@submittedAt", SqlDbType.NVarChar).Value = request.SubmittedAt.ToString("yyyy-MM-dd HH:mm:ss");
+            command.Parameters.Add("@submittedAt", SqlDbType.DateTime2).Value = request.SubmittedAt;
             command.Parameters.Add("@matchId", SqlDbType.Int).Value = matchId;
 
 

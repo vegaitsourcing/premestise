@@ -11,50 +11,50 @@
 		<div class="wrap">
 			<div id="tab-1" class="tab-content current">
 				<h2 class="tab-title">Gde zelis da se premestis?</h2>
-				<form action="">
+				<form>
 					<div class="form-wrap">
 						<div class="form-left">
-							<input type="text"  class="input parent-input" placeholder="Ime i prezime roditelja *">
-							<input type="text" class="input child-input" placeholder="Ime deteta *">
-							<input type="email"  class="input input__email" placeholder="Email *">
+							<input type="text" id="newRequestParentName" class="input parent-input" placeholder="Ime i prezime roditelja *">
+							<input type="text" id="newRequestChildName" class="input child-input" placeholder="Ime deteta *">
+							<input type="email" id="newRequestEmail" class="input input__email" placeholder="Email *">
 							<div class="form-left__double">
-								<input type="text"  class="input input__phone" placeholder="Broj telefona *">
-								<input type="date"  class="input input__date" placeholder="Datum rodjenja deteta">
+								<input type="text" id="newRequestPhoneNumber" class="input input__phone" placeholder="Broj telefona *">
+								<input type="date" id="newRequestChildBirthDate" class="input input__date" placeholder="Datum rodjenja deteta">
 							</div>
 						</div>
 						<div class="form-right">
 							<div class="select-wrap">
-								<select id= "firstLocation">
-									<option value="Izaberi trenutno lokaciju">Izaberi trenutnu lokaciju</option>
-									<option value="Lokacija 1">Маштоленд</option>
-									<option value="Lokacija 2">Вртић златна греда</option>
+								<select id= "newRequestFromKindergardenSelect">
+									<option value="" selected disabled hidden>Izaberi trenutnu lokaciju</option>
+									{{!-- <option value="Lokacija 1">Маштоленд</option>
+									<option value="Lokacija 2">Вртић златна греда</option> --}}
 								</select>
 							</div>
 							<div class="select-wrap">
-								<select id="secondLocation">
-									<option value="Izaberi trenutnu lokaciju">1. Lokacija na koju zelis da se premestis?</option>
-									<option value="Lokacija 1">Маштоленд</option>
-									<option value="Lokacija 2">Вртић златна греда</option>
+								<select id="newRequestToKindergarden1Select">
+									<option value="" selected disabled hidden>1. Lokacija na koju zelis da se premestis?</option>
+									{{!-- <option value="Lokacija 1">Маштоленд</option>
+									<option value="Lokacija 2">Вртић златна греда</option> --}}
 								</select>
 							</div>
 							<div class="select-wrap">
-								<select id="thirdLocation">
-									<option value="Izaberi trenutnu lokaciju">2. Lokacija na koju zelis da se premestis?</option>
-									<option value="Izaberi trenutnu lokaciju">Lokacija 1</option>
+								<select id="newRequestToKindergarden2Select">
+									<option value="" selected disabled hidden>2. Lokacija na koju zelis da se premestis?</option>
+									{{!-- <option value="Izaberi trenutnu lokaciju">Lokacija 1</option>
 									<option value="Izaberi trenutnu lokaciju">Lokacija 2</option>
 									<option value="Izaberi trenutnu lokaciju">Lokacija 3</option>
 									<option value="Izaberi trenutnu lokaciju">Lokacija 4</option>
-									<option value="Izaberi trenutnu lokaciju">Lokacija 5</option>
+									<option value="Izaberi trenutnu lokaciju">Lokacija 5</option> --}}
 								</select>
 							</div>
 							<div class="select-wrap">
-								<select>
-									<option value="Izaberi trenutnu lokaciju">3. Lokacija na koju zelis da se premestis?</option>
-									<option value="Izaberi trenutnu lokaciju">Lokacija 1</option>
+								<select id="newRequestToKindergarden3Select">
+									<option value="" selected disabled hidden>3. Lokacija na koju zelis da se premestis?</option>
+									{{!-- <option value="Izaberi trenutnu lokaciju">Lokacija 1</option>
 									<option value="Izaberi trenutnu lokaciju">Lokacija 2</option>
 									<option value="Izaberi trenutnu lokaciju">Lokacija 3</option>
 									<option value="Izaberi trenutnu lokaciju">Lokacija 4</option>
-									<option value="Izaberi trenutnu lokaciju">Lokacija 5</option>
+									<option value="Izaberi trenutnu lokaciju">Lokacija 5</option> --}}
 								</select>
 							</div>
 						</div>
@@ -77,7 +77,7 @@
 							</ul>
 						</div>
 						<div class="form-buttons__right">
-							<button class="btn" type="submit">
+							<button class="btn" type="submit" id="submit-new-request">
 								<span class="font-ico-envelope"></span>
 								Obavesti me
 							</button>

@@ -64,8 +64,9 @@ namespace Persistence.Repositories
                 cmd.Transaction = transaction;
                 cmd.CommandText = @"INSERT INTO matches (matched_at, status) " +
                     "VALUES ( @MatchedAt, @Status); SELECT SCOPE_IDENTITY()";
-                cmd.Parameters.Add(new SqlParameter("@MatchedAt", matched_at.ToString("yyyy-MM-dd HH:mm:ss")));
-                cmd.Parameters.Add(new SqlParameter("@Status", Status.Matched));
+
+                cmd.Parameters.Add("@MatchedAt", SqlDbType.DateTime2).Value = matched_at;
+                cmd.Parameters.Add("@Status", SqlDbType.Int).Value = Status.Matched;
 
                 try
                 {

@@ -1,6 +1,6 @@
 const contact = {
 
-	test: function() {
+	initializeContactSubmit: function() {
 		$('.js-submit').on('click', (e) => {
 			e.preventDefault();
 			const email = document.getElementById('email').value;
@@ -10,7 +10,7 @@ const contact = {
 	},
 
 	init: function() {
-		this.test();
+		this.initializeContactSubmit();
 	}
 };
 
