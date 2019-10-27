@@ -23,8 +23,6 @@ namespace VegaIT.PremestiSE.Controllers
         {
             string email = Request.Form["email"];
             string message = Request.Form["message"];
-            Console.WriteLine(email);
-            Console.WriteLine(message);
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(message))
                 return BadRequest();
 
