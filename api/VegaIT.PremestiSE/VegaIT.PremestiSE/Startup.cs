@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
-using System.Threading.Tasks;
-using Core.Clients;
+﻿using Core.Clients;
 using Core.Interfaces.Intefaces;
 using Core.Services;
 using Microsoft.AspNetCore.Builder;
@@ -33,8 +27,6 @@ namespace VegaIT.PremestiSE
             services.AddMvc(config =>
             {
                 config.Filters.Add(typeof(ExceptionHandler));
-
-
             });
             services.AddScoped<IKindergardenService, KindergardenService>();
             services.AddScoped<IMatchService, MatchService>();
@@ -64,8 +56,10 @@ namespace VegaIT.PremestiSE
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
             app.UseMvc();
-            app.UseFileServer();
         }
     }
 }
