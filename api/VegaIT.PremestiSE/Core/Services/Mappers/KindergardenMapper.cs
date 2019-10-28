@@ -13,7 +13,7 @@ namespace Core.Services.Mappers
             return new KindergardenDto
             {
                 Id = HashId.Encode(kindergarden.Id),
-                Name = $"{kindergarden.Name} - ${kindergarden.Street} ${kindergarden.StreetNumber}, ${kindergarden.City}",
+                Name = $"{kindergarden.Name} - {kindergarden.Street} {kindergarden.StreetNumber}, {kindergarden.City}",
                 Longitude = kindergarden.Longitude,
                 Latitude = kindergarden.Latitude
             };

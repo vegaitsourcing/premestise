@@ -27,16 +27,16 @@ namespace Persistence.Repositories
                 conn.ConnectionString = _connString;
                 conn.Open();
                 SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = @"SELECT * FROM Kindergarden;";
+                cmd.CommandText = @"SELECT * FROM kindergarden;";
 
                 using (SqlDataAdapter dataAdapter = new SqlDataAdapter())
                 {
                     DataSet dataSet = new DataSet();
 
                     dataAdapter.SelectCommand = cmd;
-                    dataAdapter.Fill(dataSet, "Kindergarden");
+                    dataAdapter.Fill(dataSet, "kindergarden");
 
-                    foreach (DataRow row in dataSet.Tables["Kindergarden"].Rows)
+                    foreach (DataRow row in dataSet.Tables["kindergarden"].Rows)
                     {
                         kindergardens.Add(new Kindergarden
                         {
