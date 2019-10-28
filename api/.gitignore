@@ -37,3 +37,6 @@ msbuild.wrn
 .vs/
 
 wwwroot
+
+**/appsettings.json
+appsettings.json
