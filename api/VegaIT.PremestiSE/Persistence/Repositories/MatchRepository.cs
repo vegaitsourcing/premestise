@@ -21,32 +21,33 @@ namespace Persistence.Repositories
 
         public IEnumerable<Match> GetAll()
         {
-            List<Match> matchs = new List<Match>();
+            List<Match> matches = new List<Match>();
             using (SqlConnection conn = new SqlConnection())
             {
                 conn.ConnectionString = _connString;
                 conn.Open();
                 SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = @"SELECT * FROM match;";
+                cmd.CommandText = @"SELECT * FROM matches;";
 
                 using (SqlDataAdapter dataAdapter = new SqlDataAdapter())
                 {
                     DataSet dataSet = new DataSet();
 
                     dataAdapter.SelectCommand = cmd;
-                    dataAdapter.Fill(dataSet, "match");
+                    dataAdapter.Fill(dataSet, "matches");
 
-                    foreach (DataRow row in dataSet.Tables["match"].Rows)
+                    foreach (DataRow row in dataSet.Tables["matches"].Rows)
                     {
-                        matchs.Add(new Match
+                        matches.Add(new Match
                         {
                             Id = (int)row["id"],
-                            MatchedAt = (DateTime)row["matched_at"]
+                            MatchedAt = (DateTime)row["matched_at"],
+                            Status = (Status)row["status"]
                         });
                     }
                 }
             }
-            return matchs;
+            return matches;
         }
 
         public Match Create()
@@ -95,7 +96,7 @@ namespace Persistence.Repositories
                 conn.Open();
 
                 SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = @"DELETE FROM match WHERE first_matched_request_id=@Id OR second_matched_request_id=@Id;";
+                cmd.CommandText = @"DELETE FROM matches WHERE first_matched_request_id=@Id OR second_matched_request_id=@Id;";
                 cmd.Parameters.Add(new SqlParameter("@Id", id));
 
                 cmd.ExecuteNonQuery();

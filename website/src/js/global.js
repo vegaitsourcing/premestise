@@ -24,3 +24,6 @@ contact.init();
 
 import newRequest from './_project/new-request';
 newRequest.init();
+
+import totalMatches from './_project/totalMatches';
+totalMatches.init();
