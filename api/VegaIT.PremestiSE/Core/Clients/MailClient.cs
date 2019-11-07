@@ -29,6 +29,12 @@ namespace Core.Clients
         private const string _infoNotValidPageUrl = "placeholder";
         private const string _confirmMatchPageUrl = "placeholder";
 
+        // ovo negde u config ili nesto
+        private readonly string _verifyTemplatePath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\verify.htm";
+        private readonly string _matchTemplatePath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\index.htm";
+        private readonly string _bannerPath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\images\\top-banner.jpg";
+        private readonly string _footerPath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\images\\logo-footer.png";
+
         public MailClient(ISmtpClientFactory smtpClientFactory, IConfiguration config)
         {
             _smtpClientFactory = smtpClientFactory;
@@ -68,13 +74,18 @@ namespace Core.Clients
             }
         }
 
+        /// <summary>
+        /// Sends email for verification with given request information
+        /// </summary>
+        /// <param name="request">Parent RequestDto object</param>
+        /// <param name="fromKindergarden">KindergardenDto of the current kindergarden</param>
+        /// <param name="wishes">List of requested kindergarden wishes</param>
         public void SendVerificationMessage(RequestDto request, KindergardenDto fromKindergarden, IEnumerable<KindergardenDto> wishes)
         {
-            string verifyTemplatePath = $"{Directory.GetParent(System.Environment.CurrentDirectory)}\\Core\\Templates\\verify.htm";
-            string bannerPath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\images\\top-banner.jpg";
-            string footerPath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\images\\logo-footer.png";
+            // Ako postoji drugi nacin da se slika stavi u email - izmenite
+            // pokusao sam img src="http://localhost:50800/assets/images/..." ali nece u mail da stavi
 
-            using (StreamReader reader = new StreamReader(verifyTemplatePath))
+            using (StreamReader reader = new StreamReader(_verifyTemplatePath))
             {
                 string mailText = reader.ReadToEnd();
                 mailText = mailText.Replace("[[PARENT_NAME]]", request.ParentName);
@@ -87,9 +98,8 @@ namespace Core.Clients
                     toKindergardensBuilder.Append($"- {wish.Name}<br>");
                 mailText = mailText.Replace("[[TO_KINDERGARDENS]]", toKindergardensBuilder.ToString());
 
-                AlternateView bannerImageAltView = new AlternateView(bannerPath, MediaTypeNames.Image.Jpeg);
-                AlternateView footerImageAltView = new AlternateView(footerPath, MediaTypeNames.Image.Jpeg);
-
+                AlternateView bannerImageAltView = new AlternateView(_bannerPath, MediaTypeNames.Image.Jpeg);
+                AlternateView footerImageAltView = new AlternateView(_footerPath, MediaTypeNames.Image.Jpeg);
                 bannerImageAltView.TransferEncoding = TransferEncoding.Base64;
                 footerImageAltView.TransferEncoding = TransferEncoding.Base64;
 
@@ -102,74 +112,57 @@ namespace Core.Clients
             }
         }
 
+        /// <summary>
+        /// Sends email to both parents with given match information
+        /// </summary>
+        /// <param name="firstMatch">First parent RequestDto object</param>
+        /// <param name="secondMatch">Second parent RequestDto object</param>
+        /// <param name="from">First parent KindergardentDto object</param>
+        /// <param name="to">Second parent KindergardenDto object</param>
         public void SendFoundMatchMessage(RequestDto firstMatch, RequestDto secondMatch, KindergardenDto from, KindergardenDto to)
         {
-            /*
-             * First parent email
-             */
-            StringBuilder firstMessageBuilder = new StringBuilder();
+            using (StreamReader reader = new StreamReader(_matchTemplatePath))
+            {
+                string mailText = reader.ReadToEnd();
 
-            firstMessageBuilder.Append($"Poštovani, {firstMatch.ParentName} <br/>");
-            firstMessageBuilder.Append($"Pronašli smo potencijalni premeštaj za vaše dete. ${Environment.NewLine}");
+                List<AlternateView> firstParentMailViews = CreateMatchMail(mailText, firstMatch, secondMatch, from, to);
+                List<AlternateView> secondParentMailViews = CreateMatchMail(mailText, secondMatch, firstMatch, to, from);
 
-            firstMessageBuilder.Append($"<table>");
+                Send(firstMatch.Email, firstParentMailViews);
+                Send(secondMatch.Email, secondParentMailViews);
+            }
+        }
 
-            firstMessageBuilder.Append($"<tr>");
-            firstMessageBuilder.Append($"<td> Ime deteta: </td>");
-            firstMessageBuilder.Append($"<td> {firstMatch.ChildName} </td>");
-            firstMessageBuilder.Append($"<td> {secondMatch.ChildName} </td>");
-            firstMessageBuilder.Append($"</tr>");
+        // DRY Helper Method
+        private List<AlternateView> CreateMatchMail(string mail, RequestDto firstMatch, RequestDto secondMatch, KindergardenDto from, KindergardenDto to)
+        {
+            // images
+            AlternateView bannerImageAltView = new AlternateView(_bannerPath, MediaTypeNames.Image.Jpeg);
+            AlternateView footerImageAltView = new AlternateView(_footerPath, MediaTypeNames.Image.Jpeg);
+            bannerImageAltView.TransferEncoding = TransferEncoding.Base64;
+            footerImageAltView.TransferEncoding = TransferEncoding.Base64;
 
-            firstMessageBuilder.Append($"<tr>");
-            firstMessageBuilder.Append($"<td> Vrtić: </td>");
-            firstMessageBuilder.Append($"<td> {from.Name} </td>");
-            firstMessageBuilder.Append($"<td> {to.Name} </td>");
-            firstMessageBuilder.Append($"</tr>");
-            firstMessageBuilder.Append($"</table> <br>");
+            // mail
+            mail = mail.Replace("[[PARENT_NAME]]", firstMatch.ParentName);
+            mail = mail.Replace("[[FROM_KINDERGARDEN]]", from.Name);
+            mail = mail.Replace("[[TO_KINDERGARDEN]]", to.Name);
+            mail = mail.Replace("[[MATCH_PARENT_NAME]]", secondMatch.ParentName);
+            mail = mail.Replace("[[MATCH_PHONE]]", secondMatch.PhoneNumber);
+            mail = mail.Replace("[[MATCH_EMAIL]]", secondMatch.Email);
+            mail = mail.Replace("[[TOP_BANNER_LOGO_SRC]]", $"cid:{bannerImageAltView.ContentId}");
+            mail = mail.Replace("[[FOOTER_LOGO_SRC]]", $"cid:{footerImageAltView.ContentId}");
 
-            firstMessageBuilder.Append($"Kontakt informacije drugog roditelja: <br>");
-            firstMessageBuilder.Append($"Ime: {secondMatch.ParentName} <br>");
-            firstMessageBuilder.Append($"Telefon: {secondMatch.PhoneNumber} <br>");
-            firstMessageBuilder.Append($"Email: {secondMatch.Email} <br>");
+            List<AlternateView> mailViews = new List<AlternateView>()
+            {
+                // image alternate views
+                bannerImageAltView,
+                footerImageAltView,
 
+                // mail alternate view
+                AlternateView.CreateAlternateViewFromString(mail, null, MediaTypeNames.Text.Html)
+            };
 
-            firstMessageBuilder.AppendLine($"<strong><a href=\"{_verificationPageUrl}\"> Uspešno </a></strong> <br>");
-            firstMessageBuilder.AppendLine($"ili <br>");
-            firstMessageBuilder.AppendLine($"<strong><a href=\"{_infoNotValidPageUrl}\"> Vrati me u red čekanja </a></strong> <br>");
-
-            /*
-             * Second parent email
-             */
-            StringBuilder secondMessageBuilder = new StringBuilder();
-            secondMessageBuilder.Append($"Poštovani, {secondMatch.ParentName} <br>");
-            secondMessageBuilder.Append($"Pronašli smo potencijalni premeštaj za vaše dete. <br>");
-
-            secondMessageBuilder.Append($"<table>");
-
-            secondMessageBuilder.Append($"<tr>");
-            secondMessageBuilder.Append($"<td> Ime deteta: </td>");
-            secondMessageBuilder.Append($"<td> {secondMatch.ChildName} </td>");
-            secondMessageBuilder.Append($"<td> {firstMatch.ChildName} </td>");
-            secondMessageBuilder.Append($"</tr>");
-
-            secondMessageBuilder.Append($"<tr>");
-            secondMessageBuilder.Append($"<td> Vrtić: </td>");
-            secondMessageBuilder.Append($"<td> {to.Name} </td>");
-            secondMessageBuilder.Append($"<td> {from.Name} </td>");
-            secondMessageBuilder.Append($"</tr>");
-            secondMessageBuilder.Append($"</table> <br>");
-
-            secondMessageBuilder.Append($"Kontakt informacije drugog roditelja: <br>");
-            secondMessageBuilder.Append($"Ime: {firstMatch.ParentName} <br>");
-            secondMessageBuilder.Append($"Telefon: {firstMatch.PhoneNumber} <br>");
-            secondMessageBuilder.Append($"Email: {firstMatch.Email} <br>");
-
-            secondMessageBuilder.AppendLine($"<strong><a href=\"{_verificationPageUrl}\"> Uspešno </a></strong> <br>");
-            secondMessageBuilder.AppendLine($"ili <br>");
-            secondMessageBuilder.AppendLine($"<strong><a href=\"{_infoNotValidPageUrl}\"> Vrati me u red čekanja </a></strong> <br>");
-
-            Send(firstMatch.Email, firstMessageBuilder.ToString());
-            Send(secondMatch.Email, secondMessageBuilder.ToString());
+            return mailViews;
         }
     }
 }
