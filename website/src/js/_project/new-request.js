@@ -1,3 +1,5 @@
+import translate from './translate';
+
 let kindergardens = [];
 // let displayedKindergardens = [];
 
@@ -73,7 +75,21 @@ const initializeNewRequestSubmit = () => {
 const newRequest = {
 	init: function() {
 		fetchKindergardens().done(data => {
-			kindergardens = data,
+
+			// kindergardens = data;
+
+			// cyrillic -> latin
+			kindergardens = data.map(kg => {
+				return {
+					id: kg.id,
+					name: translate(kg.name),
+					longitude: kg.longitude,
+					latitude: kg.latitude
+				};
+			});
+
+			console.log(kindergardens[1]);
+
 			// filterSelectedKindergardens();
 			initializeKindergardensInDropdowns();
 			// initializeOnDropdownChange();
