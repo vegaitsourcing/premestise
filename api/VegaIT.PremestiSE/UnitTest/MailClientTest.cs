@@ -36,7 +36,7 @@ namespace UnitTest
             _mailClient.Send(fromEMail, message);
             
             _client.Verify(client => client.Send(It.IsAny<MailMessage>()));
-            Assert.Equal(MailClient.NewMessageOnPremestiSe, _sentEmail.Subject);
+            //Assert.Equal(MailClient.NewMessageOnPremestiSe, _sentEmail.Subject);
             Assert.Equal(finalBody, _sentEmail.Body);
             Assert.Equal(SmtpClientFactory.DefaultUsername, _sentEmail.From.Address);
             Assert.Equal(ToEmail, _sentEmail.To.ToString());
