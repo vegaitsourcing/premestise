@@ -1,11 +1,8 @@
-﻿    using System;
-using System.Collections.Generic;
+﻿using Util;
 using System.Linq;
-using System.Text;
-using Core.Interfaces.Intefaces;
 using Core.Interfaces.Models;
+using Core.Interfaces.Intefaces;
 using Persistence.Interfaces.Entites;
-using Util;
 
 namespace Core.Services.Mappers
 {

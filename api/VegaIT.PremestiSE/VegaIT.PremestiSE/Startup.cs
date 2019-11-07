@@ -13,11 +13,11 @@ namespace VegaIT.PremestiSE
     public class Startup
     {
         private readonly IConfiguration _configuration;
-   
+
         public Startup(IConfiguration configuration)
         {
             _configuration = configuration;
-            
+
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -28,10 +28,10 @@ namespace VegaIT.PremestiSE
             {
                 config.Filters.Add(typeof(ExceptionHandler));
             });
+
             services.AddScoped<IKindergardenService, KindergardenService>();
             services.AddScoped<IMatchService, MatchService>();
             services.AddScoped<IRequestService, RequestService>();
-
 
             services.AddScoped<IKindergardenRepository, KindergardenRepository>();
             services.AddScoped<IMatchRepository, MatchRepository>();
@@ -40,8 +40,6 @@ namespace VegaIT.PremestiSE
 
             services.AddScoped<ISmtpClientFactory, SmtpClientFactory>();
             services.AddScoped<ISmtpClientWrapper, SmtpClientWrapper>();
-
-
 
             services.AddScoped<IMailClient, MailClient>();
             services.AddScoped<IKindergardenRepository, KindergardenRepository>();

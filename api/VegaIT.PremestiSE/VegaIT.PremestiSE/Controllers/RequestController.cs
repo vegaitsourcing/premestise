@@ -21,9 +21,6 @@ namespace VegaIT.PremestiSE.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] RequestDto newRequest)
         {
-            Console.WriteLine(newRequest.FromKindergardenId);
-            Console.WriteLine(newRequest.ToKindergardenIds);
-
             if (!ModelState.IsValid)
             {
                 return BadRequest();

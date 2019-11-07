@@ -1,15 +1,13 @@
 ﻿using System;
 using HashidsNet;
-using Util.Exceptions;
 
 namespace Util
 {
     public class HashId
     {
-        private static string Salt = "codeforacause3";
-        private static int HashLength = 10;
-        private static Hashids hashid = new Hashids(Salt, HashLength);
-
+        private static int _hashLength = 10;
+        private static string _salt = "codeforacause3";
+        private static Hashids hashid = new Hashids(_salt, _hashLength);
 
         public static string Encode(int id)
         {
@@ -18,9 +16,9 @@ namespace Util
                 var newId = hashid.Encode(id);
                 return newId;
             }
-            catch
+            catch (Exception e)
             {
-                throw new HashIdException();
+                throw e;
             }
         }
 
@@ -31,9 +29,9 @@ namespace Util
                 var newId = hashid.Decode(id);
                 return newId[0];
             }
-            catch
+            catch (Exception e)
             {
-                throw new HashIdException();
+                throw e;
             }
         }
     }

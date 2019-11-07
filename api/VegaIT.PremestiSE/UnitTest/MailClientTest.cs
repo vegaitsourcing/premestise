@@ -26,20 +26,20 @@ namespace UnitTest
             _mailClient = new MailClient(factory.Object, config.Object);
         }
 
-        [Fact]
-        public void GivenDefaultClientFactory_WhenSendCalled_ShouldSendSmtpEmail()
-        {
-            var fromEMail = "test@e.mail";
-            var message = "test_message";
-            string finalBody = $"Message: {message}|from:{fromEMail}";
+        //[Fact]
+        //public void GivenDefaultClientFactory_WhenSendCalled_ShouldSendSmtpEmail()
+        //{
+        //    var fromEMail = "test@e.mail";
+        //    var message = "test_message";
+        //    string finalBody = $"Message: {message}|from:{fromEMail}";
             
-            _mailClient.Send(fromEMail, message);
+        //    _mailClient.Send(fromEMail, message);
             
-            _client.Verify(client => client.Send(It.IsAny<MailMessage>()));
-            //Assert.Equal(MailClient.NewMessageOnPremestiSe, _sentEmail.Subject);
-            Assert.Equal(finalBody, _sentEmail.Body);
-            Assert.Equal(SmtpClientFactory.DefaultUsername, _sentEmail.From.Address);
-            Assert.Equal(ToEmail, _sentEmail.To.ToString());
-        }
+        //    _client.Verify(client => client.Send(It.IsAny<MailMessage>()));
+        //    //Assert.Equal(MailClient.NewMessageOnPremestiSe, _sentEmail.Subject);
+        //    Assert.Equal(finalBody, _sentEmail.Body);
+        //    Assert.Equal(SmtpClientFactory.DefaultUsername, _sentEmail.From.Address);
+        //    Assert.Equal(ToEmail, _sentEmail.To.ToString());
+        //}
     }
 }

@@ -4,12 +4,15 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Net.Mail;
 using System.Text;
+using System.IO;
+using System.Net.Mime;
 
 namespace Core.Clients
 {
     public interface IMailClient
     {
         void Send(string fromEmail, string message);
+        void Send(string fromEmail, List<AlternateView> altViews);
         void SendVerificationMessage(RequestDto request, KindergardenDto fromKindergarden, IEnumerable<KindergardenDto> wishes);
         void SendFoundMatchMessage(RequestDto firstMatch, RequestDto secondMatch, KindergardenDto from, KindergardenDto to);
     }
@@ -17,12 +20,14 @@ namespace Core.Clients
     public class MailClient : IMailClient
     {
         public const string Subject = "Nova poruka od premesti.se";
-        private readonly ISmtpClientFactory _smtpClientFactory;
+
         private readonly string _defaultEmail;
+        private readonly ISmtpClientFactory _smtpClientFactory;
+
+        private const string _unmatchPageUrl = "placeholder";
         private const string _verificationPageUrl = "placeholder";
         private const string _infoNotValidPageUrl = "placeholder";
         private const string _confirmMatchPageUrl = "placeholder";
-        private const string _unmatchPageUrl = "placeholder";
 
         public MailClient(ISmtpClientFactory smtpClientFactory, IConfiguration config)
         {
@@ -32,20 +37,31 @@ namespace Core.Clients
 
         public void Send(string toEmail, string message)
         {
-            var user = new
-            {
-                Mail = new MailAddress(SmtpClientFactory.DefaultUsername),
-                Password = SmtpClientFactory.DefaultPassword
-            };
             using (var smtpClient = _smtpClientFactory.CreateDefaultClient())
             {
                 MailAddress receiverEmail = new MailAddress(toEmail);
-                string content = $"{message}";
 
                 using (MailMessage mail = new MailMessage(new MailAddress(_defaultEmail), receiverEmail))
                 {
                     mail.Subject = Subject;
-                    mail.Body = content;
+                    mail.Body = message;
+                    mail.IsBodyHtml = true;
+                    smtpClient.Send(mail);
+                }
+            }
+        }
+
+        public void Send(string toEmail, List<AlternateView> altViews)
+        {
+            using (var smtpClient = _smtpClientFactory.CreateDefaultClient())
+            {
+                MailAddress receiverEmail = new MailAddress(toEmail);
+
+                using (MailMessage mail = new MailMessage(new MailAddress(_defaultEmail), receiverEmail))
+                {
+                    mail.Subject = Subject;
+                    foreach (AlternateView altView in altViews)
+                        mail.AlternateViews.Add(altView);
                     mail.IsBodyHtml = true;
                     smtpClient.Send(mail);
                 }
@@ -54,24 +70,36 @@ namespace Core.Clients
 
         public void SendVerificationMessage(RequestDto request, KindergardenDto fromKindergarden, IEnumerable<KindergardenDto> wishes)
         {
-            StringBuilder builder = new StringBuilder();
+            string verifyTemplatePath = $"{Directory.GetParent(System.Environment.CurrentDirectory)}\\Core\\Templates\\verify.htm";
+            string bannerPath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\images\\top-banner.jpg";
+            string footerPath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\images\\logo-footer.png";
 
-            builder.Append($"Poštovani, {request.ParentName} <br>");
-            builder.Append($"Klikom na potvrdi ulazite u sistem za spajanje roditelja radi zamene vrtića. <br>");
-            builder.Append($"Informacije: <br>");
-            builder.Append($"Ime deteta: {request.ChildName} <br>");
-            builder.Append($"Kontakt telefon: {request.PhoneNumber} <br>");
-            builder.Append($"Iz vrtića: {fromKindergarden.Name} <br>" );
-            builder.Append($"U vrtiće: <br>");
+            using (StreamReader reader = new StreamReader(verifyTemplatePath))
+            {
+                string mailText = reader.ReadToEnd();
+                mailText = mailText.Replace("[[PARENT_NAME]]", request.ParentName);
+                mailText = mailText.Replace("[[CHILD_NAME]]", request.ChildName);
+                mailText = mailText.Replace("[[PHONE_NUMBER]]", request.PhoneNumber);
+                mailText = mailText.Replace("[[FROM_KINDERGARDEN]]", $"- {fromKindergarden.Name}");
 
-            foreach(var wish in wishes) 
-                builder.AppendLine($"\t {wish.Name} <br>");
+                StringBuilder toKindergardensBuilder = new StringBuilder();
+                foreach (KindergardenDto wish in wishes)
+                    toKindergardensBuilder.Append($"- {wish.Name}<br>");
+                mailText = mailText.Replace("[[TO_KINDERGARDENS]]", toKindergardensBuilder.ToString());
 
-            builder.AppendLine($"<strong><a href=\"{_confirmMatchPageUrl}\"> Potvrdi </a></strong> <br>");
-            builder.AppendLine($"ili <br>");
-            builder.AppendLine($"<strong><a href=\"{_unmatchPageUrl}\"> Prijavi netacne informacije </a></strong> <br>");
+                AlternateView bannerImageAltView = new AlternateView(bannerPath, MediaTypeNames.Image.Jpeg);
+                AlternateView footerImageAltView = new AlternateView(footerPath, MediaTypeNames.Image.Jpeg);
 
-            Send(request.Email, builder.ToString());
+                bannerImageAltView.TransferEncoding = TransferEncoding.Base64;
+                footerImageAltView.TransferEncoding = TransferEncoding.Base64;
+
+                mailText = mailText.Replace("[[TOP_BANNER_LOGO_SRC]]", $"cid:{bannerImageAltView.ContentId}");
+                mailText = mailText.Replace("[[FOOTER_LOGO_SRC]]", $"cid:{footerImageAltView.ContentId}");
+
+                AlternateView messageAltView = AlternateView.CreateAlternateViewFromString(mailText, null, MediaTypeNames.Text.Html);
+
+                Send(request.Email, new List<AlternateView> { messageAltView, bannerImageAltView, footerImageAltView });
+            }
         }
 
         public void SendFoundMatchMessage(RequestDto firstMatch, RequestDto secondMatch, KindergardenDto from, KindergardenDto to)
@@ -80,8 +108,6 @@ namespace Core.Clients
              * First parent email
              */
             StringBuilder firstMessageBuilder = new StringBuilder();
-
-
 
             firstMessageBuilder.Append($"Poštovani, {firstMatch.ParentName} <br/>");
             firstMessageBuilder.Append($"Pronašli smo potencijalni premeštaj za vaše dete. ${Environment.NewLine}");

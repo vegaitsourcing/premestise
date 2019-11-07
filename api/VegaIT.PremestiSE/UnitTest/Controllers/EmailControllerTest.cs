@@ -21,11 +21,12 @@ namespace UnitTest
         [Fact]
         public void GivenId_WhenVerifyCalled_ShouldReturnOk()
         {
-            var id = int.MaxValue;
+            string id = HashId.Encode(int.MaxValue);
+            int decodedId = HashId.Decode(id);
 
             var result = _emailController.Verify(id.ToString());
 
-            _matchService.Verify(service => service.TryMatch(id));
+            _matchService.Verify(service => service.TryMatch(decodedId));
             Assert.Equal(typeof(OkResult), result.GetType());
         }
 
