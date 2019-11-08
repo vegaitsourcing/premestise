@@ -4,6 +4,7 @@ jobs:
       - image: mcr.microsoft.com/dotnet/core/sdk:2.2
     steps:
       - checkout
+      - run: sudo apt-get install npm
       # - restore_cache:
       #     key: dependency-cache-{{ checksum "package-lock.json" }}
       - run: cd website && npm install
