@@ -60,6 +60,9 @@ namespace Core.Services
         public WishDto GetLatest()
         {
             PendingRequest latestPendingRequest = _pendingRequestRepository.GetLatest();
+            
+            // latestPendingRequest moze biti null ako ne postoji verified pending request, obratiti paznju na to ispod;
+
             Kindergarden fromKindergarden = _kindergardenRepository.GetById(latestPendingRequest.FromKindergardenId);
             List<Kindergarden> toKindergardens = _kindergardenRepository.GetToByRequestId(latestPendingRequest.Id);
 

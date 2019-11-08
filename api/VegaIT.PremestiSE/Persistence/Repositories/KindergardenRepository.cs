@@ -130,8 +130,10 @@ namespace Persistence.Repositories
             {
                 conn.ConnectionString = _connString;
                 conn.Open();
+
                 SqlCommand cmd = conn.CreateCommand();
-                cmd.CommandText = @"SELECT * FROM kindergarden WHERE id IN (SELECT kindergarden_request_id FROM pending_request_wishes WHERE pending_request_id=id);";
+                cmd.CommandText = @"SELECT * FROM kindergarden WHERE id IN (SELECT kindergarden_wish_id FROM pending_request_wishes WHERE pending_request_id=@id);";
+                cmd.Parameters.Add("@id", SqlDbType.Int).Value = id;
 
                 using (SqlDataAdapter dataAdapter = new SqlDataAdapter())
                 {
@@ -146,16 +148,16 @@ namespace Persistence.Repositories
                         {
                             Id = (int)row["id"],
                             Municipality = (string)row["municipality"],
-                            Government = (string)row["goverment"],
+                            Government = (string)row["government"],
                             City = (string)row["city"],
                             Name = (string)row["name"],
                             Department = (string)row["department"],
                             Street = (string)row["street"],
                             StreetNumber = (string)row["street_number"],
                             PostalCode = (string)row["postal_code"],
-                            LocationType = (int)row["location_type"] == 0 ? LocationType.Base : LocationType.Remote,
-                            Longitude = (decimal)row["longitude"],
-                            Latitude = (decimal)row["latitude"],
+                            LocationType = (bool)row["location_type"] ? LocationType.Remote : LocationType.Base,
+                            Longitude = row["longitude"] == System.DBNull.Value ? null : (decimal?)row["longitude"],
+                            Latitude = row["latitude"] == System.DBNull.Value ? null : (decimal?)row["latitude"],
                         });
                     }
                 }

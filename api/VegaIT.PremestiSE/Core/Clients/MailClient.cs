@@ -115,10 +115,10 @@ namespace Core.Clients
         /// <summary>
         /// Sends email to both parents with given match information
         /// </summary>
-        /// <param name="firstMatch">First parent RequestDto object</param>
-        /// <param name="secondMatch">Second parent RequestDto object</param>
-        /// <param name="from">First parent KindergardentDto object</param>
-        /// <param name="to">Second parent KindergardenDto object</param>
+        /// <param name="firstMatch">RequestDto object of first matched parent</param>
+        /// <param name="secondMatch">RequestDto object of second matched parent</param>
+        /// <param name="from">KindergardentDto object of first matched parent</param>
+        /// <param name="to">KindergardenDto object of second matched parent</param>
         public void SendFoundMatchMessage(RequestDto firstMatch, RequestDto secondMatch, KindergardenDto from, KindergardenDto to)
         {
             using (StreamReader reader = new StreamReader(_matchTemplatePath))

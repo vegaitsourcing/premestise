@@ -27,3 +27,6 @@ newRequest.init();
 
 import totalMatches from './_project/totalMatches';
 totalMatches.init();
+
+import latestWish from './_project/latestWish';
+latestWish.init();
