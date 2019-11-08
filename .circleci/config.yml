@@ -2,9 +2,9 @@ jobs:
   build: 
     docker:
       - image: mcr.microsoft.com/dotnet/core/sdk:2.2
+      - image: node:12-alpine
     steps:
-      - checkout
-      - run: apt-get install npm -y sudo
+      - checkout 
       # - restore_cache:
       #     key: dependency-cache-{{ checksum "package-lock.json" }}
       - run: cd website && npm install
