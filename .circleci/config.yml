@@ -4,6 +4,13 @@ jobs:
       - image: mcr.microsoft.com/dotnet/core/sdk:2.2
     steps:
       - checkout
+      # - restore_cache:
+      #     key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run: cd website && npm install
+      # - save_cache:
+      #     key: dependency-cache-{{ checksum "package-lock.json" }}
+      #     paths:
+      #       - ./website/node_modules
       - run: cd api/VegaIT.PremestiSE && dotnet restore
       - run: cd api/VegaIT.PremestiSE && dotnet build
 
