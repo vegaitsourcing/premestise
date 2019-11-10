@@ -4,7 +4,9 @@ jobs:
       - image: mcr.microsoft.com/dotnet/core/sdk:2.2
     steps:
       - checkout
-      - run: apt-get install npm
+      - run: apt-get install curl
+      - run: curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+      - run: apt install nodejs
       - run: cd website && npm install
       - run: cd api/VegaIT.PremestiSE && dotnet restore
       - run: cd api/VegaIT.PremestiSE && dotnet build
