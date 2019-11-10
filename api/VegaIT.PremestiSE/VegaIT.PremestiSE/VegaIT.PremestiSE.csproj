@@ -20,6 +20,9 @@
     <ProjectReference Include="..\Persistence.Interfaces\Persistence.Interfaces.csproj" />
     <ProjectReference Include="..\Persistence\Persistence.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <MySourceFiles Include="$(SolutionDir)..\..\website\dist\**\*.*"/>
+  </ItemGroup>
 
   <Target Name="BuildFrontend" BeforeTargets="Build">
     <Message Text="* * * * * * Building Frontend App * * * * * *" Importance="high" />
@@ -27,7 +30,10 @@
     <Exec WorkingDirectory="$(SolutionDir)../../website" Command="npx gulp build-prod" />
     <Message Text="* * * * * * Copying to wwwroot * * * * * *" Importance="high" />
     <Exec WorkingDirectory="$(SolutionDir)..\..\website" Command="Xcopy /E /Y /i $(SolutionDir)..\..\website\dist $(SolutionDir)VegaIT.PremestiSE\wwwroot" />
-    
+    <Copy
+            SourceFiles="$(MySourceFiles)"
+            DestinationFiles="@(MySourceFiles->'$(SolutionDir)..\..\website\dist\%(RecursiveDir)%(Filename)%(Extension)')"
+        />
   </Target>
 
 </Project>
