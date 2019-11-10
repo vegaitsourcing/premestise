@@ -1,17 +1,16 @@
 jobs:
-  build:
+  buildfrontend:
     docker:
-      - image: mcr.microsoft.com/dotnet/core/sdk:2.2
       - image: circleci/node:12.13
     steps:
       - checkout
-      # - restore_cache:
-      #     key: dependency-cache-{{ checksum "package-lock.json" }}
       - run: cd website && npm install
-      # - save_cache:
-      #     key: dependency-cache-{{ checksum "package-lock.json" }}
-      #     paths:
-      #       - ./website/node_modules
+
+  buildapi:
+    docker:
+      - image: mcr.microsoft.com/dotnet/core/sdk:2.2
+    steps:
+      - checkout
       - run: cd api/VegaIT.PremestiSE && dotnet restore
       - run: cd api/VegaIT.PremestiSE && dotnet build
 
@@ -26,7 +25,10 @@ workflows:
   version: 2
   build_and_test:
     jobs:
-      - build
+      - buildfrontend
+      - buildapi:
+          requires:
+            - buildfrontend
       - test:
           requires:
-            - build
+            - buildapi
