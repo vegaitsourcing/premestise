@@ -2,10 +2,9 @@ jobs:
   build:
     docker:
       - image: mcr.microsoft.com/dotnet/core/sdk:2.2
-      - image: circleci/node:12.13
-        command: [npm]
     steps:
       - checkout
+      - run: apt-get install npm
       - run: cd website && npm install
       - run: cd api/VegaIT.PremestiSE && dotnet restore
       - run: cd api/VegaIT.PremestiSE && dotnet build
