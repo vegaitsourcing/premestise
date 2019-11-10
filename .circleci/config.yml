@@ -5,7 +5,7 @@ jobs:
     steps:
       - checkout
       - run: apt-get install curl
-      - run: curl -sL https://deb.nodesource.com/setup_12.x | -E bash -
+      - run: curl -sL https://deb.nodesource.com/setup_12.x | bash -
       - run: apt-get install nodejs
       - run: cd website && npm install
       - run: cd api/VegaIT.PremestiSE && dotnet restore
