@@ -1,12 +1,10 @@
-jobs: 
-  build: 
+jobs:
+  build:
     docker:
       - image: mcr.microsoft.com/dotnet/core/sdk:2.2
-      - image: node:12-alpine
+      - image: circleci/node:latest
     steps:
-      - checkout 
-      - run: apt-get install -y sudo
-      - run: sudo apt-get install npm
+      - checkout
       # - restore_cache:
       #     key: dependency-cache-{{ checksum "package-lock.json" }}
       - run: cd website && npm install
@@ -17,7 +15,7 @@ jobs:
       - run: cd api/VegaIT.PremestiSE && dotnet restore
       - run: cd api/VegaIT.PremestiSE && dotnet build
 
-  test: 
+  test:
     docker:
       - image: mcr.microsoft.com/dotnet/core/sdk:2.2
     steps:
