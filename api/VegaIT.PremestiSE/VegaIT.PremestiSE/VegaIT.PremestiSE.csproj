@@ -26,7 +26,7 @@
     <Message Text="$(MSBuildProjectDirectory)" Importance="high" />
     <Exec WorkingDirectory="$(SolutionDir)../../website" Command="npx gulp build-prod" />
     <Message Text="* * * * * * Copying to wwwroot * * * * * *" Importance="high" />
-    <Exec WorkingDirectory="$(SolutionDir)..\..\website" Command="Xcopy /E /Y $(SolutionDir)..\..\website\dist $(SolutionDir)VegaIT.PremestiSE\wwwroot" />
+    <Exec WorkingDirectory="$(SolutionDir)..\..\website" Command="Xcopy /E /Y /i $(SolutionDir)..\..\website\dist $(SolutionDir)VegaIT.PremestiSE\wwwroot" />
     
   </Target>
 
