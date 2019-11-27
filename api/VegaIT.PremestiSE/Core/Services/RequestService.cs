@@ -1,21 +1,16 @@
-﻿using Core.Interfaces.Intefaces;
-using Core.Interfaces.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Transactions;
+﻿using System.Linq;
 using Core.Clients;
 using Core.Services.Mappers;
+using Core.Interfaces.Models;
+using Core.Interfaces.Intefaces;
+using System.Collections.Generic;
 using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
-using Util;
 
 namespace Core.Services
 {
     public class RequestService : IRequestService
     {
-
         private readonly IPendingRequestRepository _pendingRequestRepository;
         private readonly IMatchedRequestRepository _matchedRequestRepository;
         private readonly IMailClient _mailClient;
@@ -31,7 +26,8 @@ namespace Core.Services
         }
 
         public RequestDto CreatePending(RequestDto newRequest)
-        {   //Kad se kreira pending request treba da se kreira i entry u pending_request_wishes
+        {  
+            //Kad se kreira pending request treba da se kreira i entry u pending_request_wishes
             var requestMapper = new RequestMapper();
             var kindergardenMapper = new KindergardenMapper();
 
@@ -45,7 +41,7 @@ namespace Core.Services
             Kindergarden fromKindergarden = _kindergardenRepository.GetById(addedPendingRequest.FromKindergardenId);
 
             List<KindergardenDto> wishes = new List<KindergardenDto>();
-            foreach(var wishId in addedPendingRequest.KindergardenWishIds)
+            foreach (var wishId in addedPendingRequest.KindergardenWishIds)
             {
                 wishes.Add(kindergardenMapper.DtoFromEntity(_kindergardenRepository.GetById(wishId)));
             }
@@ -60,16 +56,14 @@ namespace Core.Services
         public WishDto GetLatest()
         {
             PendingRequest latestPendingRequest = _pendingRequestRepository.GetLatest();
-            
+
             // latestPendingRequest moze biti null ako ne postoji verified pending request, obratiti paznju na to ispod;
 
             Kindergarden fromKindergarden = _kindergardenRepository.GetById(latestPendingRequest.FromKindergardenId);
             List<Kindergarden> toKindergardens = _kindergardenRepository.GetToByRequestId(latestPendingRequest.Id);
 
-
             KindergardenDto fromKindergardenDto = new KindergardenMapper().DtoFromEntity(fromKindergarden);
-            IEnumerable<KindergardenDto> toKindergadenDtos =
-                toKindergardens.Select(new KindergardenMapper().DtoFromEntity);
+            IEnumerable<KindergardenDto> toKindergadenDtos = toKindergardens.Select(new KindergardenMapper().DtoFromEntity);
 
             return new WishDto
             {

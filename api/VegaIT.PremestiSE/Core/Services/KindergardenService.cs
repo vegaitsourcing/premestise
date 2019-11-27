@@ -1,12 +1,9 @@
-﻿using Core.Interfaces.Intefaces;
-using Core.Interfaces.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using Core.Services.Mappers;
+using Core.Interfaces.Models;
+using Core.Interfaces.Intefaces;
+using System.Collections.Generic;
 using Persistence.Interfaces.Contracts;
-using Persistence.Interfaces.Entites;
 
 namespace Core.Services
 {

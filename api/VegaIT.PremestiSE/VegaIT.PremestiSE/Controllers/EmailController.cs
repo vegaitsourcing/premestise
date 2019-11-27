@@ -1,5 +1,6 @@
 ﻿using Core.Interfaces.Intefaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using Util;
 
 namespace VegaIT.PremestiSE.Controllers
@@ -15,14 +16,16 @@ namespace VegaIT.PremestiSE.Controllers
             _matchService = service;
         }
 
-        [HttpPost]
-
+        [HttpGet]
         [Route("verify")]
-        public IActionResult Verify([FromBody] string id)
+        public IActionResult Verify([FromQuery] string id)
         {
             int decodedId = HashId.Decode(id);
             _matchService.TryMatch(decodedId);
-            return Ok();
+
+            // radi testiranja zakucano, nisam siguran kako ce rutiranje funkcionisati
+            // Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString();
+            return Redirect($"http://localhost:50800/verify.html");
         }
 
         [HttpPost]

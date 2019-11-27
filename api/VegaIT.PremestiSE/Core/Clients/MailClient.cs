@@ -24,12 +24,12 @@ namespace Core.Clients
         private readonly string _defaultEmail;
         private readonly ISmtpClientFactory _smtpClientFactory;
 
+        // ovo sve negde iz config citati ili nekako drugacije
         private const string _unmatchPageUrl = "placeholder";
-        private const string _verificationPageUrl = "placeholder";
+        private const string _verificationPageUrl = "http://localhost:50800/api/email/verify";
         private const string _infoNotValidPageUrl = "placeholder";
         private const string _confirmMatchPageUrl = "placeholder";
 
-        // ovo negde u config ili nesto
         private readonly string _verifyTemplatePath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\verify.htm";
         private readonly string _matchTemplatePath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\index.htm";
         private readonly string _bannerPath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\images\\top-banner.jpg";
@@ -92,6 +92,7 @@ namespace Core.Clients
                 mailText = mailText.Replace("[[CHILD_NAME]]", request.ChildName);
                 mailText = mailText.Replace("[[PHONE_NUMBER]]", request.PhoneNumber);
                 mailText = mailText.Replace("[[FROM_KINDERGARDEN]]", $"- {fromKindergarden.Name}");
+                mailText = mailText.Replace("[[VERIFY_URL]]", $"{_verificationPageUrl}?id={request.Id}");
 
                 StringBuilder toKindergardensBuilder = new StringBuilder();
                 foreach (KindergardenDto wish in wishes)
