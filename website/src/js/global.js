@@ -25,8 +25,8 @@ contact.init();
 import newRequest from './_project/new-request';
 newRequest.init();
 
-import totalMatches from './_project/totalMatches';
+import totalMatches from './_project/total-matches';
 totalMatches.init();
 
-import latestWish from './_project/latestWish';
+import latestWish from './_project/latest-wish';
 latestWish.init();
