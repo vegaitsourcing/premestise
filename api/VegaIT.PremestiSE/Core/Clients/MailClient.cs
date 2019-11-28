@@ -1,11 +1,11 @@
-﻿using System;
-using Core.Interfaces.Models;
+﻿using Core.Interfaces.Models;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
-using System.Net.Mail;
-using System.Text;
 using System.IO;
+using System.Net.Mail;
 using System.Net.Mime;
+using System.Text;
 
 namespace Core.Clients
 {

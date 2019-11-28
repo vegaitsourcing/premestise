@@ -19,7 +19,7 @@ namespace UnitTest
         }
 
         [Fact]
-        public void GivenId_WhenVerifyCalled_ShouldReturnOk()
+        public void GivenId_WhenVerifyCalled_ShouldRedirect()
         {
             string id = HashId.Encode(int.MaxValue);
             int decodedId = HashId.Decode(id);
@@ -27,7 +27,7 @@ namespace UnitTest
             var result = _emailController.Verify(id.ToString());
 
             _matchService.Verify(service => service.TryMatch(decodedId));
-            Assert.Equal(typeof(OkResult), result.GetType());
+            Assert.Equal(typeof(RedirectResult), result.GetType());
         }
 
         [Fact]

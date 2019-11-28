@@ -1,6 +1,5 @@
 ﻿using Core.Interfaces.Intefaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using Util;
 
 namespace VegaIT.PremestiSE.Controllers
@@ -42,7 +41,7 @@ namespace VegaIT.PremestiSE.Controllers
         public IActionResult Recover([FromBody] string id)
         {
             int decodedId = HashId.Decode(id);
-            int newId =_matchService.Unmatch(decodedId);
+            int newId = _matchService.Unmatch(decodedId);
             _matchService.TryMatch(newId);
 
             return Ok();
