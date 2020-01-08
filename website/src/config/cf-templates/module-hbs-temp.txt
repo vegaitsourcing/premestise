@@ -1,3 +1,0 @@
-<div class="@{module}">
-	<h2>{{title}} - @{module}</h2>
-</div>
