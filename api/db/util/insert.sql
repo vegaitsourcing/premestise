@@ -1,2 +1,0 @@
-﻿INSERT INTO kindergarden (city, municipality, government, department, name, street, street_number, postal_code, location_type, longitude, latitude) VALUES ('Kragujevac', 'Topola', 'Topola (varošica)', 'PU Sofija Ristić', 'Zabavište', 'Princa tomislava karađorđevića', '10', '34310', 1, null, null);
-INSERT INTO kindergarden (city, municipality, government, department, name, street, street_number, postal_code, location_type, longitude, latitude) VALUES ('Leskovac', 'Trgovište', 'Trgovište', 'PU Poletarac', 'PU Poletarac', 'Jna', 'bb', '17525', 0, null, null);
