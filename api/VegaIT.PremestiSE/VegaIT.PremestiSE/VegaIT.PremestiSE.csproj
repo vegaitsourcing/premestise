@@ -23,7 +23,7 @@
 
   <Target Name="BuildFrontend" BeforeTargets="Build">
     <Message Text="$(MSBuildProjectDirectory)" Importance="high" />
-    <exec workingdirectory="$(solutiondir)../../website" command="npx gulp build-prod" />
+    
     <ItemGroup>
       <SourceFiles Include="$(SolutionDir)..\..\website\dist\**\*.*"/>
     </ItemGroup>
