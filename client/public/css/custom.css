@@ -1,5 +1,29 @@
 .wishItem {
-    border-bottom: 1px solid #444;
-    padding-bottom: 32px;
-    padding-top: 32px;
-  }
+  border-bottom: 1px solid #444;
+  padding-bottom: 32px;
+  padding-top: 32px;
+}
+
+.inputSpanGlobalWrapper {
+  width: 100%;
+}
+
+.inputSpanWrapperPhone {
+  display: inline-block;
+  width: 48%;
+}
+
+.inputSpanWrapperDate {
+  display: inline-block;
+  width: 48%;
+  margin-left: 19px;
+  padding: 0;
+}
+
+.input__phone {
+  max-width: 100%;
+}
+
+.input__date {
+  width: 100%;
+}
