@@ -1,23 +1,22 @@
 import React, { Component } from "react";
-//import {changeTab} from '../../Actions/NavActions/NavigationActions';
 import { connect } from "react-redux";
 
 class NavigationItem extends Component {
   render() {
-    const tabNum = this.props.tabNum;
+    const tabNumber = this.props.tabNumber;
     const currentTab = this.props.currentTab;
     const iconName =
-      tabNum === 1
+      tabNumber === 1
         ? "font-ico-map-q-pin"
-        : tabNum === 2
+        : tabNumber === 2
         ? "font-ico-map-pin"
         : "font-ico-new-wish";
-    const currentTabClass = currentTab === tabNum ? "current" : "";
+    const currentTabClass = currentTab === tabNumber ? "current" : "";
     return (
       <li
-        onClick={() => this.props.changeTab(tabNum)}
+        onClick={() => this.props.changeTab(tabNumber)}
         className={"tabs__link " + currentTabClass}
-        data-tab={"tab-" + tabNum}
+        data-tab={"tab-" + tabNumber}
       >
         <span className={iconName}></span>
         {this.props.title}

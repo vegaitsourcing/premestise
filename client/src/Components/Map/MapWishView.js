@@ -1,6 +1,8 @@
+import { GetAllWishesForMap } from "../../Actions/NavActions/AllWishesActions";
+
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { GetAllWishesForMap } from "../../Actions/NavActions/AllWishesActions";
+
 class MapWishView extends Component {
   componentDidUpdate() {
     this.paintMapMarkers();
@@ -43,7 +45,6 @@ class MapWishView extends Component {
       pinFrom.latitude = wish.fromKindergarden.latitude;
 
       let pinTo = {};
-
       for (let i = 0; i < toKinderLen; i++) {
         if (
           wish.toKindergardens[i].longitude == null ||
@@ -56,7 +57,6 @@ class MapWishView extends Component {
         pinTo.latitude = wish.toKindergardens[i].latitude;
 
         let list = [pinFrom, pinTo];
-
         list.forEach((pin, index) => {
           L.marker([pin.longitude, pin.latitude])
             .addTo(map)

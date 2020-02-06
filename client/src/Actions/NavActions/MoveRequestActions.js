@@ -1,10 +1,12 @@
-import axios from "axios";
 import { webApiURL } from "../../HostAddresses/webApiHost";
+import { GET_ALL_KINDERGARDENS } from "../../Reducer/reducerActions";
+
+import axios from "axios";
 
 export const GetAllKindergardens = () => {
   return dispatch => {
     axios.get(webApiURL + "/api/kindergarden").then(res => {
-      dispatch({ type: "GET_ALL_KINDERGARDENS", payload: res.data });
+      dispatch({ type: GET_ALL_KINDERGARDENS, payload: res.data });
     });
   };
 };

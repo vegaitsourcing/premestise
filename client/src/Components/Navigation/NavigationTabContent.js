@@ -1,7 +1,8 @@
-import React, { Component } from "react";
 import AllWishes from "../TabsContent/AllWishes";
 import LatestWish from "../TabsContent/LatestWish";
 import MoveRequestForm from "../TabsContent/MoveRequestForm";
+
+import React, { Component } from "react";
 
 class NavigationTabContent extends Component {
   render() {

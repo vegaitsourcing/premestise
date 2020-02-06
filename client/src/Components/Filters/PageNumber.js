@@ -5,6 +5,7 @@ class PageNumber extends Component {
     const currentPage = this.props.currentPage;
     const pageNumber = this.props.pageNumber;
     const filterByPage = this.props.filterByPageHandler;
+
     return (
       <li>
         <a

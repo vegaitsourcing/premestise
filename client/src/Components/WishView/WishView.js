@@ -1,9 +1,12 @@
+import { PrepareRequest } from "../../Actions/NavActions/LatestWishActions";
+
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { PrepareRequest } from "../../Actions/NavActions/LatestWishActions";
+
 class WishView extends Component {
   render() {
     let wish = this.props.wish;
+
     return (
       <div className="wishItem">
         <h3 id="latestWishFrom">

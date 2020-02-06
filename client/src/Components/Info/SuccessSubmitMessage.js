@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+
 class SuccessSubmitMessage extends Component {
   render() {
     return (

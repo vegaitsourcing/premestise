@@ -1,106 +1,49 @@
-import React, { Component } from "react";
 import { GetAllWishes } from "../../Actions/NavActions/AllWishesActions";
+
+import React, { Component } from "react";
 import { connect } from "react-redux";
 
 class ChildAgeFilter extends Component {
-  render() {
+  filterByAge = ageValue => {
+    this.props.getAllWishes(ageValue);
+  };
+  preventEventAndFilter = (event, age) => {
+    event.preventDefault();
+    this.filterByAge(age);
+  };
+
+  renderClickableFilterNumbers = () => {
+    const maximumAgeFilter = 6;
     const selectedAge = this.props.selectedAge;
+    let filterNumbers = [];
+    for (let i = 1; i <= maximumAgeFilter; i++) {
+      filterNumbers.push(
+        <li>
+          <a
+            className={selectedAge == i ? "tab-year active" : "tab-year"}
+            href="!#"
+            onClick={event => {
+              this.preventEventAndFilter(event, i);
+            }}
+          >
+            {i}
+          </a>
+        </li>
+      );
+    }
+    return <ul>{filterNumbers}</ul>;
+  };
+
+  render() {
     const currentPage = this.props.currentPage;
     const perPageCount = this.props.perPageCount;
     const elementsAmount = this.props.elementsAmount;
-
-    const filterByAge = ageValue => {
-      this.props.getAllWishes(ageValue);
-    };
 
     return (
       <div className="tab-years">
         <p>Odaberi starosno doba:</p>
         <ul className="tab-years__list">
-          <li>
-            <a
-              className={selectedAge == 1 ? "tab-year active" : "tab-year"}
-              href="!#"
-              onClick={e => {
-                e.preventDefault();
-                filterByAge(1);
-              }}
-            >
-              1
-            </a>
-          </li>
-          <li>
-            <a
-              className={selectedAge == 2 ? "tab-year active" : "tab-year"}
-              href="javascript:void(0);"
-              onClick={e => {
-                e.preventDefault();
-                filterByAge(2);
-              }}
-            >
-              2
-            </a>
-          </li>
-          <li>
-            <a
-              className={selectedAge == 3 ? "tab-year active" : "tab-year"}
-              href="javascript:void(0);"
-              onClick={e => {
-                e.preventDefault();
-                filterByAge(3);
-              }}
-            >
-              3
-            </a>
-          </li>
-          <li>
-            <a
-              className={selectedAge == 4 ? "tab-year active" : "tab-year"}
-              href="javascript:void(0);"
-              onClick={e => {
-                e.preventDefault();
-                filterByAge(4);
-              }}
-            >
-              4
-            </a>
-          </li>
-          <li>
-            <a
-              className={selectedAge == 5 ? "tab-year active" : "tab-year"}
-              href="javascript:void(0);"
-              onClick={e => {
-                e.preventDefault();
-                filterByAge(5);
-              }}
-            >
-              5
-            </a>
-          </li>
-          <li>
-            <a
-              className={selectedAge == 6 ? "tab-year active" : "tab-year"}
-              href="javascript:void(0);"
-              onClick={e => {
-                e.preventDefault();
-                filterByAge(6);
-              }}
-            >
-              6
-            </a>
-          </li>
-          <li>
-            <a
-              className={selectedAge == 7 ? "tab-year active" : "tab-year"}
-              href="javascript:void(0);"
-              onClick={e => {
-                e.preventDefault();
-                filterByAge(7);
-              }}
-            >
-              7
-            </a>
-          </li>
+          {this.renderClickableFilterNumbers()}
         </ul>
 
         <span className="number-info">

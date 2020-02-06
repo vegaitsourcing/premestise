@@ -1,6 +1,8 @@
+import { GetMatchedCount } from "../../Actions/MatchedInfoActions/MatchedInfoActions";
+
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { GetMatchedCount } from "../../Actions/MatchedInfoActions/MatchedInfoActions";
+
 class MatchedInfo extends Component {
   componentDidMount() {
     this.props.getMatchedCount();

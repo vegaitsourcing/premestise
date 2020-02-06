@@ -1,9 +1,9 @@
+import { VerifyEmail } from "../../Actions/EmailActions/EmailActions";
+import InfoPage from "../Info/InfoPage";
+
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import queryString from "querystring";
-import { VerifyEmail } from "../../Actions/EmailActions/EmailActions";
-import InfoPage from "../Info/InfoPage";
-import { Link } from "react-router-dom";
 
 class EmailVerification extends Component {
   componentDidMount() {
@@ -13,6 +13,7 @@ class EmailVerification extends Component {
 
   render() {
     const emailVerified = this.props.emailVerified;
+
     return (
       <div className="wrap">
         {

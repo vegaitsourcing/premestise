@@ -1,8 +1,9 @@
+import { RecoverEmail } from "../../Actions/EmailActions/EmailActions";
+import InfoPage from "../Info/InfoPage";
+
 import React, { Component } from "react";
 import queryString from "querystring";
-import { RecoverEmail } from "../../Actions/EmailActions/EmailActions";
 import { connect } from "react-redux";
-import InfoPage from "../Info/InfoPage";
 
 class EmailRecover extends Component {
   componentDidMount() {
@@ -12,6 +13,7 @@ class EmailRecover extends Component {
 
   render() {
     const emailRecovered = this.props.emailRecovered;
+
     return (
       <div>
         {

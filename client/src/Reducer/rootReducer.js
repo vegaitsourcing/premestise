@@ -1,3 +1,5 @@
+import * as reducerActions from "./reducerActions";
+
 const initState = {
   currentNavTab: 1,
   kindergardens: [],
@@ -83,35 +85,35 @@ const wishesChunkFilteredByAge = (age, state) => {
 };
 
 const rootReducer = (state = initState, action) => {
-  if (action.type === "CHANGE_NAVIGATION_TAB") {
+  if (action.type === reducerActions.CHANGE_NAVIGATION_TAB) {
     return {
       ...state,
       currentNavTab: action.changeTo
     };
   }
 
-  if (action.type === "GET_ALL_KINDERGARDENS") {
+  if (action.type === reducerActions.GET_ALL_KINDERGARDENS) {
     return {
       ...state,
       kindergardens: action.payload
     };
   }
 
-  if (action.type === "SET_MATCHED_COUNT") {
+  if (action.type === reducerActions.SET_MATCHED_COUNT) {
     return {
       ...state,
       matchedCount: action.payload
     };
   }
 
-  if (action.type === "FOR_MAP_WISHES") {
+  if (action.type === reducerActions.FOR_MAP_WISHES) {
     return {
       ...state,
       allWishesForMap: action.payload.data
     };
   }
 
-  if (action.type === "GO_TO_NEXT_PAGE") {
+  if (action.type === reducerActions.GO_TO_NEXT_PAGE) {
     let wishesWithChildAge = state.allWishes.filter(
       wish => wish.childAge === state.selectedChildAge
     );
@@ -133,7 +135,7 @@ const rootReducer = (state = initState, action) => {
     };
   }
 
-  if (action.type === "GO_TO_PREVIOUS_PAGE") {
+  if (action.type === reducerActions.GO_TO_PREVIOUS_PAGE) {
     let wishesWithChildAge = state.allWishes.filter(
       wish => wish.childAge === state.selectedChildAge
     );
@@ -155,42 +157,43 @@ const rootReducer = (state = initState, action) => {
     };
   }
 
-  if (action.type === "PREPARE_REQUEST_FORM") {
+  if (action.type === reducerActions.PREPARE_REQUEST_FORM) {
+    alert(action.payload)
     return {
       ...state,
       prePopulatedId: action.payload
     };
   }
 
-  if (action.type === "SWITCH_TO_LATEST_WISH_TAB") {
+  if (action.type === reducerActions.SWITCH_TO_LATEST_WISH_TAB) {
     return {
       ...state,
       currentNavTab: 2
     };
   }
 
-  if (action.type === "SWITCH_TO_REQUEST_FORM") {
+  if (action.type === reducerActions.SWITCH_TO_REQUEST_FORM) {
     return {
       ...state,
       currentNavTab: 1
     };
   }
 
-  if (action.type === "LATEST_WISH") {
+  if (action.type === reducerActions.LATEST_WISH) {
     return {
       ...state,
       latestWish: action.payload
     };
   }
 
-  if (action.type === "PAGE_SELECTION") {
+  if (action.type === reducerActions.PAGE_SELECTION) {
     return {
       ...state,
       currentPage: action.payload
     };
   }
 
-  if (action.type === "GET_ALL_WISHES") {
+  if (action.type === reducerActions.GET_ALL_WISHES) {
     //filter by age number
     if (
       action.payload.filterByAge !== null &&
@@ -245,41 +248,41 @@ const rootReducer = (state = initState, action) => {
     };
   }
 
-  if (action.type === "FILTER_BY_CHILD_AGE_AND_PAGE") {
+  if (action.type === reducerActions.FILTER_BY_CHILD_AGE_AND_PAGE) {
     return {
       ...state,
       selectedChildAge: action.payload
     };
   }
 
-  if (action.type === "VERIFY_EMAIL") {
+  if (action.type === reducerActions.VERIFY_EMAIL) {
     return {
       ...state,
       emailVerification: action.payload
     };
   }
 
-  if (action.type === "CONFIRM_EMAIL") {
+  if (action.type === reducerActions.CONFIRM_EMAIL) {
     return {
       ...state,
       emailConfirmation: action.payload
     };
   }
-  if (action.type === "RECOVER_EMAIL") {
+  if (action.type === reducerActions.RECOVER_EMAIL) {
     return {
       ...state,
       emailRecovery: action.payload
     };
   }
 
-  if (action.type === "REMOVE_REQUEST_EMAIL") {
+  if (action.type === reducerActions.REMOVE_REQUEST_EMAIL) {
     return {
       ...state,
       emailRemoveRequest: action.payload
     };
   }
 
-  if (action.type === "DONT_VERIFY_EMAIL") {
+  if (action.type === reducerActions.DONT_VERIFY_EMAIL) {
     return {
       ...state,
       emailRemoveRequest: action.payload

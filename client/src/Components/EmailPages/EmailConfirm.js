@@ -1,8 +1,10 @@
+import { ConfirmEmail } from "../../Actions/EmailActions/EmailActions";
+import InfoPage from "../Info/InfoPage";
+
 import React, { Component } from "react";
 import queryString from "querystring";
-import { ConfirmEmail } from "../../Actions/EmailActions/EmailActions";
 import { connect } from "react-redux";
-import InfoPage from "../Info/InfoPage";
+
 class EmailConfirm extends Component {
   componentDidMount() {
     const queryId = queryString.parse(window.location.search)["?id"];
@@ -11,6 +13,7 @@ class EmailConfirm extends Component {
 
   render() {
     const emailConfirmed = this.props.emailConfirmed;
+
     return (
       <div className="wrap">
         {

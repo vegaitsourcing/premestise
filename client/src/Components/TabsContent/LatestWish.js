@@ -1,10 +1,12 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
 import {
   GetLatestWish,
   PrepareRequest
 } from "../../Actions/NavActions/LatestWishActions";
 import WishView from "../../Components/WishView/WishView";
+
+import React, { Component } from "react";
+import { connect } from "react-redux";
+
 class LatestWish extends Component {
   componentDidMount() {
     this.props.getLatestWish();

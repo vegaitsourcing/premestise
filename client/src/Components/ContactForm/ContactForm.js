@@ -1,7 +1,9 @@
+import { SendForm } from "../../Actions/ContactFormActions/ContactFormActions";
+
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { SendForm } from "../../Actions/ContactFormActions/ContactFormActions";
 import { Link } from "react-router-dom";
+
 class ContactForm extends Component {
   state = {
     emailErrorMessage: null,
@@ -37,36 +39,51 @@ class ContactForm extends Component {
       : false;
   };
 
+  emailFormatValidation = emailAddress => {
+    let mailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!mailRegex.test(emailAddress)) {
+      this.setState({
+        email: emailAddress,
+        emailErrorMessage: "Proveriti format e-mail adrese!"
+      });
+      this.setState({ emailErrorExists: true });
+    } else {
+      this.setState({
+        emailErrorMessage: null,
+        email: emailAddress,
+        emailErrorExists: false
+      });
+    }
+  };
+
   handleEmailChange = event => {
     event.preventDefault();
-    let mailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (event.target.value !== "") {
-      if (!mailRegex.test(event.target.value)) {
-        this.setState({ email: event.target.value });
-        this.setState({ emailErrorMessage: "Proveriti format e-mail adrese!" });
-        this.setState({ emailErrorExists: true });
-      } else {
-        this.setState({ emailErrorMessage: null });
-        this.setState({ email: event.target.value });
-        this.setState({ emailErrorExists: false });
-      }
+      this.emailFormatValidation(event.target.value);
     } else {
-      this.setState({ email: "" });
-      this.setState({ emailErrorMessage: "Proveriti format e-mail adrese!" });
-      this.setState({ emailErrorExists: true });
+      this.setState({
+        email: "",
+        emailErrorMessage: "Proveriti format e-mail adrese!",
+        emailErrorExists: true
+      });
     }
   };
 
   handleMessageChange = event => {
     event.preventDefault();
     if (event.target.value !== "") {
-      this.setState({ message: event.target.value });
-      this.setState({ messageErrorMessage: null });
-      this.setState({ messageErrorExists: false });
+      this.setState({
+        message: event.target.value,
+        messageErrorMessage: null,
+        messageErrorExists: false
+      });
     } else {
-      this.setState({ messageErrorMessage: "Obavezno uneti text poruke!" });
-      this.setState({ message: "" });
-      this.setState({ messageErrorExists: true });
+      this.setState({
+        messageErrorMessage: "Obavezno uneti text poruke!",
+        message: "",
+        messageErrorExists: true
+      });
     }
   };
 
@@ -76,10 +93,10 @@ class ContactForm extends Component {
       display: "block",
       marginBottom: 32
     };
-
     const noMarginBottom = {
       marginBottom: 0
     };
+
     const { email, message } = this.state;
 
     return (
@@ -118,8 +135,7 @@ class ContactForm extends Component {
             </span>
             <div class="contact-us__send">
               <a href="javascript:;" class="contact-us__facebook">
-                {" "}
-                Ili nas pronađite na Facebook-u:{" "}
+                Ili nas pronađite na Facebook-u:
                 <span class="font-ico-facebook"></span>
               </a>
               <Link to="/contact" onClick={this.handleSubmitData}>
