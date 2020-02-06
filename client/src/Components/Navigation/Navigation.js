@@ -1,6 +1,7 @@
-import React, { Component } from "react";
 import NavigationItem from "./NavigationItem";
 import NavigationTabContent from "../Navigation/NavigationTabContent";
+
+import React, { Component } from "react";
 import { connect } from "react-redux";
 
 class Navigation extends Component {
@@ -16,17 +17,17 @@ class Navigation extends Component {
             <ul class="tabs">
               <NavigationItem
                 title="Gde zelis da se premestis?"
-                tabNum={1}
+                tabNumber={1}
                 currentTab={currentTab}
               />
               <NavigationItem
                 title="Najnovija zelja"
-                tabNum={2}
+                tabNumber={2}
                 currentTab={currentTab}
               />
               <NavigationItem
                 title="Sve zelje"
-                tabNum={3}
+                tabNumber={3}
                 currentTab={currentTab}
               />
             </ul>

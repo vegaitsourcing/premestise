@@ -1,5 +1,3 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
 import {
   GetAllWishes,
   PageNumberSelector,
@@ -7,6 +5,9 @@ import {
   GoToPreviousPage
 } from "../../Actions/NavActions/AllWishesActions";
 import PageNumber from "./PageNumber";
+
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
 class WishPaging extends Component {
   filterByPage = pageNumber => {

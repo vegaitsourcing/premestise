@@ -1,23 +1,26 @@
+import { PrepareRequest } from "../../Actions/NavActions/LatestWishActions";
+
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { PrepareRequest } from "../../Actions/NavActions/LatestWishActions";
+
 class WishView extends Component {
   render() {
     let wish = this.props.wish;
+
     return (
       <div className="wishItem">
         <h3 id="latestWishFrom">
-          {" "}
+          &nbsp;
           <span className="font-ico-circle">
             {wish != null ? wish.fromKindergarden.name : ""}
-          </span>{" "}
+          </span>&nbsp;
           >>
           <br />
           {wish != null
             ? wish.toKindergardens.map((kinder, index) => (
                 <React.Fragment>
                   <span className="name" id="latestWishTo">
-                    <strong>{index + 1}.</strong> {kinder.name}{" "}
+                    <strong>{index + 1}.</strong> {kinder.name}&nbsp;
                   </span>
                   <br />
                 </React.Fragment>

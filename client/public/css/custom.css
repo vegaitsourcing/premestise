@@ -27,3 +27,25 @@
 .input__date {
   width: 100%;
 }
+
+.banner {
+  background-image: url(/assets/images/baby-boy-child-159533.jpg);
+}
+
+.errorMessageMainForm {
+  color: red;
+}
+
+.errorMessageContactForm {
+  color: yellow;
+  display: block;
+  margin-bottom: 32px;
+}
+
+.blockSpan {
+  display: block;
+}
+
+.noMarginBottom {
+  margin-bottom: 0;
+} 

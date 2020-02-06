@@ -1,12 +1,15 @@
+import { GetMatchedCount } from "../../Actions/MatchedInfoActions/MatchedInfoActions";
+
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { GetMatchedCount } from "../../Actions/MatchedInfoActions/MatchedInfoActions";
+
 class MatchedInfo extends Component {
   componentDidMount() {
     this.props.getMatchedCount();
   }
 
   render() {
+    const matchedCount = "ostvarenih premeštaja do sada.";
     return (
       <div class="success-banner">
         <div class="success-banner__wrap wrap">
@@ -17,7 +20,7 @@ class MatchedInfo extends Component {
             <span class="font-ico-circle"></span>
           </div>
           <p class="succeess-banner__paragraf">
-            ostvarenih premeštaja do sada.
+            {matchedCount}
           </p>
         </div>
       </div>

@@ -1,6 +1,9 @@
+import { GetAllWishesForMap } from "../../Actions/NavActions/AllWishesActions";
+import { MAP_ACCESS_TOKEN, MAP_URL } from "../../Config/config";
+
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { GetAllWishesForMap } from "../../Actions/NavActions/AllWishesActions";
+
 class MapWishView extends Component {
   componentDidUpdate() {
     this.paintMapMarkers();
@@ -21,7 +24,7 @@ class MapWishView extends Component {
     };
 
     L.tileLayer(
-      "https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoidGVzdGFwcGNmYWMiLCJhIjoiY2sxZXRjazlsMGw0ZzNvdW1mdTh4ZHA0eCJ9.7RLE9_R1Z-SOpPw9WrRJCA",
+      MAP_URL + MAP_ACCESS_TOKEN,
       {
         maxZoom: 18,
         id: "mapbox.streets"
@@ -43,11 +46,10 @@ class MapWishView extends Component {
       pinFrom.latitude = wish.fromKindergarden.latitude;
 
       let pinTo = {};
-
       for (let i = 0; i < toKinderLen; i++) {
         if (
-          wish.toKindergardens[i].longitude == null ||
-          wish.toKindergardens[i].latitude == null
+          !wish.toKindergardens[i].longitude ||
+          !wish.toKindergardens[i].latitude
         )
           return;
 
@@ -56,11 +58,10 @@ class MapWishView extends Component {
         pinTo.latitude = wish.toKindergardens[i].latitude;
 
         let list = [pinFrom, pinTo];
-
         list.forEach((pin, index) => {
           L.marker([pin.longitude, pin.latitude])
             .addTo(map)
-            .bindPopup(`<b>${index === 0 ? "Iz: " : "U: "} ${pin.name}</b>`);
+            .bindPopup(`<b>${index === 0 ? "ИЗ: " : "У: "} ${pin.name}</b>`);
         });
 
         drawLineBeetwenPines(...list);

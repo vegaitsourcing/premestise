@@ -2,6 +2,15 @@ import React, { Component } from "react";
 
 class Header extends Component {
   render() {
+    const commonQuestions = "Česta pitanja";
+    const writeUs = "Pišite nam";
+    const whereToMove = "Gde zelis da se premestis?";
+    const latestWish = "Najnovija želja";
+    const allWishes = "Sve želje";
+    const aboutUsText = "O nama";
+    const writeUsViaFacebook = "Pisite nam putem Facebook-a";
+    const findUsOnFacebook = "Posetite nas na Facebook-u ";
+
     return (
       <header className="header">
         <div className="wrap">
@@ -26,7 +35,7 @@ class Header extends Component {
                     data-section-name-link="questions"
                     className="nav__link js-scroll-to"
                   >
-                    Česta pitanja{" "}
+                    {commonQuestions}
                   </a>
                 </li>
                 <li className="nav__item">
@@ -35,7 +44,7 @@ class Header extends Component {
                     data-section-name-link="form"
                     className="nav__link js-scroll-to"
                   >
-                    Pišite nam{" "}
+                    {writeUs}
                   </a>
                 </li>
               </ul>
@@ -47,8 +56,7 @@ class Header extends Component {
                       data-section-mobile="tabs"
                       href="javascript:;"
                     >
-                      <span className="font-ico-map-q-pin"></span> Gde zelis da
-                      se premestis?{" "}
+  <span className="font-ico-map-q-pin"></span> {whereToMove}&nbsp;
                     </a>
                   </li>
                   <li>
@@ -57,8 +65,7 @@ class Header extends Component {
                       data-section-mobile="tabs"
                       href="javascript:;"
                     >
-                      <span className="font-ico-map-q-pin"></span> Najnovija
-                      zelja{" "}
+  <span className="font-ico-map-q-pin"></span> {latestWish}&nbsp;
                     </a>
                   </li>
                   <li>
@@ -67,7 +74,7 @@ class Header extends Component {
                       data-section-mobile="tabs"
                       href="javascript:;"
                     >
-                      <span className="font-ico-map-q-pin"></span> Sve zelje{" "}
+  <span className="font-ico-map-q-pin"></span>{allWishes}&nbsp;
                     </a>
                   </li>
                   <li>
@@ -76,7 +83,7 @@ class Header extends Component {
                       data-section-mobile="questions"
                       href="javascript:;"
                     >
-                      <span className="font-ico-map-q-pin"></span> Cesta pitanja{" "}
+                      <span className="font-ico-map-q-pin"></span> {commonQuestions}&nbsp;
                     </a>
                   </li>
                   <li>
@@ -85,7 +92,7 @@ class Header extends Component {
                       data-section-mobile="form"
                       href="javascript:;"
                     >
-                      <span className="font-ico-map-q-pin"></span> Pisite nam{" "}
+                      <span className="font-ico-map-q-pin"></span> {writeUs}&nbsp;
                     </a>
                   </li>
                   <li>
@@ -94,21 +101,19 @@ class Header extends Component {
                       data-section-mobile=""
                       href="javascript:;"
                     >
-                      <span className="font-ico-map-q-pin"></span> O nama{" "}
+  <span className="font-ico-map-q-pin"></span> {aboutUsText}&nbsp;
                     </a>
                   </li>
                 </ul>
                 <ul className="form-social-links">
                   <li>
                     <a className="form-link" href="javascript:;">
-                      <span className="font-ico-messenger"></span> Pisite nam
-                      putem Facebook-a
+                      <span className="font-ico-messenger"></span> {writeUsViaFacebook}
                     </a>
                   </li>
                   <li>
                     <a className="form-link" href="javascript:;">
-                      <span className="font-ico-facebook"></span> Posetite nas
-                      na Facebook-u
+                      <span className="font-ico-facebook"></span> {findUsOnFacebook}
                     </a>
                   </li>
                 </ul>

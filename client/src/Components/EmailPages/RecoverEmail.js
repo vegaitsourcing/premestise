@@ -2,9 +2,11 @@ import React, { Component } from "react";
 
 class RecoverEmail extends Component {
   render() {
+
+    const message = "Uspešno ste vraćeni u sistem.";
     return (
       <div>
-        <p>Uspešno ste vraćeni u sistem.</p>
+        <p>{message}</p>
       </div>
     );
   }

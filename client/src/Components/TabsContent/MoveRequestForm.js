@@ -1,9 +1,11 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
 import {
   GetAllKindergardens,
   NewMoveRequest
 } from "../../Actions/NavActions/MoveRequestActions";
+
+import React, { Component } from "react";
+import { connect } from "react-redux";
+
 
 class MoveRequestForm extends Component {
   state = {
@@ -28,6 +30,7 @@ class MoveRequestForm extends Component {
 
   handleSubmitData = event => {
     event.preventDefault();
+
     let toKindergardenIds = [];
     if (this.state.MoveToLocationId1)
       toKindergardenIds.push(this.state.MoveToLocationId1);
@@ -37,7 +40,6 @@ class MoveRequestForm extends Component {
       toKindergardenIds.push(this.state.MoveToLocationId3);
 
     let form = {
-      //id??
       ParentName: this.state.ParentNameSurname,
       Email: this.state.Email,
       PhoneNumber: this.state.PhoneNumber,
@@ -49,44 +51,50 @@ class MoveRequestForm extends Component {
 
     if (form.ParentName === "") {
       this.setState({
-        parentNameErrorMessage: "Obavezno uneti ime roditelja!"
+        parentNameErrorMessage: "Obavezno uneti ime roditelja!",
+        validationErrorExists: true
       });
-      this.setState({ validationErrorExists: true });
     }
 
     if (form.Email === "") {
-      this.setState({ emailErrorMessage: "Proveriti format e-mail adrese!" });
-      this.setState({ validationErrorExists: true });
+      this.setState({
+        emailErrorMessage: "Proveriti format e-mail adrese!",
+        validationErrorExists: true
+      });
     }
 
     if (form.PhoneNumber === "") {
-      this.setState({ phoneErrorMessage: "Obavezno uneti kontakt telefon!" });
-      this.setState({ validationErrorExists: true });
+      this.setState({
+        phoneErrorMessage: "Obavezno uneti kontakt telefon!",
+        validationErrorExists: true
+      });
     }
 
     if (form.ChildName === "") {
-      this.setState({ childNameErrorMessage: "Obavezno uneti ime deteta!" });
-      this.setState({ validationErrorExists: true });
+      this.setState({
+        childNameErrorMessage: "Obavezno uneti ime deteta!",
+        validationErrorExists: true
+      });
     }
     if (form.ChildBirthDate === null) {
       this.setState({
-        childBirthErrorMessage: "Obavezno uneti datum rođenja deteta!"
+        childBirthErrorMessage: "Obavezno uneti datum rođenja deteta!",
+        validationErrorExists: true
       });
-      this.setState({ validationErrorExists: true });
     }
     if (form.FromKindergardenId === null) {
       this.setState({
-        fromKindergardenErrorMessage: "Obavezno mesto relokacije!"
+        fromKindergardenErrorMessage: "Obavezno mesto relokacije!",
+        validationErrorExists: true
       });
-      this.setState({ validationErrorExists: true });
     }
 
     if (form.ToKindergardenIds.length === 0) {
       this.setState({
         toKindergardenErrorMessage:
-          "Obavezno odabrati bar jednu želju za premestaj!"
+          "Obavezno odabrati bar jednu želju za premestaj!",
+        validationErrorExists: true
       });
-      this.setState({ validationErrorExists: true });
     }
 
     if (this.checkIfHasErrors()) {
@@ -105,62 +113,85 @@ class MoveRequestForm extends Component {
         this.state.fromKindergardenErrorMessage ||
         this.state.toKindergardenErrorMessage
       )
-    ) {
-      return false;
-    } else {
-      return true;
-    }
+    ) return false;
+
+    return true;
+
   };
 
   handleParentNameChange = event => {
     event.preventDefault();
     if (event.target.value !== "") {
-      this.setState({ ParentNameSurname: event.target.value });
-      this.setState({ parentNameErrorMessage: null });
+      this.setState({
+        ParentNameSurname: event.target.value,
+        parentNameErrorMessage: null
+      });
     } else {
       this.setState({
-        parentNameErrorMessage: "Obavezno uneti ime roditelja!"
+        parentNameErrorMessage: "Obavezno uneti ime roditelja!",
+        ParentNameSurname: ""
       });
-      this.setState({ ParentNameSurname: "" });
     }
   };
 
   handleChildNameChange = event => {
     event.preventDefault();
     if (event.target.value !== "") {
-      this.setState({ ChildName: event.target.value });
-      this.setState({ childNameErrorMessage: null });
+      this.setState({
+        ChildName: event.target.value,
+        childNameErrorMessage: null
+      });
     } else {
-      this.setState({ childNameErrorMessage: "Obavezno uneti ime deteta!" });
-      this.setState({ ChildName: "" });
+      this.setState({
+        childNameErrorMessage: "Obavezno uneti ime deteta!",
+        ChildName: ""
+      });
     }
   };
 
+  emailFormatValidation = (emailAddress) => {
+    const mailRegex = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!mailRegex.test(emailAddress)) {
+      this.setState({
+        Email: emailAddress,
+        emailErrorMessage: "Proveriti format e-mail adrese!"
+      });
+      this.setState({});
+    } else {
+      this.setState({
+        emailErrorMessage: null,
+        Email: emailAddress
+      });
+
+    }
+  }
+
   handleEmailChange = event => {
     event.preventDefault();
-    //return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
     if (event.target.value !== "") {
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(event.target.value)) {
-        this.setState({ Email: event.target.value });
-        this.setState({ emailErrorMessage: "Proveriti format e-mail adrese!" });
-      } else {
-        this.setState({ emailErrorMessage: null });
-        this.setState({ Email: event.target.value });
-      }
+      this.emailFormatValidation(event.target.value)
     } else {
-      this.setState({ Email: "" });
-      this.setState({ emailErrorMessage: "Proveriti format e-mail adrese!" });
+      this.setState({
+        Email: "",
+        emailErrorMessage: "Proveriti format e-mail adrese!"
+      });
     }
   };
 
   handlePhoneNumberChange = event => {
     event.preventDefault();
     if (event.target.value !== "") {
-      this.setState({ PhoneNumber: event.target.value });
-      this.setState({ phoneErrorMessage: null });
+      this.setState({
+        PhoneNumber: event.target.value,
+        phoneErrorMessage: null
+      });
     } else {
-      this.setState({ PhoneNumber: "" });
-      this.setState({ phoneErrorMessage: "Obavezno uneti kontakt telefon!" });
+      this.setState({
+        PhoneNumber: "",
+        phoneErrorMessage: "Obavezno uneti kontakt telefon!"
+      });
     }
   };
 
@@ -168,11 +199,13 @@ class MoveRequestForm extends Component {
     event.preventDefault();
     console.log(event.target.value);
     if (event.target.value !== null || event.target.value !== undefined) {
-      this.setState({ ChildBirthDate: event.target.value });
-      this.setState({ childBirthErrorMessage: null });
-    } else {
-      this.setState({ ChildBirthDate: null });
       this.setState({
+        ChildBirthDate: event.target.value,
+        childBirthErrorMessage: null
+      });
+    } else {
+      this.setState({
+        ChildBirthDate: null,
         childBirthErrorMessage: "Obavezno uneti datum rođenja deteta!"
       });
     }
@@ -182,11 +215,14 @@ class MoveRequestForm extends Component {
     event.preventDefault();
     console.log(event.target.value);
     if (event.target.value !== null) {
-      this.setState({ MoveFromLocationId: event.target.value });
-      this.setState({ fromKindergardenErrorMessage: null });
-    } else {
-      this.setState({ MoveFromLocationId: null });
       this.setState({
+        MoveFromLocationId: event.target.value,
+        fromKindergardenErrorMessage: null
+      });
+
+    } else {
+      this.setState({
+        MoveFromLocationId: null,
         fromKindergardenErrorMessage: "Obavezno mesto relokacije!"
       });
     }
@@ -196,8 +232,11 @@ class MoveRequestForm extends Component {
     event.preventDefault();
     //check format before setting state or smth
     if (event.target.value !== null) {
-      this.setState({ MoveToLocationId1: event.target.value });
-      this.setState({ toKindergardenErrorMessage: null });
+      this.setState({
+        MoveToLocationId1: event.target.value,
+        toKindergardenErrorMessage: null
+      });
+
     } else {
       this.setState({ MoveToLocationId1: null });
     }
@@ -205,10 +244,12 @@ class MoveRequestForm extends Component {
 
   handleMoveToLocationId2Change = event => {
     event.preventDefault();
-    console.log(event.target.value);
+
     if (event.target.value !== null) {
-      this.setState({ MoveToLocationId2: event.target.value });
-      this.setState({ toKindergardenErrorMessage: null });
+      this.setState({
+        MoveToLocationId2: event.target.value,
+        toKindergardenErrorMessage: null
+      });
     } else {
       this.setState({ MoveToLocationId2: null });
     }
@@ -216,9 +257,12 @@ class MoveRequestForm extends Component {
 
   handleMoveToLocationId3Change = event => {
     event.preventDefault();
+
     if (event.target.value !== null) {
-      this.setState({ MoveToLocationId3: event.target.value });
-      this.setState({ toKindergardenErrorMessage: null });
+      this.setState({
+        MoveToLocationId3: event.target.value,
+        toKindergardenErrorMessage: null
+      });
     } else {
       this.setState({ MoveToLocationId3: null });
     }
@@ -233,14 +277,6 @@ class MoveRequestForm extends Component {
   }
 
   render() {
-    const errorMsgStyle = {
-      color: "red"
-    };
-
-    const blockSpan = {
-      display: "block"
-    };
-
     const {
       ParentNameSurname,
       ChildName,
@@ -254,9 +290,23 @@ class MoveRequestForm extends Component {
     } = this.state;
     const fromKindergardenId = this.props.fromKindergardenId;
 
+    const whereToMove = "Gde zelis da se premestis?"
+    const parentNamePlaceholderText = "Ime i prezime roditelja *";
+    const childNamePlaceHolderText = "Ime deteta *";
+    const emailPlaceholderText = "Email *";
+    const phonePlaceholderText = "Broj telefona *";
+    const birthdatePlaceholderText = "Datum rođenja deteta";
+    const locationToFirstWishText = "1. Lokacija na koju želiš da se premestiš?";
+    const locationToSecondWishText = "2. Lokacija na koju želiš da se premestiš?";
+    const locationToThirdWishText = "3. Lokacija na koju želiš da se premestiš?";
+    const chooseCurrentLocationText = "Izaberi trenutnu lokaciju";
+    const messengerLinkText = "Pišite name";
+    const facebookLinkText = "Posetite nas";
+    const submitFormButtonText = "Obavesti me"
+
     return (
       <div id="tab-1" className="tab-content current">
-        <h2 className="tab-title">Gde zelis da se premestis?</h2>
+      <h2 className="tab-title">{whereToMove}</h2>
         <form>
           <div className="form-wrap">
             <div className="form-left">
@@ -264,33 +314,33 @@ class MoveRequestForm extends Component {
                 type="text"
                 id="newRequestParentName"
                 className="input parent-input"
-                placeholder="Ime i prezime roditelja *"
+                placeholder={parentNamePlaceholderText}
                 onChange={this.handleParentNameChange}
                 value={ParentNameSurname}
               />
-              <span style={errorMsgStyle}>
+              <span className="errorMessageMainForm" >
                 {this.state.parentNameErrorMessage}
               </span>
               <input
                 type="text"
                 id="newRequestChildName"
                 className="input child-input"
-                placeholder="Ime deteta *"
+                placeholder={childNamePlaceHolderText}
                 onChange={this.handleChildNameChange}
                 value={ChildName}
               />
-              <span style={errorMsgStyle}>
+              <span className="errorMessageMainForm" >
                 {this.state.childNameErrorMessage}
               </span>
               <input
                 type="email"
                 id="newRequestEmail"
                 className="input input__email"
-                placeholder="Email *"
+                placeholder={emailPlaceholderText}
                 onChange={this.handleEmailChange}
                 value={Email}
               />
-              <span style={{ ...errorMsgStyle, ...blockSpan }}>
+              <span className="errorMessageMainForm blockSpan">
                 {this.state.emailErrorMessage}
               </span>
               <div className="form-left__double">
@@ -300,12 +350,12 @@ class MoveRequestForm extends Component {
                       type="text"
                       id="newRequestPhoneNumber"
                       className="input input__phone"
-                      placeholder="Broj telefona *"
+                      placeholder={phonePlaceholderText}
                       onChange={this.handlePhoneNumberChange}
                       value={PhoneNumber}
                     />
 
-                    <span style={errorMsgStyle}>
+                    <span className="errorMessageMainForm" >
                       {this.state.phoneErrorMessage}
                     </span>
                   </div>
@@ -315,12 +365,12 @@ class MoveRequestForm extends Component {
                       type="date"
                       id="newRequestChildBirthDate"
                       className="input input__date"
-                      placeholder="Datum rodjenja deteta"
+                      placeholder={birthdatePlaceholderText}
                       onChange={this.handleChildBirthDateChange}
                       value={ChildBirthDate}
                     />
 
-                    <span style={errorMsgStyle}>
+                    <span className="errorMessageMainForm" >
                       {this.state.childBirthErrorMessage}
                     </span>
                   </div>
@@ -338,13 +388,13 @@ class MoveRequestForm extends Component {
                   value={MoveFromLocationId}
                 >
                   <option value="" selected disabled hidden>
-                    Izaberi trenutnu lokaciju
+                    {chooseCurrentLocationText}
                   </option>
                   {this.props.allKindergardens.map(kinder => (
                     <option value={kinder.id}>{kinder.name}</option>
                   ))}
                 </select>
-                <span style={errorMsgStyle}>
+                <span className="errorMessageMainForm" >
                   {this.state.fromKindergardenErrorMessage}
                 </span>
               </div>
@@ -359,7 +409,7 @@ class MoveRequestForm extends Component {
                   }
                 >
                   <option value="" selected disabled hidden>
-                    1. Lokacija na koju zelis da se premestis?
+                    {locationToFirstWishText}
                   </option>
                   {this.props.allKindergardens.map(kinder => (
                     <option value={kinder.id}>{kinder.name}</option>
@@ -373,7 +423,7 @@ class MoveRequestForm extends Component {
                   value={MoveToLocationId2}
                 >
                   <option value="" selected disabled hidden>
-                    2. Lokacija na koju zelis da se premestis?
+                    {locationToSecondWishText}
                   </option>
                   {this.props.allKindergardens.map(kinder => (
                     <option value={kinder.id}>{kinder.name}</option>
@@ -387,13 +437,13 @@ class MoveRequestForm extends Component {
                   value={MoveToLocationId3}
                 >
                   <option value="" selected disabled hidden>
-                    3. Lokacija na koju zelis da se premestis?
+                    {locationToThirdWishText}
                   </option>
                   {this.props.allKindergardens.map(kinder => (
                     <option value={kinder.id}>{kinder.name}</option>
                   ))}
                 </select>
-                <span style={errorMsgStyle}>
+                <span className="errorMessageMainForm" >
                   {this.state.toKindergardenErrorMessage}
                 </span>
               </div>
@@ -405,12 +455,12 @@ class MoveRequestForm extends Component {
               <ul className="form-social-links">
                 <li>
                   <a className="form-link" href="javascript:void(0);">
-                    <span className="font-ico-messenger"></span> Pisite nam{" "}
+                    <span className="font-ico-messenger"></span> {messengerLinkText}
                   </a>
                 </li>
                 <li>
                   <a className="form-link" href="javascript:void(0);">
-                    <span className="font-ico-facebook"></span> Posetite nas{" "}
+                    <span className="font-ico-facebook"></span> {facebookLinkText}
                   </a>
                 </li>
               </ul>
@@ -423,7 +473,7 @@ class MoveRequestForm extends Component {
                 id="submit-new-request"
                 onClick={this.handleSubmitData}
               >
-                <span className="font-ico-envelope"></span> Obavesti me{" "}
+                <span className="font-ico-envelope"></span> {submitFormButtonText}
               </button>
             </div>
           </div>

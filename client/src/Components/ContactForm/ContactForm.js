@@ -1,7 +1,9 @@
+import { SendForm } from "../../Actions/ContactFormActions/ContactFormActions";
+
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { SendForm } from "../../Actions/ContactFormActions/ContactFormActions";
 import { Link } from "react-router-dom";
+
 class ContactForm extends Component {
   state = {
     emailErrorMessage: null,
@@ -37,57 +39,68 @@ class ContactForm extends Component {
       : false;
   };
 
+  emailFormatValidation = emailAddress => {
+    let mailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!mailRegex.test(emailAddress)) {
+      this.setState({
+        email: emailAddress,
+        emailErrorMessage: "Proveriti format e-mail adrese!"
+      });
+      this.setState({ emailErrorExists: true });
+    } else {
+      this.setState({
+        emailErrorMessage: null,
+        email: emailAddress,
+        emailErrorExists: false
+      });
+    }
+  };
+
   handleEmailChange = event => {
     event.preventDefault();
-    let mailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (event.target.value !== "") {
-      if (!mailRegex.test(event.target.value)) {
-        this.setState({ email: event.target.value });
-        this.setState({ emailErrorMessage: "Proveriti format e-mail adrese!" });
-        this.setState({ emailErrorExists: true });
-      } else {
-        this.setState({ emailErrorMessage: null });
-        this.setState({ email: event.target.value });
-        this.setState({ emailErrorExists: false });
-      }
+      this.emailFormatValidation(event.target.value);
     } else {
-      this.setState({ email: "" });
-      this.setState({ emailErrorMessage: "Proveriti format e-mail adrese!" });
-      this.setState({ emailErrorExists: true });
+      this.setState({
+        email: "",
+        emailErrorMessage: "Proveriti format e-mail adrese!",
+        emailErrorExists: true
+      });
     }
   };
 
   handleMessageChange = event => {
     event.preventDefault();
     if (event.target.value !== "") {
-      this.setState({ message: event.target.value });
-      this.setState({ messageErrorMessage: null });
-      this.setState({ messageErrorExists: false });
+      this.setState({
+        message: event.target.value,
+        messageErrorMessage: null,
+        messageErrorExists: false
+      });
     } else {
-      this.setState({ messageErrorMessage: "Obavezno uneti text poruke!" });
-      this.setState({ message: "" });
-      this.setState({ messageErrorExists: true });
+      this.setState({
+        messageErrorMessage: "Obavezno uneti text poruke!",
+        message: "",
+        messageErrorExists: true
+      });
     }
   };
 
   render() {
-    const errorMsgStyle = {
-      color: "yellow",
-      display: "block",
-      marginBottom: 32
-    };
 
-    const noMarginBottom = {
-      marginBottom: 0
-    };
     const { email, message } = this.state;
+    const messageSocial = "Ili nas pronađite na Facebook-u:";
+    const formHeader = "Pišite nam";
+    const formDescription = "Unapred smo zahvalni za sve dobre i loše stvari na sajtu koje nam javite.";
+    const sendButtonText = "Pošalji";
 
     return (
       <section class="contact-us" data-section-name="form">
         <div class="contact-us__wrap wrap">
-          <h2 class="contact-us__heading">Pišite nam</h2>
+      <h2 class="contact-us__heading">{formHeader}</h2>
           <form class="contact-us__form">
-            <div class="contact-us__email" style={noMarginBottom}>
+            <div className="contact-us__email noMarginBottom">
               <input
                 class="contact-us__input"
                 id="email"
@@ -97,33 +110,30 @@ class ContactForm extends Component {
                 value={email}
               />
               <span class="contact-us__text">
-                Unapred smo zahvalni za sve dobre i loše stvari na sajtu koje
-                nam javite.
+                {formDescription}
               </span>
             </div>
-            <span style={errorMsgStyle}>{this.state.emailErrorMessage}</span>
+            <span className="errorMessageContactForm">{this.state.emailErrorMessage}</span>
             <textarea
-              style={noMarginBottom}
-              class="contact-us__textarea"
+              
+              className="contact-us__textarea noMarginBottom"
               id="message"
               name="message"
               placeholder="Text"
               onChange={this.handleMessageChange}
               value={message}
             ></textarea>
-            <span style={errorMsgStyle}>{this.state.messageErrorMessage}</span>
+            <span className="errorMessageContactForm">{this.state.messageErrorMessage}</span>
             <span class="contact-us__text--hidden">
-              Unapred smo zahvalni za sve dobre i loše stvari na sajtu koje nam
-              javite.
+            {formDescription}
             </span>
             <div class="contact-us__send">
               <a href="javascript:;" class="contact-us__facebook">
-                {" "}
-                Ili nas pronađite na Facebook-u:{" "}
+                {messageSocial}
                 <span class="font-ico-facebook"></span>
               </a>
               <Link to="/contact" onClick={this.handleSubmitData}>
-                <button class="contact-us__btn btn js-submit">Pošalji</button>
+    <button class="contact-us__btn btn js-submit">{sendButtonText}</button>
               </Link>
             </div>
           </form>

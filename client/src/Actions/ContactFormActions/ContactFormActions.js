@@ -1,10 +1,11 @@
+import { WEB_API_URL } from "../../Config/config";
+
 import axios from "axios";
-import { webApiURL } from "../../HostAddresses/webApiHost";
 
 export const SendForm = form => {
   return dispatch => {
     axios
-      .post(webApiURL + "/api/contact", form)
+      .post(WEB_API_URL + "/api/contact", form)
       .then(res => {
         window.location.href = "/contact";
       })

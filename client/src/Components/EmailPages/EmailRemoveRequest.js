@@ -1,9 +1,9 @@
+import InfoPage from "../Info/InfoPage";
+import { RemoveRequestEmail } from "../../Actions/EmailActions/EmailActions";
+
 import React, { Component } from "react";
 import queryString from "querystring";
-import { RemoveRequestEmail } from "../../Actions/EmailActions/EmailActions";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import InfoPage from "../Info/InfoPage";
 
 class EmailRemoveRequest extends Component {
   componentDidMount() {
@@ -13,14 +13,17 @@ class EmailRemoveRequest extends Component {
 
   render() {
     const emailRemoved = this.props.removeRequestConfirmed;
+    const successMessage = "Uspesno uklonjen zahtev iz sistema usled neispravnih podataka, pokusajte ponovo... ";
+    const waitingMessage = "Uklanjanje u toku...";
+
     return (
       <div>
         {
           <InfoPage
             description={
               emailRemoved
-                ? "Uspesno uklonjen zahtev iz sistema usled neispravnih podataka, pokusajte ponovo... "
-                : "Uklanjanje u toku..."
+                ? successMessage
+                : waitingMessage
             }
           />
         }

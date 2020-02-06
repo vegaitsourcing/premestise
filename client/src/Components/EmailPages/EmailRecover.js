@@ -1,8 +1,9 @@
+import { RecoverEmail } from "../../Actions/EmailActions/EmailActions";
+import InfoPage from "../Info/InfoPage";
+
 import React, { Component } from "react";
 import queryString from "querystring";
-import { RecoverEmail } from "../../Actions/EmailActions/EmailActions";
 import { connect } from "react-redux";
-import InfoPage from "../Info/InfoPage";
 
 class EmailRecover extends Component {
   componentDidMount() {
@@ -12,14 +13,17 @@ class EmailRecover extends Component {
 
   render() {
     const emailRecovered = this.props.emailRecovered;
+    const successMessage = "Uspesno ste vraceni u sistem posto dogovor nije postignut, srecno u daljem traganju...";
+    const waitingMessage = "Vracanje u sistem, pricekajte momenat...";
+
     return (
       <div>
         {
           <InfoPage
             description={
               emailRecovered
-                ? "Uspesno ste vraceni u sistem posto dogovor nije postignut, srecno u daljem traganju..."
-                : "Vracanje u sistem, pricekajte momenat..."
+                ? successMessage
+                : waitingMessage
             }
           />
         }

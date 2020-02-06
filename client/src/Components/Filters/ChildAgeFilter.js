@@ -1,114 +1,55 @@
-import React, { Component } from "react";
 import { GetAllWishes } from "../../Actions/NavActions/AllWishesActions";
+
+import React, { Component } from "react";
 import { connect } from "react-redux";
 
 class ChildAgeFilter extends Component {
-  render() {
-    const selectedAge = this.props.selectedAge;
-    const currentPage = this.props.currentPage;
-    const perPageCount = this.props.perPageCount;
-    const elementsAmount = this.props.elementsAmount;
+  filterByAge = ageValue => {
+    this.props.getAllWishes(ageValue);
+  };
+  preventEventAndFilter = (event, age) => {
+    event.preventDefault();
+    this.filterByAge(age);
+  };
 
-    const filterByAge = ageValue => {
-      this.props.getAllWishes(ageValue);
-    };
+  renderClickableFilterNumbers = () => {
+    const maximumAgeFilter = 6;
+    const selectedAge = this.props.selectedAge;
+    let filterNumbers = [];
+    for (let i = 1; i <= maximumAgeFilter; i++) {
+      filterNumbers.push(
+
+      );
+    }
+    return <ul>{filterNumbers}</ul>;
+  };
+
+  lowerPageRange = () => {
+    return (this.props.currentPage - 1) * this.props.perPageCount + 1;
+  }
+
+  upperPageRange = () => {
+    return this.props.currentPage * this.props.perPageCount < this.props.elementsAmount
+      ? this.props.currentPage * this.props.perPageCount
+      : this.props.elementsAmount
+  }
+
+  render() {
+    const elementsAmount = this.props.elementsAmount;
 
     return (
       <div className="tab-years">
         <p>Odaberi starosno doba:</p>
         <ul className="tab-years__list">
-          <li>
-            <a
-              className={selectedAge == 1 ? "tab-year active" : "tab-year"}
-              href="!#"
-              onClick={e => {
-                e.preventDefault();
-                filterByAge(1);
-              }}
-            >
-              1
-            </a>
-          </li>
-          <li>
-            <a
-              className={selectedAge == 2 ? "tab-year active" : "tab-year"}
-              href="javascript:void(0);"
-              onClick={e => {
-                e.preventDefault();
-                filterByAge(2);
-              }}
-            >
-              2
-            </a>
-          </li>
-          <li>
-            <a
-              className={selectedAge == 3 ? "tab-year active" : "tab-year"}
-              href="javascript:void(0);"
-              onClick={e => {
-                e.preventDefault();
-                filterByAge(3);
-              }}
-            >
-              3
-            </a>
-          </li>
-          <li>
-            <a
-              className={selectedAge == 4 ? "tab-year active" : "tab-year"}
-              href="javascript:void(0);"
-              onClick={e => {
-                e.preventDefault();
-                filterByAge(4);
-              }}
-            >
-              4
-            </a>
-          </li>
-          <li>
-            <a
-              className={selectedAge == 5 ? "tab-year active" : "tab-year"}
-              href="javascript:void(0);"
-              onClick={e => {
-                e.preventDefault();
-                filterByAge(5);
-              }}
-            >
-              5
-            </a>
-          </li>
-          <li>
-            <a
-              className={selectedAge == 6 ? "tab-year active" : "tab-year"}
-              href="javascript:void(0);"
-              onClick={e => {
-                e.preventDefault();
-                filterByAge(6);
-              }}
-            >
-              6
-            </a>
-          </li>
-          <li>
-            <a
-              className={selectedAge == 7 ? "tab-year active" : "tab-year"}
-              href="javascript:void(0);"
-              onClick={e => {
-                e.preventDefault();
-                filterByAge(7);
-              }}
-            >
-              7
-            </a>
-          </li>
+          {this.renderClickableFilterNumbers()}
         </ul>
 
         <span className="number-info">
-          ({(currentPage - 1) * perPageCount + 1}-
-          {currentPage * perPageCount < elementsAmount
-            ? currentPage * perPageCount
-            : elementsAmount}{" "}
-          od ukupno {elementsAmount})
+          (
+          {this.lowerPageRange()}-
+          {this.upperPageRange()}&nbsp;
+          od ukupno {elementsAmount}
+          )
         </span>
       </div>
     );
