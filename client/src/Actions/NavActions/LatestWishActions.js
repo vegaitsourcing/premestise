@@ -16,7 +16,6 @@ export const GetLatestWish = () => {
 };
 
 export const PrepareRequest = fromKindergardenId => {
-  alert(fromKindergardenId)
   return dispatch => {
     dispatch({ type: PREPARE_REQUEST_FORM, payload: fromKindergardenId });
     dispatch({ type: SWITCH_TO_REQUEST_FORM });

@@ -150,7 +150,7 @@ class MoveRequestForm extends Component {
   };
 
   emailFormatValidation = (emailAddress) => {
-    const mailRegex = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const mailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!mailRegex.test(emailAddress)) {
       this.setState({
