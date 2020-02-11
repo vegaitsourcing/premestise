@@ -10,6 +10,7 @@ namespace Core.Interfaces.Intefaces
     {
         RequestDto CreatePending(RequestDto newRequest);
         WishDto GetLatest();
+        IEnumerable<WishDto> GetAllPendingWishes();
         IEnumerable<RequestDto> GetAllPending();
         void DeletePending(int id);
         IEnumerable<RequestDto> GetAllMatched();

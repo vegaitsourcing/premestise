@@ -1,6 +1,8 @@
 ﻿using Core.Interfaces.Intefaces;
 using Microsoft.AspNetCore.Mvc;
 using Util;
+using System;
+using System.Net.Mail;
 
 namespace VegaIT.PremestiSE.Controllers
 {
@@ -15,32 +17,56 @@ namespace VegaIT.PremestiSE.Controllers
             _matchService = service;
         }
 
-        [HttpPost]
-
+        [HttpGet]
         [Route("verify")]
-        public IActionResult Verify([FromBody] string id)
+        public IActionResult Verify([FromQuery] string id)
         {
             int decodedId = HashId.Decode(id);
-            _matchService.TryMatch(decodedId);
+
+            try
+            {
+               _matchService.TryMatch(decodedId);
+            }
+            catch (SmtpException)
+            {
+                return BadRequest();
+            }
+            
             return Ok();
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("confirm")]
-        public IActionResult Confirm([FromBody] string id)
+        public IActionResult Confirm([FromQuery] string id)
         {
             int decodedId = HashId.Decode(id);
-            _matchService.ConfirmMatch(decodedId);
+            try
+            {
+                _matchService.ConfirmMatch(decodedId);
+            }
+            catch(SmtpException)
+            {
+
+            }
+            
             return Ok();
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("recover")]
-        public IActionResult Recover([FromBody] string id)
+        public IActionResult Recover([FromQuery] string id)
         {
             int decodedId = HashId.Decode(id);
-            int newId =_matchService.Unmatch(decodedId);
-            _matchService.TryMatch(newId);
+            try
+            {
+                int newId = _matchService.Unmatch(decodedId);
+                _matchService.TryMatch(newId);
+            }
+            catch(SmtpException)
+            {
+                return BadRequest();
+            }
+            
 
             return Ok();
         }

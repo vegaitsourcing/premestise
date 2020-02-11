@@ -20,6 +20,8 @@ namespace VegaIT.PremestiSE
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+            .UseIIS()
+            .CaptureStartupErrors(true)
                 .Build();
     }
 }

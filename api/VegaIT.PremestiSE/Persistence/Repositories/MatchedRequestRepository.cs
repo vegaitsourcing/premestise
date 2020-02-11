@@ -147,11 +147,11 @@ namespace Persistence.Repositories
         {
             MatchedRequest matchedRequest = Get(id);
 
-            SqlCommand deleteMatchedRequest = new SqlCommand($"DELETE FROM matched_request WHERE ID = @id");
-            deleteMatchedRequest.Parameters.Add("@id", SqlDbType.Int).Value = id;
-
             SqlCommand deleteMatchedRequestWishes = new SqlCommand($"DELETE FROM matched_request_wishes WHERE matched_request_id = @id");
             deleteMatchedRequestWishes.Parameters.Add("@id", SqlDbType.Int).Value = id;
+
+            SqlCommand deleteMatchedRequest = new SqlCommand($"DELETE FROM matched_request WHERE id = @id");
+            deleteMatchedRequest.Parameters.Add("@id", SqlDbType.Int).Value = id;
 
             using (SqlConnection connection = new SqlConnection())
             {

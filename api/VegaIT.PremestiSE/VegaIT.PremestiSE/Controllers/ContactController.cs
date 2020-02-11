@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Clients;
 using Microsoft.AspNetCore.Mvc;
+using Core.Interfaces.Models;
+using Microsoft.Extensions.Configuration;
+using System.Net.Mail;
 
 namespace VegaIT.PremestiSE.Controllers
 {
@@ -12,22 +15,31 @@ namespace VegaIT.PremestiSE.Controllers
     public class ContactController : Controller
     {
         private readonly IMailClient _mailClient;
-
-        public ContactController(IMailClient mailClient)
+        private readonly IConfiguration _config;
+        public ContactController(IMailClient mailClient, IConfiguration config)
         {
             _mailClient = mailClient;
+            _config = config;
         }
+        
 
         [HttpPost]
-        public IActionResult Index( )
+        public IActionResult Create([FromBody] ContactFormDto form)
         {
-            string email = Request.Form["email"];
-            string message = Request.Form["message"];
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(message))
-                return BadRequest();
+            if (!ModelState.IsValid) return BadRequest();
 
-            _mailClient.Send(email, message);
-            
+
+            try
+            {
+                _mailClient.Send(form.Email, "Hvala sto ste nas kontaktirali, odgovoricemo Vam sto pre!");
+                _mailClient.Send(_config.GetValue<string>("SecondEmail"), form.Message);
+            }
+            catch (SmtpException)
+            {
+                return BadRequest();
+            }
+
+           
             return Ok();
         }
     }

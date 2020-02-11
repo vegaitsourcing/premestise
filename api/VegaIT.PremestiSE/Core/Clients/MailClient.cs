@@ -6,6 +6,7 @@ using System.Net.Mail;
 using System.Text;
 using System.IO;
 using System.Net.Mime;
+using Util;
 
 namespace Core.Clients
 {
@@ -92,6 +93,8 @@ namespace Core.Clients
                 mailText = mailText.Replace("[[CHILD_NAME]]", request.ChildName);
                 mailText = mailText.Replace("[[PHONE_NUMBER]]", request.PhoneNumber);
                 mailText = mailText.Replace("[[FROM_KINDERGARDEN]]", $"- {fromKindergarden.Name}");
+               
+                mailText = mailText.Replace("[[HASHED_ID]]", request.Id);
 
                 StringBuilder toKindergardensBuilder = new StringBuilder();
                 foreach (KindergardenDto wish in wishes)
@@ -151,6 +154,9 @@ namespace Core.Clients
             mail = mail.Replace("[[MATCH_EMAIL]]", secondMatch.Email);
             mail = mail.Replace("[[TOP_BANNER_LOGO_SRC]]", $"cid:{bannerImageAltView.ContentId}");
             mail = mail.Replace("[[FOOTER_LOGO_SRC]]", $"cid:{footerImageAltView.ContentId}");
+            mail = mail.Replace("[[MATCHED_REQUEST_ID]]", firstMatch.Id);
+
+            
 
             List<AlternateView> mailViews = new List<AlternateView>()
             {

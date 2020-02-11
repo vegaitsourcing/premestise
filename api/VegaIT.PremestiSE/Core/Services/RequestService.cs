@@ -57,6 +57,7 @@ namespace Core.Services
             return addedPendingRequestDto;
         }
 
+
         public WishDto GetLatest()
         {
             PendingRequest latestPendingRequest = _pendingRequestRepository.GetLatest();
@@ -72,7 +73,7 @@ namespace Core.Services
                 toKindergardens.Select(new KindergardenMapper().DtoFromEntity);
 
             return new WishDto
-            {
+            { 
                 RequestId = latestPendingRequest.Id,
                 ChildBirthDate = latestPendingRequest.ChildBirthDate,
                 FromKindergarden = fromKindergardenDto,
@@ -109,6 +110,30 @@ namespace Core.Services
                     .GetAll()
                     .Where(request => request.Verified)
                     .Select(requestMapper.DtoFromEntity);
+
+        }
+
+        public IEnumerable<WishDto> GetAllPendingWishes()
+        {
+            return _pendingRequestRepository
+                    .GetAll()
+                    .Where(request => request.Verified)
+                    .Select(request => {
+                        Kindergarden fromKindergarden = _kindergardenRepository.GetById(request.FromKindergardenId);
+                        List<Kindergarden> toKindergardens = _kindergardenRepository.GetToByRequestId(request.Id);
+
+                        KindergardenDto fromKindergardenDto = new KindergardenMapper().DtoFromEntity(fromKindergarden);
+                        IEnumerable<KindergardenDto> toKindergadenDtos =
+                            toKindergardens.Select(new KindergardenMapper().DtoFromEntity);
+
+                        return new WishDto
+                        {
+                            RequestId = request.Id,
+                            ChildBirthDate = request.ChildBirthDate,
+                            FromKindergarden = fromKindergardenDto,
+                            ToKindergardens = toKindergadenDtos
+                        };
+                    });
 
         }
     }

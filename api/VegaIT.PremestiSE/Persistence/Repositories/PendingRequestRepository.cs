@@ -135,7 +135,7 @@ namespace Persistence.Repositories
                             ChildName = row["child_name"] == System.DBNull.Value ? null : (string)row["child_name"],
                             ChildBirthDate = row["child_birth_date"] == System.DBNull.Value ? DateTime.Now : (DateTime)row["child_birth_date"],
                             Verified = row["verified"] != System.DBNull.Value && (bool)row["verified"],
-
+                            
                             KindergardenWishIds = GetPendingWishes((int)row["id"])
                         };
                     }
@@ -148,11 +148,14 @@ namespace Persistence.Repositories
 
         public void Delete(int id)
         {
-            SqlCommand deletePendingReqCommand = new SqlCommand($"DELETE FROM pending_request WHERE ID = @id");
-            deletePendingReqCommand.Parameters.Add("@id", SqlDbType.Int).Value = id;
 
             SqlCommand deletePendingRequestWishes = new SqlCommand($"DELETE FROM pending_request_wishes WHERE pending_request_id = @id");
             deletePendingRequestWishes.Parameters.Add("@id", SqlDbType.Int).Value = id;
+
+            SqlCommand deletePendingReqCommand = new SqlCommand($"DELETE FROM pending_request WHERE id = @id");
+            deletePendingReqCommand.Parameters.Add("@id", SqlDbType.Int).Value = id;
+
+
 
             using (SqlConnection connection = new SqlConnection())
             {

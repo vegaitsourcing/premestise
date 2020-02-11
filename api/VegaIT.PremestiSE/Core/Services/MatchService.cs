@@ -34,7 +34,7 @@ namespace Core.Services
             return _matchRepository.GetAll().Count(m => m.Status == Status.Success || m.Status == Status.Matched);
         }
 
-        public void TryMatch(int id)
+        public void TryMatch(int id) 
         {
             PendingRequest incomingRequest = _pendingRequestRepository.Get(id);
             _pendingRequestRepository.Verify(id);
@@ -61,6 +61,8 @@ namespace Core.Services
 
             var firstMatchDto = requestMapper.DtoFromEntity(firstMatchedRequest);
             var secondMatchDto = requestMapper.DtoFromEntity(secondMatchedRequest);
+
+
 
             _mailClient.SendFoundMatchMessage(firstMatchDto,
                                             secondMatchDto,

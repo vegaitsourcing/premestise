@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Net.Mail;
 using Core.Interfaces.Intefaces;
 using Core.Interfaces.Models;
 using Microsoft.AspNetCore.Mvc;
-
+using Util;
 namespace VegaIT.PremestiSE.Controllers
 {
     [ApiController]
@@ -25,7 +26,16 @@ namespace VegaIT.PremestiSE.Controllers
             {
                 return BadRequest();
             }
-            RequestDto result = _requestService.CreatePending(newRequest);
+            RequestDto result;
+            try
+            {
+                result = _requestService.CreatePending(newRequest);
+            }
+            catch(SmtpException)
+            {
+                return BadRequest();
+            }
+             
 
             return Created(Request.Host + Request.Path + result.Id, result);
         }
@@ -59,11 +69,27 @@ namespace VegaIT.PremestiSE.Controllers
             return Ok(_requestService.GetLatest());
         }
 
+        [HttpGet]
+        [Route("allWishes")]
+        public IActionResult GetAllWishes()
+        {
+            return Ok(_requestService.GetAllPendingWishes());
+        }
+        /*
         [HttpDelete]
         public IActionResult Delete(int id)
         {
             _requestService.DeletePending(id);
             return NoContent();
+        }*/
+
+        [HttpGet]
+        [Route("delete")]
+        public IActionResult Delete([FromQuery]string id)
+        {
+            int decodedId = HashId.Decode(id);
+            _requestService.DeletePending(decodedId);
+            return Ok();
         }
     }
 }

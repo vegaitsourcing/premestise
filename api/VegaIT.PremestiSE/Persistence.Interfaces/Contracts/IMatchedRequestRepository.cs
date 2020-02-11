@@ -7,7 +7,6 @@ namespace Persistence.Interfaces.Contracts
     {
         MatchedRequest Get(int id);
         IEnumerable<MatchedRequest> GetAll();
-        
         MatchedRequest Create(Request request, int matchId);
         MatchedRequest Delete(int id);
     }
