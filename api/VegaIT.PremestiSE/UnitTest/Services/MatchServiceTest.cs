@@ -34,7 +34,7 @@ namespace UnitTest.Services
         public void bla()
         {
             
-            _matchService = new MatchService(_matchRepo.Object, _pendingRequestRepo.Object, _matchedRepo.Object, null, null);
+            _matchService = new MatchService(_matchRepo.Object, _pendingRequestRepo.Object, _matchedRepo.Object, null, null, null);
         }
     }
 }

@@ -6,7 +6,7 @@ using Persistence.Interfaces.Entites.Exceptions;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-
+using System.Net;
 namespace Persistence.Repositories
 {
     public class KindergardenRepository : IKindergardenRepository
@@ -15,6 +15,7 @@ namespace Persistence.Repositories
 
         public KindergardenRepository(IConfiguration config)
         {
+            
             _connString = config.GetConnectionString("DefaultConnection");
 
         }
@@ -57,6 +58,32 @@ namespace Persistence.Repositories
                 }
             }
             return kindergardens;
+        }
+
+        public List<string> GetAllCities()
+        {
+            List<string> cities = new List<string>();
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = _connString;
+                conn.Open();
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = @"SELECT DISTINCT city FROM kindergarden;";
+
+                using (SqlDataAdapter dataAdapter = new SqlDataAdapter())
+                {
+                    DataSet dataSet = new DataSet();
+
+                    dataAdapter.SelectCommand = cmd;
+                    dataAdapter.Fill(dataSet, "kindergarden");
+
+                    foreach (DataRow row in dataSet.Tables["kindergarden"].Rows)
+                    {
+                        cities.Add((string)row["city"]);
+                    }
+                }
+            }
+            return cities;
         }
 
         public Kindergarden GetById(int id)
@@ -123,6 +150,48 @@ namespace Persistence.Repositories
             }
         }
 
+        public List<Kindergarden> GetKindergardensByCity(string city)
+        {
+            
+            List<Kindergarden> kindergardens = new List<Kindergarden>();
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = _connString;
+                conn.Open();
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = @"SELECT * FROM kindergarden where city=@City;";
+                cmd.Parameters.Add(new SqlParameter("@City", city));
+
+                using (SqlDataAdapter dataAdapter = new SqlDataAdapter())
+                {
+                    DataSet dataSet = new DataSet();
+
+                    dataAdapter.SelectCommand = cmd;
+                    dataAdapter.Fill(dataSet, "kindergarden");
+
+                    foreach (DataRow row in dataSet.Tables["kindergarden"].Rows)
+                    {
+                        kindergardens.Add(new Kindergarden
+                        {
+                            Id = (int)row["id"],
+                            Municipality = (string)row["municipality"],
+                            Government = (string)row["government"],
+                            City = (string)row["city"],
+                            Name = (string)row["name"],
+                            Department = (string)row["department"],
+                            Street = (string)row["street"],
+                            StreetNumber = (string)row["street_number"],
+                            PostalCode = (string)row["postal_code"],
+                            LocationType = (bool)row["location_type"] ? LocationType.Base : LocationType.Remote,
+                            Longitude = row["longitude"] == System.DBNull.Value ? null : (decimal?)row["longitude"],
+                            Latitude = row["latitude"] == System.DBNull.Value ? null : (decimal?)row["latitude"],
+                        });
+                    }
+                }
+            }
+            return kindergardens;
+        }
+
         public List<Kindergarden> GetToByRequestId(int id)
         {
             List<Kindergarden> kindergardens = new List<Kindergarden>();
@@ -164,5 +233,7 @@ namespace Persistence.Repositories
             }
             return kindergardens;
         }
+
+        
     }
 }

@@ -3,10 +3,12 @@ using Core.Interfaces.Intefaces;
 using Core.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Interfaces.Contracts;
 using Persistence.Repositories;
+using System.IO;
 
 namespace VegaIT.PremestiSE
 {
@@ -58,6 +60,11 @@ namespace VegaIT.PremestiSE
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseMvc();
+            app.Run(async (context) =>
+            {
+                context.Response.ContentType = "text/html";
+                await context.Response.SendFileAsync(Path.Combine(env.WebRootPath, "index.html"));
+            });
         }
     }
 }

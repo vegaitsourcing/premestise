@@ -5,14 +5,14 @@ USE premestise;
 
 CREATE TABLE kindergarden (
   id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-  municipality NVARCHAR(50),
-  government NVARCHAR(50),
-  city NVARCHAR(50),
-  name NVARCHAR(50),
-  department NVARCHAR(50),
-  street NVARCHAR(50),
-  street_number NVARCHAR(50),
-  postal_code NVARCHAR(50),
+  municipality NVARCHAR(120),
+  government NVARCHAR(120),
+  city NVARCHAR(120),
+  name NVARCHAR(220),
+  department NVARCHAR(120),
+  street NVARCHAR(120),
+  street_number NVARCHAR(120),
+  postal_code NVARCHAR(120),
   location_type BIT,
   longitude DECIMAL(9, 7),
   latitude DECIMAL(9, 7)
@@ -26,6 +26,7 @@ CREATE TABLE pending_request (
   phone_number NVARCHAR(50),
   child_name NVARCHAR(50),
   child_birth_date DATETIME2,
+  age_group INT,
   from_kindergarden_id INT,
   verified BIT
 );

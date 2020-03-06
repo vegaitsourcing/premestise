@@ -7,7 +7,7 @@ using System.Text;
 using System.IO;
 using System.Net.Mime;
 using Util;
-
+using Util.Enums;
 namespace Core.Clients
 {
     public interface IMailClient
@@ -23,6 +23,7 @@ namespace Core.Clients
         public const string Subject = "Nova poruka od premesti.se";
 
         private readonly string _defaultEmail;
+        private readonly string _environment;
         private readonly ISmtpClientFactory _smtpClientFactory;
 
         private const string _unmatchPageUrl = "placeholder";
@@ -40,6 +41,7 @@ namespace Core.Clients
         {
             _smtpClientFactory = smtpClientFactory;
             _defaultEmail = config.GetSection("DefaultEmail").Value;
+            _environment = config.GetSection("env").Value;
         }
 
         public void Send(string toEmail, string message)
@@ -89,9 +91,11 @@ namespace Core.Clients
             using (StreamReader reader = new StreamReader(_verifyTemplatePath))
             {
                 string mailText = reader.ReadToEnd();
+                var groupMapper = new AgeGroupMapper();
                 mailText = mailText.Replace("[[PARENT_NAME]]", request.ParentName);
-                mailText = mailText.Replace("[[CHILD_NAME]]", request.ChildName);
+                mailText = mailText.Replace("[[CHILD_GROUP]]", groupMapper.mapGroupToText(request.Group));
                 mailText = mailText.Replace("[[PHONE_NUMBER]]", request.PhoneNumber);
+                mailText = mailText.Replace("[[URL_ENV]]", _environment);
                 mailText = mailText.Replace("[[FROM_KINDERGARDEN]]", $"- {fromKindergarden.Name}");
                
                 mailText = mailText.Replace("[[HASHED_ID]]", request.Id);
@@ -155,8 +159,9 @@ namespace Core.Clients
             mail = mail.Replace("[[TOP_BANNER_LOGO_SRC]]", $"cid:{bannerImageAltView.ContentId}");
             mail = mail.Replace("[[FOOTER_LOGO_SRC]]", $"cid:{footerImageAltView.ContentId}");
             mail = mail.Replace("[[MATCHED_REQUEST_ID]]", firstMatch.Id);
+            mail = mail.Replace("[[URL_ENV]]", _environment);
 
-            
+
 
             List<AlternateView> mailViews = new List<AlternateView>()
             {

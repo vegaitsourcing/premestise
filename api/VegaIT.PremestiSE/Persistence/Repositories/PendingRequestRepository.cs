@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
 using Persistence.Interfaces.Entites.Exceptions;
-
+using Util.Enums;
 namespace Persistence.Repositories
 {
     public class PendingRequestRepository : IPendingRequestRepository
@@ -24,15 +24,14 @@ namespace Persistence.Repositories
             request.SubmittedAt = DateTime.Now;
 
             SqlCommand command = new SqlCommand();
-            command.CommandText = $@"INSERT INTO pending_request (email, parent_name, phone_number, child_name, child_birth_date, from_kindergarden_id, submitted_at, verified) 
-                                    VALUES (@email, @parentName, @phoneNumber, @childName, @childBirthDate, @fromKindergardenId, @submittedAt, @verified);
+            command.CommandText = $@"INSERT INTO pending_request (email, parent_name, phone_number, age_group, from_kindergarden_id, submitted_at, verified) 
+                                    VALUES (@email, @parentName, @phoneNumber, @ageGroup, @fromKindergardenId, @submittedAt, @verified);
                                     SELECT SCOPE_IDENTITY()";
 
             command.Parameters.Add("@email", SqlDbType.NVarChar).Value = request.ParentEmail;
             command.Parameters.Add("@parentName", SqlDbType.NVarChar).Value = request.ParentName;
             command.Parameters.Add("@phoneNumber", SqlDbType.NVarChar).Value = request.ParentPhoneNumber;
-            command.Parameters.Add("@childName", SqlDbType.NVarChar).Value = request.ChildName;
-            command.Parameters.Add("@childBirthDate", SqlDbType.DateTime2).Value = request.ChildBirthDate;
+            command.Parameters.Add("@ageGroup", SqlDbType.Int).Value = request.Group;
             command.Parameters.Add("@fromKindergardenId", SqlDbType.Int).Value = request.FromKindergardenId;
             command.Parameters.Add("@submittedAt", SqlDbType.DateTime2).Value = request.SubmittedAt;
             command.Parameters.AddWithValue("@verified", false);
@@ -95,8 +94,7 @@ namespace Persistence.Repositories
                 ParentEmail = request.ParentEmail,
                 ParentName = request.ParentName,
                 ParentPhoneNumber = request.ParentPhoneNumber,
-                ChildName = request.ChildName,
-                ChildBirthDate = request.ChildBirthDate,
+                Group = request.Group,
                 KindergardenWishIds = request.KindergardenWishIds,
                 FromKindergardenId = request.FromKindergardenId,
                 Verified = false,
@@ -183,6 +181,47 @@ namespace Persistence.Repositories
             }
         }
 
+        public IEnumerable<PendingRequest> GetAllVerified()
+        {
+            List<PendingRequest> pendingRequests = new List<PendingRequest>();
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = _connectionString;
+                conn.Open();
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = @"SELECT * FROM pending_request where verified=1;";
+
+                using (SqlDataAdapter dataAdapter = new SqlDataAdapter())
+                {
+                    DataSet dataSet = new DataSet();
+
+                    dataAdapter.SelectCommand = cmd;
+                    dataAdapter.Fill(dataSet, "pending_request");
+
+                    foreach (DataRow row in dataSet.Tables["pending_request"].Rows)
+                    {
+                        pendingRequests.Add(new PendingRequest
+                        {
+                            Id = (int)row["id"],
+                            FromKindergardenId = (int)row["from_kindergarden_id"],
+                            SubmittedAt = row["submitted_at"] == System.DBNull.Value ? DateTime.Now : (DateTime)row["submitted_at"],
+                            ParentEmail = row["email"] == System.DBNull.Value ? null : (string)row["email"],
+                            ParentName = row["parent_name"] == System.DBNull.Value ? null : (string)row["parent_name"],
+                            ParentPhoneNumber = row["phone_number"] == System.DBNull.Value ? null : (string)row["phone_number"],
+                            Group = (AgeGroup)row["age_group"],
+                            //ChildName = row["child_name"] == System.DBNull.Value ? null : (string)row["child_name"],
+                            //ChildBirthDate = row["child_birth_date"] == System.DBNull.Value ? DateTime.Now : (DateTime)row["child_birth_date"],
+                            Verified = row["verified"] != System.DBNull.Value && (bool)row["verified"],
+
+                            KindergardenWishIds = GetPendingWishes((int)row["id"])
+                        });
+                    }
+                }
+
+            }
+            return pendingRequests;
+        }
+
         public IEnumerable<PendingRequest> GetAll()
         {
             List<PendingRequest> pendingRequests = new List<PendingRequest>();
@@ -210,8 +249,9 @@ namespace Persistence.Repositories
                             ParentEmail = row["email"] == System.DBNull.Value ? null : (string)row["email"],
                             ParentName = row["parent_name"] == System.DBNull.Value ? null : (string)row["parent_name"],
                             ParentPhoneNumber = row["phone_number"] == System.DBNull.Value ? null : (string)row["phone_number"],
-                            ChildName = row["child_name"] == System.DBNull.Value ? null : (string)row["child_name"],
-                            ChildBirthDate = row["child_birth_date"] == System.DBNull.Value ? DateTime.Now : (DateTime)row["child_birth_date"],
+                            Group =  (AgeGroup)row["age_group"],
+                            //ChildName = row["child_name"] == System.DBNull.Value ? null : (string)row["child_name"],
+                            //ChildBirthDate = row["child_birth_date"] == System.DBNull.Value ? DateTime.Now : (DateTime)row["child_birth_date"],
                             Verified = row["verified"] != System.DBNull.Value && (bool)row["verified"],
 
                             KindergardenWishIds = GetPendingWishes((int)row["id"])
@@ -273,9 +313,8 @@ namespace Persistence.Repositories
                     pending.ParentEmail = reader["email"].ToString();
                     pending.ParentName = reader["parent_name"].ToString();
                     pending.FromKindergardenId = (int)reader["from_kindergarden_id"];
+                    pending.Group = (AgeGroup)(int)reader["age_group"];
                     pending.ParentPhoneNumber = reader["phone_number"].ToString();
-                    pending.ChildName = reader["child_name"].ToString();
-                    pending.ChildBirthDate = (DateTime)reader["child_birth_date"];
                     pending.KindergardenWishIds = GetPendingWishes(id);
 
                 }

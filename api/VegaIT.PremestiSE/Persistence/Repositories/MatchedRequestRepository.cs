@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
-
+using Util.Enums;
 namespace Persistence.Repositories
 {
     public class MatchedRequestRepository : IMatchedRequestRepository
@@ -66,15 +66,14 @@ namespace Persistence.Repositories
             request.SubmittedAt = request.SubmittedAt;
 
             SqlCommand command = new SqlCommand();
-            command.CommandText = $@"INSERT INTO matched_request (email, parent_name, phone_number, child_name, child_birth_date, from_kindergarden_id, submitted_at, match_id) 
-                                    VALUES (@email, @parentName, @parentPhoneNumber, @childName, @childBirthDate, @fromKindergardenId, @submittedAt, @matchId)
+            command.CommandText = $@"INSERT INTO matched_request (email, parent_name, phone_number, age_group, from_kindergarden_id, submitted_at, match_id) 
+                                    VALUES (@email, @parentName, @parentPhoneNumber, @ageGroup,  @fromKindergardenId, @submittedAt, @matchId)
                                     SELECT SCOPE_IDENTITY()";
 
             command.Parameters.Add("@email", SqlDbType.NVarChar).Value = request.ParentEmail;
             command.Parameters.Add("@parentPhoneNumber", SqlDbType.NVarChar).Value = request.ParentPhoneNumber;
             command.Parameters.Add("@parentName", SqlDbType.NVarChar).Value = request.ParentName;
-            command.Parameters.Add("@childName", SqlDbType.NVarChar).Value = request.ChildName;
-            command.Parameters.Add("@childBirthDate", SqlDbType.DateTime2).Value = request.ChildBirthDate;
+            command.Parameters.Add("@ageGroup", SqlDbType.Int).Value = request.Group;
             command.Parameters.Add("@fromKindergardenId", SqlDbType.Int).Value = request.FromKindergardenId;
             command.Parameters.Add("@submittedAt", SqlDbType.DateTime2).Value = request.SubmittedAt;
             command.Parameters.Add("@matchId", SqlDbType.Int).Value = matchId;
@@ -134,8 +133,7 @@ namespace Persistence.Repositories
                 ParentEmail = request.ParentEmail,
                 ParentName = request.ParentName,
                 ParentPhoneNumber = request.ParentPhoneNumber,
-                ChildName = request.ChildName,
-                ChildBirthDate = request.ChildBirthDate,
+                Group = request.Group,
                 SubmittedAt = request.SubmittedAt,
                 FromKindergardenId = request.FromKindergardenId,
                 KindergardenWishIds = GetMatchedWishes(request.Id)
@@ -204,8 +202,7 @@ namespace Persistence.Repositories
                 int submittedAtOrd = reader.GetOrdinal("submitted_at");
                 int parentEmailOrd = reader.GetOrdinal("email");
                 int parentNameOrd = reader.GetOrdinal("parent_name");
-                int parentPhoneNumberOrd = reader.GetOrdinal("phone_number");
-                int childNameOrd = reader.GetOrdinal("child_name");
+                int ageGroup = reader.GetOrdinal("age_group");
                 int childBirthDateOrd = reader.GetOrdinal("child_birth_date");
                 int fromKindergardenIdOrd = reader.GetOrdinal("from_kindergarden_id");
                 int matchId = reader.GetOrdinal("match_id");
@@ -219,8 +216,7 @@ namespace Persistence.Repositories
                     SubmittedAt = reader.GetDateTime(submittedAtOrd),
                     ParentEmail = reader.GetString(parentEmailOrd),
                     ParentName = reader.GetString(parentNameOrd),
-                    ParentPhoneNumber = reader.GetString(parentPhoneNumberOrd),
-                    ChildName = reader.GetString(childNameOrd),
+                    Group = (AgeGroup)reader.GetInt32(ageGroup),
                     FromKindergardenId = reader.GetInt32(fromKindergardenIdOrd),
                     KindergardenWishIds = kindergardenWishIds,
                     MatchId = reader.GetInt32(matchId)

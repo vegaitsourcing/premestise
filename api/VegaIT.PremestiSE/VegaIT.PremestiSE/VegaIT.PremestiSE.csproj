@@ -10,7 +10,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
     <PackageReference Include="xunit" Version="2.4.1" />
   </ItemGroup>
 
@@ -25,11 +25,9 @@
     <Message Text="$(MSBuildProjectDirectory)" Importance="high" />
     
     <ItemGroup>
-      <SourceFiles Include="$(SolutionDir)..\..\website\dist\**\*.*"/>
+      <SourceFiles Include="$(SolutionDir)..\..\website\dist\**\*.*" />
     </ItemGroup>
-    <Copy 
-      SourceFiles="@(SourceFiles)"
-      DestinationFolder="$(SolutionDir)VegaIT.PremestiSE\wwwroot\%(RecursiveDir)" />
+    <Copy SourceFiles="@(SourceFiles)" DestinationFolder="$(SolutionDir)VegaIT.PremestiSE\wwwroot\%(RecursiveDir)" />
   </Target>
 
 

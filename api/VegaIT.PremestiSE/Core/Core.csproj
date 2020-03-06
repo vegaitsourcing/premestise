@@ -9,6 +9,7 @@
     <ProjectReference Include="..\Core.Interfaces\Core.Interfaces.csproj" />
     <ProjectReference Include="..\Persistence.Interfaces\Persistence.Interfaces.csproj" />
     <ProjectReference Include="..\Persistence\Persistence.csproj" />
+    <ProjectReference Include="..\Util\Util.csproj" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.0.0" />
   </ItemGroup>
 

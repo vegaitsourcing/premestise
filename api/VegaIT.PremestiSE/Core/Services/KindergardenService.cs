@@ -28,6 +28,18 @@ namespace Core.Services
             return kindergardens;
         }
 
+        public IEnumerable<string> GetAllKindergardenCities()
+        {
+            return _kindergardenRepository.GetAllCities();
+        }
+
+        public IEnumerable<KindergardenDto> GetKindergardensByCity(string city)
+        {
+            KindergardenMapper kindergardenMapper = new KindergardenMapper();
+            return _kindergardenRepository.GetKindergardensByCity(city)
+                                          .Select(kindergardenMapper.DtoFromEntity);
+        }
+
         public IEnumerable<KindergardenDto> GetToKindergardens(int requestId)
         {
             KindergardenMapper kindergardenMapper = new KindergardenMapper();

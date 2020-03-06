@@ -5,6 +5,8 @@ using Persistence.Interfaces.Entites;
 using System.Collections.Generic;
 using System.Linq;
 using Core.Services.Mappers;
+using Core.Interfaces.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace Core.Services
 {
@@ -15,14 +17,16 @@ namespace Core.Services
         private readonly IMatchedRequestRepository _matchedRequestRepository;
         private readonly IMailClient _mailClient;
         private readonly IKindergardenRepository _kindergardenRepository;
+        private readonly int _chainLength;
 
-        public MatchService(IMatchRepository matchRepository, IPendingRequestRepository pendingRequestRepository, IMatchedRequestRepository matchedRequestRepository, IMailClient mailClient, IKindergardenRepository kindergardenRepository)
+        public MatchService(IMatchRepository matchRepository, IPendingRequestRepository pendingRequestRepository, IMatchedRequestRepository matchedRequestRepository, IMailClient mailClient, IKindergardenRepository kindergardenRepository, IConfiguration config)
         {
             _matchRepository = matchRepository;
             _pendingRequestRepository = pendingRequestRepository;
             _matchedRequestRepository = matchedRequestRepository;
             _mailClient = mailClient;
             _kindergardenRepository = kindergardenRepository;
+            _chainLength = int.Parse(config.GetSection("chainLength").Value);
         }
 
         public int GetTotalCount()
@@ -33,42 +37,214 @@ namespace Core.Services
             // Zato sam stavio OR
             return _matchRepository.GetAll().Count(m => m.Status == Status.Success || m.Status == Status.Matched);
         }
-
-        public void TryMatch(int id) 
+        public void TryMatch(int id)
         {
+
+            //get all pending requests with verified status
+            IEnumerable<PendingRequest> allPending = _pendingRequestRepository.GetAllVerified();
+            //incoming request
             PendingRequest incomingRequest = _pendingRequestRepository.Get(id);
             _pendingRequestRepository.Verify(id);
 
-            PendingRequest match = FindBestMatch(incomingRequest);
 
-            if (match == null) return;
 
-            Match addedMatch = _matchRepository.Create();
+            //Potential ways of starting a chain
+            IEnumerable<PendingRequest> potentials =
+                allPending.Where(pending => pending.KindergardenWishIds.First() == incomingRequest.FromKindergardenId &&
+                                            pending.Group == incomingRequest.Group);
+            
 
-            _pendingRequestRepository.Delete(incomingRequest.Id);
-            MatchedRequest firstMatchedRequest = _matchedRequestRepository.Create(incomingRequest, addedMatch.Id);
+            int len = potentials.Count();
+            //ukoliko nema zahteva koji se moze nakaciti na dolazeci zahtev znaci da nisu ispunjeni uslovi za otpocinjanje kreiranja lanca
+            if (potentials.Count() == 0)
+                return;
+            
 
-            _pendingRequestRepository.Delete(match.Id);
-            MatchedRequest secondMatchedRequest = _matchedRequestRepository.Create(match, addedMatch.Id);
+            //initial chains
+            List< List<PendingRequest> > chains = new List< List<PendingRequest> >(potentials.Count());
+            for (var i = 0; i < potentials.Count(); i++)
+            {
+                chains.Add(new List<PendingRequest>());
+                chains.ElementAt(i).Add(incomingRequest); //incoming ide na prvo mesto
+                chains.ElementAt(i).Add(potentials.ElementAt(i)); //prvi vezivni na drugo
+                
+            }
 
+            //if initial two chain elements can meet ends then it is over send them emails
+            foreach(List<PendingRequest> chain in chains)
+            {
+                //trenutno imamo samo dva elementa u lancu proveravamo da li je pun krug ranga 2
+                if (chain.First().KindergardenWishIds.First() == chain.Last().FromKindergardenId)
+                {
+                    sendRotationalMatchEmails(chain);
+                }
+                else
+                {
+                    PopulateChain(allPending, chain, _chainLength);
+                } 
+            }                             
+
+            //if chain elements len greater than 2 and chain ends can meet send emails to chain participants
+            foreach (List<PendingRequest> chain in chains)
+            {
+                if(chain.Count() > 2 &&
+                    chain.First().KindergardenWishIds.First() ==
+                    chain.Last().FromKindergardenId)
+                sendRotationalMatchEmails(chain);
+                    //mail table
+            }
+
+        }
+
+        private void PopulateChain(IEnumerable<PendingRequest> allPending, List<PendingRequest> toPopulateChain, int maxChainLength)
+        {
+            //returns if chain's elements count is less-equal than max chain size and if ends can meet function exits
+            if (toPopulateChain.Count() <= maxChainLength &&
+                toPopulateChain.Last().FromKindergardenId ==
+                toPopulateChain.First().KindergardenWishIds.First())
+                return;
+
+            //returns if there is no elements to add to the chain therefore ends can not meet
+            PendingRequest newChainElement = allPending.Where(
+                pending => pending.KindergardenWishIds.First() == toPopulateChain.Last().FromKindergardenId &&
+                           pending.Group == toPopulateChain.Last().Group)
+                          .FirstOrDefault();
+
+            //if no more elements for this chain found function returns
+            if (newChainElement == null)
+                return;
+
+            //if there are elements we can add to the chain we add it to the chain and call same function again
+            toPopulateChain.Add(newChainElement);
+            PopulateChain(allPending, toPopulateChain, maxChainLength);
+
+        }
+
+
+        private void sendRotationalMatchEmails(IEnumerable<PendingRequest> validChain)
+        {
+            Match addedMatch = null;
+            MatchedRequest firstMatchedRequest = null;
+            MatchedRequest secondMatchedRequest = null;
+            PendingRequest currentPending = null;
+            PendingRequest incomingRequest = validChain.Last();
             var requestMapper = new RequestMapper();
             var kindergardenMapper = new KindergardenMapper();
-            var fromKindergarden =
-                kindergardenMapper.DtoFromEntity(
-                    _kindergardenRepository.GetById(firstMatchedRequest.FromKindergardenId));
-            var toKindergarden = kindergardenMapper.DtoFromEntity(
-                _kindergardenRepository.GetById(secondMatchedRequest.FromKindergardenId));
+            KindergardenDto fromKindergarden = null;
+            KindergardenDto toKindergarden = null;
+            RequestDto firstMatchDto = null;
+            RequestDto secondMatchDto = null;
+            var chainLength = validChain.Count();
 
-            var firstMatchDto = requestMapper.DtoFromEntity(firstMatchedRequest);
-            var secondMatchDto = requestMapper.DtoFromEntity(secondMatchedRequest);
+            if (chainLength == 2)
+            {
+
+                addedMatch = _matchRepository.Create();
+                firstMatchedRequest = _matchedRequestRepository.Create(validChain.ElementAt(1), addedMatch.Id);
+                secondMatchedRequest = _matchedRequestRepository.Create(validChain.ElementAt(0), addedMatch.Id);
+                fromKindergarden =
+                   kindergardenMapper.DtoFromEntity(
+                       _kindergardenRepository.GetById(firstMatchedRequest.FromKindergardenId));
+                toKindergarden = kindergardenMapper.DtoFromEntity(
+                   _kindergardenRepository.GetById(secondMatchedRequest.FromKindergardenId));
+
+                firstMatchDto = requestMapper.DtoFromEntity(firstMatchedRequest);
+                secondMatchDto = requestMapper.DtoFromEntity(secondMatchedRequest);
+
+
+                _mailClient.SendFoundMatchMessage(firstMatchDto,
+                                                secondMatchDto,
+                                                fromKindergarden,
+                                                toKindergarden);
+
+                return;
+                
+            }
+
+            for (var i = 0; i < chainLength; i++)
+            {
+
+                currentPending = validChain.ElementAt(i);
+                addedMatch = _matchRepository.Create();
+                if (i == 0)
+                {
+                    //sused desno
+                        //pod jednim match okriljem dva susedna
+                    firstMatchedRequest = _matchedRequestRepository.Create(validChain.ElementAt(1), addedMatch.Id);
+                    secondMatchedRequest = _matchedRequestRepository.Create(validChain.ElementAt(0), addedMatch.Id);
+                     fromKindergarden =
+                        kindergardenMapper.DtoFromEntity(
+                            _kindergardenRepository.GetById(firstMatchedRequest.FromKindergardenId));
+                     toKindergarden = kindergardenMapper.DtoFromEntity(
+                        _kindergardenRepository.GetById(secondMatchedRequest.FromKindergardenId));
+
+                     firstMatchDto = requestMapper.DtoFromEntity(firstMatchedRequest);
+                     secondMatchDto = requestMapper.DtoFromEntity(secondMatchedRequest);
+
+
+                    _mailClient.SendFoundMatchMessage(firstMatchDto,
+                                                    secondMatchDto,
+                                                    fromKindergarden,
+                                                    toKindergarden);
 
 
 
-            _mailClient.SendFoundMatchMessage(firstMatchDto,
-                                            secondMatchDto,
-                                            fromKindergarden,
-                                            toKindergarden);
+                }
+
+                if (i != 0 && i != validChain.Count() - 1)
+                {
+                    //sused desno
+                    firstMatchedRequest = _matchedRequestRepository.Create(validChain.ElementAt(i + 1), addedMatch.Id);
+                    secondMatchedRequest = _matchedRequestRepository.Create(validChain.ElementAt(i), addedMatch.Id);
+                    fromKindergarden =
+                       kindergardenMapper.DtoFromEntity(
+                           _kindergardenRepository.GetById(firstMatchedRequest.FromKindergardenId));
+                    toKindergarden = kindergardenMapper.DtoFromEntity(
+       _kindergardenRepository.GetById(secondMatchedRequest.FromKindergardenId));
+
+                    firstMatchDto = requestMapper.DtoFromEntity(firstMatchedRequest);
+                    secondMatchDto = requestMapper.DtoFromEntity(secondMatchedRequest);
+
+
+                    _mailClient.SendFoundMatchMessage(firstMatchDto,
+                                                    secondMatchDto,
+                                                    fromKindergarden,
+                                                    toKindergarden);
+
+
+                }
+
+                if (i == validChain.Count() - 1)
+                {
+                    firstMatchedRequest = _matchedRequestRepository.Create(validChain.First(), addedMatch.Id);
+                    secondMatchedRequest = _matchedRequestRepository.Create(validChain.ElementAt(i), addedMatch.Id);
+                    fromKindergarden =
+                       kindergardenMapper.DtoFromEntity(
+                           _kindergardenRepository.GetById(firstMatchedRequest.FromKindergardenId));
+                    toKindergarden = kindergardenMapper.DtoFromEntity(
+       _kindergardenRepository.GetById(secondMatchedRequest.FromKindergardenId));
+
+                    firstMatchDto = requestMapper.DtoFromEntity(firstMatchedRequest);
+                    secondMatchDto = requestMapper.DtoFromEntity(secondMatchedRequest);
+
+
+                    _mailClient.SendFoundMatchMessage(firstMatchDto,
+                                                    secondMatchDto,
+                                                    fromKindergarden,
+                                                    toKindergarden);
+                }
+
+            }
+
+            foreach (PendingRequest request in validChain)
+            {
+                _pendingRequestRepository.Delete(request.Id);
+            }
+
         }
+
+        //try to populate chain and make ends meet
+
 
         private PendingRequest FindBestMatch(PendingRequest request)
         {

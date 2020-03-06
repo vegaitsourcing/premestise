@@ -8,5 +8,7 @@ namespace Persistence.Interfaces.Contracts
         Kindergarden GetById(int id);
         List<Kindergarden> GetAll();
         List<Kindergarden> GetToByRequestId(int id);
+        List<string> GetAllCities();
+        List<Kindergarden> GetKindergardensByCity(string city);
     }
 }
