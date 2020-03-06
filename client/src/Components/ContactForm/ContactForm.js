@@ -11,7 +11,9 @@ class ContactForm extends Component {
     email: "",
     message: "",
     emailErrorExists: true,
-    messageErrorExists: true
+    messageErrorExists: true,
+    privacyContactFormCheckbox: false,
+    privacyContactFormErrorMessage: null,
   };
 
   handleSubmitData = event => {
@@ -20,6 +22,14 @@ class ContactForm extends Component {
       email: this.state.email,
       message: this.state.message
     };
+
+    if (this.state.privacyContactFormCheckbox === false) {
+      this.setState({
+        privacyContactFormErrorMessage: "Obavezno prihvatiti politiku privatnosti!",
+        validationErrorExists: true
+      });
+    }
+
 
     if (form.email === "") {
       this.setState({ emailErrorMessage: "Obavezno uneti e-mail adresu!" });
@@ -53,6 +63,21 @@ class ContactForm extends Component {
         email: emailAddress,
         emailErrorExists: false
       });
+    }
+  };
+
+  handlePrivacyContactFormChange = event => {
+    if (event.target.checked === true) {
+      this.setState({
+        privacyContactFormCheckbox: true,
+        privacyContactFormErrorMessage: null
+      });
+      
+    } else {
+     
+      this.setState({
+        privacyContactFormCheckbox: false,
+         privacyContactFormErrorMessage: "Obavezno prihvatiti politiku privatnosti!" });
     }
   };
 
@@ -128,10 +153,19 @@ class ContactForm extends Component {
             {formDescription}
             </span>
             <div class="contact-us__send">
-              <a href="javascript:;" class="contact-us__facebook">
-                {messageSocial}
-                <span class="font-ico-facebook"></span>
-              </a>
+            <div  >
+               <label for="privacy" className="contact-us__text noMarginLeft">
+               <input type="checkbox" name="privacy" className="checkBoxMiddleAlign"
+                 checked={this.state.privacyContactFormCheckbox}
+                  onClick={this.handlePrivacyContactFormChange}/>
+                 &nbsp; Prihvatam politiku privatnosti</label>
+                <div>
+                <span className="errorMessageContactForm" >
+                  {this.state.privacyContactFormErrorMessage}
+                </span>
+                </div>
+              </div>
+ 
               <Link to="/contact" onClick={this.handleSubmitData}>
     <button class="contact-us__btn btn js-submit">{sendButtonText}</button>
               </Link>

@@ -20,7 +20,8 @@ const initState = {
   prePopulatedId: null,
   matchedCount: 0,
   allWishes: [],
-  allWishesForMap: []
+  allWishesForMap: [],
+  cities: []
 };
 
 const calculateAge = birthDate =>
@@ -168,6 +169,20 @@ const rootReducer = (state = initState, action) => {
     return {
       ...state,
       currentNavTab: 2
+    };
+  }
+
+  if (action.type === reducerActions.GET_CITIES) {
+    return {
+      ...state,
+      cities: action.payload
+    };
+  }
+
+  if (action.type === reducerActions.GET_KINDERS_BY_CITY) {
+    return {
+      ...state,
+      kindergardens: action.payload
     };
   }
 

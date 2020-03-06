@@ -7,13 +7,14 @@ import { connect } from "react-redux";
 
 class EmailConfirm extends Component {
   componentDidMount() {
-    const queryId = queryString.parse(window.location.search)["?id"];
+    const queryId = queryString.parse(window.location.search)["?id"]; 
+    //const queryId = window.location.hash.split('?id=')[1]; 
     this.props.confirmEmail(queryId);
   }
 
   render() {
     const emailConfirmed = this.props.emailConfirmed;
-    const successMessage = "Podacu su uspesno razmenjeni, srecan premestaj zeli Vam ekipa Premesti.se.";
+    const successMessage = "Ovim potvrđivanjem otpočinjete poces dogovaranja, srećan premeštaj želi Vam ekipa Premesti.se.";
     const waitingMessage = "Potvrda podudaranja u toku.";
     
     return (

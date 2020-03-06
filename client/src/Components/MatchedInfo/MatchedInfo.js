@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 class MatchedInfo extends Component {
   componentDidMount() {
-    this.props.getMatchedCount();
+    //this.props.getMatchedCount();
   }
 
   render() {
@@ -15,19 +15,19 @@ class MatchedInfo extends Component {
         <div class="success-banner__wrap wrap">
           <div class="success-banner__container">
             <span class="succeess-banner__number">
-              {this.props.matchedCount}
+            
             </span>
-            <span class="font-ico-circle"></span>
+            
           </div>
           <p class="succeess-banner__paragraf">
-            {matchedCount}
+          <hr/>
           </p>
         </div>
       </div>
     );
   }
 }
-
+/*
 const mapStateToProps = state => {
   return {
     matchedCount: state.matchedCount
@@ -41,5 +41,5 @@ const mapDispatchToProps = dispatch => {
     }
   };
 };
-
-export default connect(mapStateToProps, mapDispatchToProps)(MatchedInfo);
+*/
+export default MatchedInfo;// connect(mapStateToProps, mapDispatchToProps)();

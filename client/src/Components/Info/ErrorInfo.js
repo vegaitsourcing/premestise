@@ -1,5 +1,6 @@
+import {ReloadPreviousPage} from '../../Actions/ContactFormActions/ContactFormActions';
+
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 
 class ErrorInfo extends Component {
   render() {
@@ -14,7 +15,7 @@ class ErrorInfo extends Component {
             <div class="info-wrap__content">
               <h2>{ headerMessage }</h2>
               <p>{ mainMessage }</p>
-              <Link to="/">{ goHomeMessage }</Link>
+              <a onClick={ReloadPreviousPage}  href="#">{ goHomeMessage }</a>
             </div>
           </div>
         </div>

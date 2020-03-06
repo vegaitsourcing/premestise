@@ -1,5 +1,6 @@
+import {ReloadPreviousPage} from '../../Actions/ContactFormActions/ContactFormActions';
+
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
 
 class InfoPage extends Component {
   render() {
@@ -13,7 +14,7 @@ class InfoPage extends Component {
             <div class="info-wrap__content">
               <h2>{ headerMessage }</h2>
               <p>{ this.props.description }</p>
-              <Link to="/">{ goHomeMessage }</Link>
+              <a onClick={ReloadPreviousPage}  href="#">{ goHomeMessage }</a>
             </div>
           </div>
         </div>

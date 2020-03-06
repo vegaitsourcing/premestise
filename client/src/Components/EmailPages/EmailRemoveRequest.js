@@ -8,12 +8,13 @@ import { connect } from "react-redux";
 class EmailRemoveRequest extends Component {
   componentDidMount() {
     const queryId = queryString.parse(window.location.search)["?id"];
+    //const queryId = window.location.hash.split('?id=')[1]; 
     this.props.removeRequestEmail(queryId);
   }
 
   render() {
     const emailRemoved = this.props.removeRequestConfirmed;
-    const successMessage = "Uspesno uklonjen zahtev iz sistema usled neispravnih podataka, pokusajte ponovo... ";
+    const successMessage = "Uspešno uklonjen zahtev iz sistema usled neispravnih podataka, pokušajte ponovo... ";
     const waitingMessage = "Uklanjanje u toku...";
 
     return (

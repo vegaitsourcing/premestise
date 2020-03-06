@@ -20,7 +20,7 @@ class AllWishes extends Component {
 
     return (
       <div id="tab-3" className="tab-content current">
-        <h2 className="tab-title">Sve zelje</h2>
+        <h2 className="tab-title">Sve želje</h2>
 
         <ChildAgeFilter selectedAge={selectedAge} />
         <div className="tab-wizard">

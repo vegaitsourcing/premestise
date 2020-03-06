@@ -1,4 +1,5 @@
 import { GetAllWishes } from "../../Actions/NavActions/AllWishesActions";
+import ChildAgeNumberFilter from "./ChildAgeNumberFilter";
 
 import React, { Component } from "react";
 import { connect } from "react-redux";
@@ -18,7 +19,7 @@ class ChildAgeFilter extends Component {
     let filterNumbers = [];
     for (let i = 1; i <= maximumAgeFilter; i++) {
       filterNumbers.push(
-
+        <ChildAgeNumberFilter pageNumber={i} filterByAgeHandler={this.filterByAge} selectedAge={this.props.selectedAge}/>
       );
     }
     return <ul>{filterNumbers}</ul>;

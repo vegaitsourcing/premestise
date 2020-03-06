@@ -12,3 +12,9 @@ export const SendForm = form => {
       .catch(error => (window.location.href = "/error"));
   };
 };
+
+
+export const ReloadPreviousPage = (e) => {
+  e.preventDefault()
+  window.location.replace(document.referrer)
+};

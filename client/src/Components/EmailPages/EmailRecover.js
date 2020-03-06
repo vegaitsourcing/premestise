@@ -8,13 +8,14 @@ import { connect } from "react-redux";
 class EmailRecover extends Component {
   componentDidMount() {
     const queryId = queryString.parse(window.location.search)["?id"];
+    //const queryId = window.location.hash.split('?id=')[1]; 
     this.props.recoverEmail(queryId);
   }
 
   render() {
     const emailRecovered = this.props.emailRecovered;
-    const successMessage = "Uspesno ste vraceni u sistem posto dogovor nije postignut, srecno u daljem traganju...";
-    const waitingMessage = "Vracanje u sistem, pricekajte momenat...";
+    const successMessage = "Uspešno ste vraćeni u sistem posto dogovor nije postignut, srećno u daljem traganju...";
+    const waitingMessage = "Vraćanje u sistem, pričekajte momenat...";
 
     return (
       <div>

@@ -4,13 +4,21 @@
   padding-top: 32px;
 }
 
+.inline_block {
+  display: inline-block;
+}
+
 .inputSpanGlobalWrapper {
   width: 100%;
+}
+.checkBoxMiddleAlign
+{
+    vertical-align:middle;
 }
 
 .inputSpanWrapperPhone {
   display: inline-block;
-  width: 48%;
+  width: 100%;
 }
 
 .inputSpanWrapperDate {
@@ -22,10 +30,17 @@
 
 .input__phone {
   max-width: 100%;
+  width: 100%;
 }
 
 .input__date {
   width: 100%;
+}
+.noMarginLeft{
+  margin-left: 0;
+}
+.mainPrivacyPolicyCheckBox {
+  margin-top: 25px;
 }
 
 .banner {
@@ -34,6 +49,7 @@
 
 .errorMessageMainForm {
   color: red;
+ 
 }
 
 .errorMessageContactForm {

@@ -1,6 +1,8 @@
 import {
   GetAllKindergardens,
-  NewMoveRequest
+  NewMoveRequest,
+  GetCities,
+  GetKindergardensByCity
 } from "../../Actions/NavActions/MoveRequestActions";
 
 import React, { Component } from "react";
@@ -9,23 +11,31 @@ import { connect } from "react-redux";
 
 class MoveRequestForm extends Component {
   state = {
+    privacyMainFormCheckbox: false,
+    privacyMainFormErrorMessage: null,
+    
+
+
+    groupErrorMessage: null,
+    cityErrorMessage: null,
     parentNameErrorMessage: null,
-    childNameErrorMessage: null,
     emailErrorMessage: null,
     phoneErrorMessage: null,
-    childBirthErrorMessage: null,
     fromKindergardenErrorMessage: null,
     toKindergardenErrorMessage: null,
     validationErrorExists: true,
     ParentNameSurname: "",
-    ChildName: "",
     Email: "",
     PhoneNumber: "",
     ChildBirthDate: null,
+    City: null,
+    Group: null,
     MoveFromLocationId: null,
     MoveToLocationId1: null,
     MoveToLocationId2: null,
-    MoveToLocationId3: null
+    MoveToLocationId3: null,
+    ageGroups:[],
+
   };
 
   handleSubmitData = event => {
@@ -43,11 +53,20 @@ class MoveRequestForm extends Component {
       ParentName: this.state.ParentNameSurname,
       Email: this.state.Email,
       PhoneNumber: this.state.PhoneNumber,
-      ChildName: this.state.ChildName,
-      ChildBirthDate: this.state.ChildBirthDate,
+      City: this.state.City,
+      Group: this.state.Group,
       FromKindergardenId: this.state.MoveFromLocationId,
-      ToKindergardenIds: toKindergardenIds
+      ToKindergardenIds: toKindergardenIds,
+      ChildBirthDate: new Date(),
+      ChildName: 'None'
     };
+
+    if (this.state.privacyMainFormCheckbox === false) {
+      this.setState({
+        privacyMainFormErrorMessage: "Obavezno prihvatiti politiku privatnosti!",
+        validationErrorExists: true
+      });
+    }
 
     if (form.ParentName === "") {
       this.setState({
@@ -70,18 +89,22 @@ class MoveRequestForm extends Component {
       });
     }
 
-    if (form.ChildName === "") {
+
+    if (form.City === null) {
       this.setState({
-        childNameErrorMessage: "Obavezno uneti ime deteta!",
+        cityErrorMessage: "Obavezno odabrati grad relokacije!",
         validationErrorExists: true
       });
     }
-    if (form.ChildBirthDate === null) {
+
+    if (form.Group === null) {
       this.setState({
-        childBirthErrorMessage: "Obavezno uneti datum rođenja deteta!",
+        groupErrorMessage: "Obavezno odabrati grupu!",
         validationErrorExists: true
       });
     }
+
+
     if (form.FromKindergardenId === null) {
       this.setState({
         fromKindergardenErrorMessage: "Obavezno mesto relokacije!",
@@ -92,30 +115,29 @@ class MoveRequestForm extends Component {
     if (form.ToKindergardenIds.length === 0) {
       this.setState({
         toKindergardenErrorMessage:
-          "Obavezno odabrati bar jednu želju za premestaj!",
+          "Obavezno odabrati želju za premestaj!",
         validationErrorExists: true
       });
     }
 
-    if (this.checkIfHasErrors()) {
+    if (this.checkIfNotHasErrors()) {
       this.props.newMoveRequest(form);
     }
   };
 
-  checkIfHasErrors = () => {
+  checkIfNotHasErrors = () => {
     if (
-      !(
-        this.state.childNameErrorMessage ||
-        this.state.parentNameErrorMessage ||
-        this.state.emailErrorMessage ||
-        this.state.phoneErrorMessage ||
-        this.state.ChildBirthDate ||
-        this.state.fromKindergardenErrorMessage ||
-        this.state.toKindergardenErrorMessage
-      )
-    ) return false;
+        !this.state.groupErrorMessage &&
+        !this.state.cityErrorMessage &&
+        !this.state.parentNameErrorMessage &&
+        !this.state.emailErrorMessage &&
+        !this.state.phoneErrorMessage &&
+        !this.state.fromKindergardenErrorMessage &&
+        !this.state.toKindergardenErrorMessage &&
+        !this.state.privacyMainFormErrorMessage
+    ) return true;
 
-    return true;
+    return false;
 
   };
 
@@ -134,20 +156,6 @@ class MoveRequestForm extends Component {
     }
   };
 
-  handleChildNameChange = event => {
-    event.preventDefault();
-    if (event.target.value !== "") {
-      this.setState({
-        ChildName: event.target.value,
-        childNameErrorMessage: null
-      });
-    } else {
-      this.setState({
-        childNameErrorMessage: "Obavezno uneti ime deteta!",
-        ChildName: ""
-      });
-    }
-  };
 
   emailFormatValidation = (emailAddress) => {
     const mailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -195,25 +203,53 @@ class MoveRequestForm extends Component {
     }
   };
 
-  handleChildBirthDateChange = event => {
-    event.preventDefault();
-    console.log(event.target.value);
-    if (event.target.value !== null || event.target.value !== undefined) {
+  handlePrivacyMainFormChange = event => {
+    if (event.target.checked === true) {
       this.setState({
-        ChildBirthDate: event.target.value,
-        childBirthErrorMessage: null
+        privacyMainFormCheckbox: true,
+        privacyMainFormErrorMessage: null
       });
+      
     } else {
+     
       this.setState({
-        ChildBirthDate: null,
-        childBirthErrorMessage: "Obavezno uneti datum rođenja deteta!"
-      });
+        privacyMainFormCheckbox: false,
+         privacyMainFormErrorMessage: "Obavezno prihvatiti politiku privatnosti!" });
     }
   };
 
+
+
+  handleCityChange = event => {
+    event.preventDefault();
+
+    if (event.target.value !== null) {
+      this.setState({
+        City: event.target.value,
+        cityErrorMessage: null
+      });
+      this.props.getKindergardensByCity(event.target.value)
+    } else {
+      this.setState({ City: null });
+    }
+  };
+
+  handleGroupChange = event => {
+    event.preventDefault();
+
+    if (event.target.value !== null) {
+      this.setState({
+        Group: event.target.value,
+        groupErrorMessage: null
+      });
+    } else {
+      this.setState({ Group: null });
+    }
+  };
+
+
   handleMoveFromLocationIdChange = event => {
     event.preventDefault();
-    console.log(event.target.value);
     if (event.target.value !== null) {
       this.setState({
         MoveFromLocationId: event.target.value,
@@ -269,20 +305,60 @@ class MoveRequestForm extends Component {
   };
 
   componentDidMount() {
-    this.props.getAllKindergardens();
+    this.generateAgeGroups()
+    this.props.getCities();
     if (this.props.prePopulatedId != null) {
       this.setState({ toKindergardenErrorMessage: null });
       this.state.MoveToLocationId1 = this.props.prePopulatedId;
     }
   }
 
+  generateAgeGroups() {
+    let currentYear = new Date().getFullYear()
+    let groups = [
+      {
+        id: 1,
+        text: 'Rođeni 01.03.'+(currentYear-1)+'-28.02.'+(currentYear)+' Bebe grupa'
+      },
+      {
+        id: 2,
+        text: 'Rođeni 01.03.'+(currentYear-2)+'-28.02.'+(currentYear-1)+' Mlađa jaslena grupa'
+      },
+      {
+        id: 3,
+        text: 'Rođeni 01.03.'+(currentYear-3)+'-28.02.'+(currentYear-2)+' Starija jaslena grupa'
+      },
+      {
+        id: 4,
+        text: 'Rođeni 01.03.'+(currentYear-4)+'-28.02.'+(currentYear-3)+' Mlađa grupa'
+      },
+      {
+        id: 5,
+        text: 'Rođeni 01.03.'+(currentYear-5)+'-28.02.'+(currentYear-4)+' Srednja grupa'
+      },
+      {
+        id: 6,
+        text: 'Rođeni 01.03.'+(currentYear-6)+'-28.02.'+(currentYear-5)+' Starija grupa'
+      },
+      {
+        id: 7,
+        text: 'Rođeni 01.03.'+(currentYear-7)+'-28.02.'+(currentYear-6)+' Predškolska grupa'
+      }
+    ]
+    this.setState({
+      ageGroups: groups
+    })
+
+  }
+
   render() {
     const {
       ParentNameSurname,
-      ChildName,
       Email,
       PhoneNumber,
       ChildBirthDate,
+      City,
+      Group,
       MoveFromLocationId,
       MoveToLocationId1,
       MoveToLocationId2,
@@ -290,17 +366,18 @@ class MoveRequestForm extends Component {
     } = this.state;
     const fromKindergardenId = this.props.fromKindergardenId;
 
-    const whereToMove = "Gde zelis da se premestis?"
+    const whereToMove = "Gde želis da se premestiš?"
     const parentNamePlaceholderText = "Ime i prezime roditelja *";
-    const childNamePlaceHolderText = "Ime deteta *";
     const emailPlaceholderText = "Email *";
     const phonePlaceholderText = "Broj telefona *";
     const birthdatePlaceholderText = "Datum rođenja deteta";
-    const locationToFirstWishText = "1. Lokacija na koju želiš da se premestiš?";
+    const cityPlaceholderText = "Grad *";
+    const groupPlaceholderText = "Odabrati grupu *";
+    const locationToFirstWishText = "Lokacija na koju želiš da se premestiš?";
     const locationToSecondWishText = "2. Lokacija na koju želiš da se premestiš?";
     const locationToThirdWishText = "3. Lokacija na koju želiš da se premestiš?";
     const chooseCurrentLocationText = "Izaberi trenutnu lokaciju";
-    const messengerLinkText = "Pišite name";
+    const messengerLinkText = "Pišite nam";
     const facebookLinkText = "Posetite nas";
     const submitFormButtonText = "Obavesti me"
 
@@ -321,17 +398,7 @@ class MoveRequestForm extends Component {
               <span className="errorMessageMainForm" >
                 {this.state.parentNameErrorMessage}
               </span>
-              <input
-                type="text"
-                id="newRequestChildName"
-                className="input child-input"
-                placeholder={childNamePlaceHolderText}
-                onChange={this.handleChildNameChange}
-                value={ChildName}
-              />
-              <span className="errorMessageMainForm" >
-                {this.state.childNameErrorMessage}
-              </span>
+
               <input
                 type="email"
                 id="newRequestEmail"
@@ -360,27 +427,37 @@ class MoveRequestForm extends Component {
                     </span>
                   </div>
 
-                  <div className="inputSpanWrapperDate">
-                    <input
-                      type="date"
-                      id="newRequestChildBirthDate"
-                      className="input input__date"
-                      placeholder={birthdatePlaceholderText}
-                      onChange={this.handleChildBirthDateChange}
-                      value={ChildBirthDate}
-                    />
 
-                    <span className="errorMessageMainForm" >
-                      {this.state.childBirthErrorMessage}
-                    </span>
-                  </div>
                 </div>
               </div>
+
+
+                <select
+                  id="city"
+                  onChange={this.handleCityChange}
+                  value={City}
+                >
+                  <option value="" selected disabled hidden>
+                    {cityPlaceholderText}
+                  </option>
+                  {this.props.cities.map(city => (
+                    <option value={city}>{city}</option>
+                  ))}
+                </select>
+                <span className="errorMessageMainForm" >
+                  {this.state.cityErrorMessage}
+                </span>
+             
 
               <br />
             </div>
 
             <div className="form-right">
+
+
+
+
+
               <div className="select-wrap">
                 <select
                   id="newRequestFromKindergardenSelect"
@@ -415,54 +492,46 @@ class MoveRequestForm extends Component {
                     <option value={kinder.id}>{kinder.name}</option>
                   ))}
                 </select>
-              </div>
-              <div className="select-wrap">
-                <select
-                  id="newRequestToKindergarden2Select"
-                  onChange={this.handleMoveToLocationId2Change}
-                  value={MoveToLocationId2}
-                >
-                  <option value="" selected disabled hidden>
-                    {locationToSecondWishText}
-                  </option>
-                  {this.props.allKindergardens.map(kinder => (
-                    <option value={kinder.id}>{kinder.name}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="select-wrap">
-                <select
-                  id="newRequestToKindergarden3Select"
-                  onChange={this.handleMoveToLocationId3Change}
-                  value={MoveToLocationId3}
-                >
-                  <option value="" selected disabled hidden>
-                    {locationToThirdWishText}
-                  </option>
-                  {this.props.allKindergardens.map(kinder => (
-                    <option value={kinder.id}>{kinder.name}</option>
-                  ))}
-                </select>
                 <span className="errorMessageMainForm" >
                   {this.state.toKindergardenErrorMessage}
                 </span>
               </div>
+              <select
+                  id="group"
+                  onChange={this.handleGroupChange}
+                  value={Group}
+                >
+                  <option value="" selected disabled hidden>
+                    {groupPlaceholderText}
+                  </option>
+                  {this.state.ageGroups.map(group => (
+                    <option value={group.id}>{group.text}</option>
+                  ))}
+                </select>
+                <span className="errorMessageMainForm" >
+                  {this.state.groupErrorMessage}
+                </span>
+                <div className="mainPrivacyPolicyCheckBox">
+
+                  <div className="inline_block">
+                  <label for="privacy"  >
+                    <input type="checkbox" name="privacy" className="checkBoxMiddleAlign"
+                 checked={this.state.privacyMainFormCheckbox}
+                  onClick={this.handlePrivacyMainFormChange}/>&nbsp;&nbsp;&nbsp;Prihvatam politiku privatnosti</label>
+                  </div>
+                  <div>
+                <span className="errorMessageMainForm " >
+                  {this.state.privacyMainFormErrorMessage}
+                </span>
+                </div>
+                </div>
             </div>
           </div>
 
           <div className="form-buttons">
             <div className="form-buttons__left">
               <ul className="form-social-links">
-                <li>
-                  <a className="form-link" href="javascript:void(0);">
-                    <span className="font-ico-messenger"></span> {messengerLinkText}
-                  </a>
-                </li>
-                <li>
-                  <a className="form-link" href="javascript:void(0);">
-                    <span className="font-ico-facebook"></span> {facebookLinkText}
-                  </a>
-                </li>
+
               </ul>
             </div>
 
@@ -488,14 +557,21 @@ const mapStateToProps = state => {
     currentTab: state.currentNavTab,
     allKindergardens: state.kindergardens,
     fromKindergardenId: state.fromKindergardenId,
-    prePopulatedId: state.prePopulatedId
+    prePopulatedId: state.prePopulatedId,
+    cities: state.cities
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
+    getKindergardensByCity: (city) => {
+      dispatch(GetKindergardensByCity(city))
+    },
     getAllKindergardens: () => {
       dispatch(GetAllKindergardens());
+    },
+    getCities: () => {
+      dispatch(GetCities());
     },
     newMoveRequest: formRequest => {
       dispatch(NewMoveRequest(formRequest));

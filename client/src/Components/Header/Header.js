@@ -31,7 +31,6 @@ class Header extends Component {
               <ul className="nav__list">
                 <li className="nav__item">
                   <a
-                    href="javascript:;"
                     data-section-name-link="questions"
                     className="nav__link js-scroll-to"
                   >
@@ -40,7 +39,6 @@ class Header extends Component {
                 </li>
                 <li className="nav__item">
                   <a
-                    href="javascript:;"
                     data-section-name-link="form"
                     className="nav__link js-scroll-to"
                   >
@@ -59,24 +57,8 @@ class Header extends Component {
   <span className="font-ico-map-q-pin"></span> {whereToMove}&nbsp;
                     </a>
                   </li>
-                  <li>
-                    <a
-                      className="nav__mobile-link js-scroll-to-mobile"
-                      data-section-mobile="tabs"
-                      href="javascript:;"
-                    >
-  <span className="font-ico-map-q-pin"></span> {latestWish}&nbsp;
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      className="nav__mobile-link js-scroll-to-mobile"
-                      data-section-mobile="tabs"
-                      href="javascript:;"
-                    >
-  <span className="font-ico-map-q-pin"></span>{allWishes}&nbsp;
-                    </a>
-                  </li>
+
+
                   <li>
                     <a
                       className="nav__mobile-link js-scroll-to-mobile"
@@ -95,28 +77,9 @@ class Header extends Component {
                       <span className="font-ico-map-q-pin"></span> {writeUs}&nbsp;
                     </a>
                   </li>
-                  <li>
-                    <a
-                      className="nav__mobile-link js-scroll-to-mobile"
-                      data-section-mobile=""
-                      href="javascript:;"
-                    >
-  <span className="font-ico-map-q-pin"></span> {aboutUsText}&nbsp;
-                    </a>
-                  </li>
+
                 </ul>
-                <ul className="form-social-links">
-                  <li>
-                    <a className="form-link" href="javascript:;">
-                      <span className="font-ico-messenger"></span> {writeUsViaFacebook}
-                    </a>
-                  </li>
-                  <li>
-                    <a className="form-link" href="javascript:;">
-                      <span className="font-ico-facebook"></span> {findUsOnFacebook}
-                    </a>
-                  </li>
-                </ul>
+
               </div>
             </nav>
             <div className="mobile-icon js-menu-btn">
