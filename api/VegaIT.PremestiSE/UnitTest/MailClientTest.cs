@@ -23,7 +23,7 @@ namespace UnitTest
             section.Setup(x => x.Value).Returns(ToEmail);
             var config = new Mock<IConfiguration>();
             config.Setup(x => x.GetSection(It.IsAny<string>())).Returns(section.Object);
-            _mailClient = new MailClient(factory.Object, config.Object);
+            _mailClient = new MailClient(factory.Object, config.Object, null);
         }
 
         //[Fact]

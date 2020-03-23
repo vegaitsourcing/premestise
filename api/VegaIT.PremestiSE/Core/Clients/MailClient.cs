@@ -8,6 +8,11 @@ using System.IO;
 using System.Net.Mime;
 using Util;
 using Util.Enums;
+using Persistence.Repositories;
+using Persistence.Interfaces.Contracts;
+using Core.Services.Mappers;
+using Persistence.Interfaces.Entites;
+
 namespace Core.Clients
 {
     public interface IMailClient
@@ -16,6 +21,7 @@ namespace Core.Clients
         void Send(string fromEmail, List<AlternateView> altViews);
         void SendVerificationMessage(RequestDto request, KindergardenDto fromKindergarden, IEnumerable<KindergardenDto> wishes);
         void SendFoundMatchMessage(RequestDto firstMatch, RequestDto secondMatch, KindergardenDto from, KindergardenDto to);
+        void SendCircularMatchMessage(List<MatchedRequest> validChain);
     }
 
     public class MailClient : IMailClient
@@ -25,6 +31,7 @@ namespace Core.Clients
         private readonly string _defaultEmail;
         private readonly string _environment;
         private readonly ISmtpClientFactory _smtpClientFactory;
+        private readonly IKindergardenRepository _kindergardenRepository;
 
         private const string _unmatchPageUrl = "placeholder";
         private const string _verificationPageUrl = "placeholder";
@@ -32,14 +39,16 @@ namespace Core.Clients
         private const string _confirmMatchPageUrl = "placeholder";
 
         // ovo negde u config ili nesto
+        private readonly string _circularTemplatePath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\circular.htm";
         private readonly string _verifyTemplatePath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\verify.htm";
         private readonly string _matchTemplatePath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\index.htm";
         private readonly string _bannerPath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\images\\top-banner.jpg";
         private readonly string _footerPath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\images\\logo-footer.png";
 
-        public MailClient(ISmtpClientFactory smtpClientFactory, IConfiguration config)
+        public MailClient(ISmtpClientFactory smtpClientFactory, IConfiguration config, IKindergardenRepository kindergardenRepository)
         {
             _smtpClientFactory = smtpClientFactory;
+            _kindergardenRepository = kindergardenRepository;
             _defaultEmail = config.GetSection("DefaultEmail").Value;
             _environment = config.GetSection("env").Value;
         }
@@ -174,6 +183,63 @@ namespace Core.Clients
             };
 
             return mailViews;
+        }
+
+        public void SendCircularMatchMessage(List<MatchedRequest> validChain)
+        {
+            List<Kindergarden> fromRequestsKindergardens = new List<Kindergarden>(validChain.Count);
+            //popuni listu, iz svakog zahteva iz lanca izvuci odakle se zeli premestaj sto ce biti dovoljno za email
+            foreach (MatchedRequest request in validChain)
+            {
+                fromRequestsKindergardens.Add(
+                        _kindergardenRepository.GetById(request.FromKindergardenId));
+            }
+            var groupMapper = new AgeGroupMapper();
+            string ageGroup = groupMapper.mapGroupToText(validChain[0].Group);
+
+            for (var i = 0; i < validChain.Count; i++)
+            {
+                using (StreamReader reader = new StreamReader(_circularTemplatePath))
+                {
+                    string mailText = reader.ReadToEnd();
+                   
+                    mailText = mailText.Replace("[[CHAIN_LENGTH]]", validChain.Count.ToString());
+                    mailText = mailText.Replace("[[CHILD_GROUP]]", ageGroup);
+                    mailText = mailText.Replace("[[HASHED_ID]]", HashId.Encode(validChain[i].Id));
+                    mailText = mailText.Replace("[[URL_ENV]]", _environment);
+
+                    mailText = mailText.Replace("[[PERSON_1_NAME]]", validChain[0].ParentName);
+                    mailText = mailText.Replace("[[PERSON_1_EMAIL]]", validChain[0].ParentEmail);
+                    mailText = mailText.Replace("[[PERSON_1_PHONE]]", validChain[0].ParentPhoneNumber);
+
+                    mailText = mailText.Replace("[[PERSON_2_NAME]]", validChain[1].ParentName);
+                    mailText = mailText.Replace("[[PERSON_2_EMAIL]]", validChain[1].ParentEmail);
+                    mailText = mailText.Replace("[[PERSON_2_PHONE]]", validChain[1].ParentPhoneNumber);
+
+                    mailText = mailText.Replace("[[PERSON_3_NAME]]", validChain[2].ParentName);
+                    mailText = mailText.Replace("[[PERSON_3_EMAIL]]", validChain[2].ParentEmail);
+                    mailText = mailText.Replace("[[PERSON_3_PHONE]]", validChain[2].ParentPhoneNumber);
+
+                    mailText = mailText.Replace("[[FROM_KINDERGARDEN_1]]", fromRequestsKindergardens[0].Name);
+                    mailText = mailText.Replace("[[FROM_KINDERGARDEN_2]]", fromRequestsKindergardens[1].Name);
+                    mailText = mailText.Replace("[[FROM_KINDERGARDEN_3]]", fromRequestsKindergardens[2].Name);
+
+
+                    AlternateView bannerImageAltView = new AlternateView(_bannerPath, MediaTypeNames.Image.Jpeg);
+                    AlternateView footerImageAltView = new AlternateView(_footerPath, MediaTypeNames.Image.Jpeg);
+                    bannerImageAltView.TransferEncoding = TransferEncoding.Base64;
+                    footerImageAltView.TransferEncoding = TransferEncoding.Base64;
+
+                    mailText = mailText.Replace("[[TOP_BANNER_LOGO_SRC]]", $"cid:{bannerImageAltView.ContentId}");
+                    mailText = mailText.Replace("[[FOOTER_LOGO_SRC]]", $"cid:{footerImageAltView.ContentId}");
+
+                    AlternateView messageAltView = AlternateView.CreateAlternateViewFromString(mailText, null, MediaTypeNames.Text.Html);
+
+
+                    Send(validChain[i].ParentEmail, new List<AlternateView> { messageAltView, bannerImageAltView, footerImageAltView });
+                }
+            }
+            
         }
     }
 }

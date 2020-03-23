@@ -27,7 +27,7 @@ namespace VegaIT.PremestiSE.Controllers
             {
                _matchService.TryMatch(decodedId);
             }
-            catch (SmtpException)
+            catch (SmtpException e)
             {
                 return BadRequest();
             }

@@ -203,7 +203,7 @@ namespace Persistence.Repositories
                 int parentEmailOrd = reader.GetOrdinal("email");
                 int parentNameOrd = reader.GetOrdinal("parent_name");
                 int ageGroup = reader.GetOrdinal("age_group");
-                int childBirthDateOrd = reader.GetOrdinal("child_birth_date");
+                int phoneNumberOrd = reader.GetOrdinal("phone_number");
                 int fromKindergardenIdOrd = reader.GetOrdinal("from_kindergarden_id");
                 int matchId = reader.GetOrdinal("match_id");
 
@@ -212,7 +212,8 @@ namespace Persistence.Repositories
                 return new MatchedRequest()
                 {
                     Id = reader.GetInt32(idOrd),
-                    ChildBirthDate = reader.GetDateTime(childBirthDateOrd),
+                    ParentPhoneNumber = reader.GetString(phoneNumberOrd),
+                    ChildBirthDate = new DateTime(),
                     SubmittedAt = reader.GetDateTime(submittedAtOrd),
                     ParentEmail = reader.GetString(parentEmailOrd),
                     ParentName = reader.GetString(parentNameOrd),
