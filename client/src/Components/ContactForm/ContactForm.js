@@ -1,4 +1,5 @@
 import { SendForm } from "../../Actions/ContactFormActions/ContactFormActions";
+import { PUBLIC_DOMAIN_URL } from "../../Config/config";
 
 import React, { Component } from "react";
 import { connect } from "react-redux";

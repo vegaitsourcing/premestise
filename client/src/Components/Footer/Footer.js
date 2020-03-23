@@ -1,3 +1,4 @@
+import {PUBLIC_DOMAIN_URL} from "../../Config/config"
 import React, { Component } from "react";
 
 class Footer extends Component {
@@ -40,7 +41,7 @@ class Footer extends Component {
               Premesti se 2020. All rights reserved.&nbsp;
             </span>
             |&nbsp;
-            <a href="javascript:;" className="footer__link">
+            <a href={PUBLIC_DOMAIN_URL+'/privacy'} className="footer__link">
               Privacy policy
             </a>
           </span>

@@ -4,6 +4,20 @@
   padding-top: 32px;
 }
 
+.privacyHeader {
+  color: white;
+  margin-left: 25px;
+}
+div.scrollBox {
+  
+  width: 67%;
+  height: 500px;
+  overflow: auto;
+  margin: 0 auto;
+  margin-top: 29px;
+
+}
+
 .inline_block {
   display: inline-block;
 }

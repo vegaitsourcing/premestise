@@ -7,6 +7,7 @@ import {
 
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { PUBLIC_DOMAIN_URL } from "../../Config/config";
 
 
 class MoveRequestForm extends Component {
@@ -437,7 +438,7 @@ class MoveRequestForm extends Component {
                   onChange={this.handleCityChange}
                   value={City}
                 >
-                  <option value="" selected disabled hidden>
+                  <option value="" selected  hidden>
                     {cityPlaceholderText}
                   </option>
                   {this.props.cities.map(city => (
@@ -464,7 +465,7 @@ class MoveRequestForm extends Component {
                   onChange={this.handleMoveFromLocationIdChange}
                   value={MoveFromLocationId}
                 >
-                  <option value="" selected disabled hidden>
+                  <option value="" selected  hidden>
                     {chooseCurrentLocationText}
                   </option>
                   {this.props.allKindergardens.map(kinder => (
@@ -485,7 +486,7 @@ class MoveRequestForm extends Component {
                       : MoveToLocationId1
                   }
                 >
-                  <option value="" selected disabled hidden>
+                  <option value="" selected  hidden>
                     {locationToFirstWishText}
                   </option>
                   {this.props.allKindergardens.map(kinder => (
@@ -501,7 +502,7 @@ class MoveRequestForm extends Component {
                   onChange={this.handleGroupChange}
                   value={Group}
                 >
-                  <option value="" selected disabled hidden>
+                  <option value="" selected  hidden>
                     {groupPlaceholderText}
                   </option>
                   {this.state.ageGroups.map(group => (
