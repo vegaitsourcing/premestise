@@ -41,7 +41,7 @@ namespace Core.Services
         {
 
             //get all pending requests with verified status
-            IEnumerable<PendingRequest> allPending = _pendingRequestRepository.GetAllVerified();
+            IEnumerable<PendingRequest> allPending = _pendingRequestRepository.GetAllVerified().OrderBy(pending => pending.SubmittedAt);
             //incoming request
             PendingRequest incomingRequest = _pendingRequestRepository.Get(id);
             _pendingRequestRepository.Verify(id);
@@ -61,18 +61,15 @@ namespace Core.Services
             
 
             //initial chains
-            List< List<PendingRequest> > chains = new List< List<PendingRequest> >(potentials.Count());
-            for (var i = 0; i < potentials.Count(); i++)
-            {
-                chains.Add(new List<PendingRequest>());
-                chains.ElementAt(i).Add(incomingRequest); //incoming ide na prvo mesto
-                chains.ElementAt(i).Add(potentials.ElementAt(i)); //prvi vezivni na drugo
+             List<PendingRequest>  chain = new List<PendingRequest>(1);
+
+                chain.Add(incomingRequest); //incoming ide na prvo mesto
+                chain.Add(potentials.ElementAt(0)); //prvi vezivni po starini na drugo mesto
                 
-            }
+            
 
             //if initial two chain elements can meet ends then it is over send them emails
-            foreach(List<PendingRequest> chain in chains)
-            {
+
                 //trenutno imamo samo dva elementa u lancu proveravamo da li je pun krug ranga 2
                 if (chain.First().KindergardenWishIds.First() == chain.Last().FromKindergardenId)
                 {
@@ -82,17 +79,16 @@ namespace Core.Services
                 {
                     PopulateChain(allPending, chain, _chainLength);
                 } 
-            }                             
+                                        
 
             //if chain elements len greater than 2 and chain ends can meet send emails to chain participants
-            foreach (List<PendingRequest> chain in chains)
-            {
+
                 if(chain.Count() > 2 &&
                     chain.First().KindergardenWishIds.First() ==
                     chain.Last().FromKindergardenId)
                 sendRotationalMatchEmails(chain);
                     //mail table
-            }
+            
 
         }
 

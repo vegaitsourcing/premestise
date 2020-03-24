@@ -4,8 +4,30 @@
   padding-top: 32px;
 }
 
+.privacyHeader {
+  color: white;
+  margin-left: 25px;
+}
+div.scrollBox {
+  
+  width: 67%;
+  height: 500px;
+  overflow: auto;
+  margin: 0 auto;
+  margin-top: 29px;
+
+}
+
+.inline_block {
+  display: inline-block;
+}
+
 .inputSpanGlobalWrapper {
   width: 100%;
+}
+.checkBoxMiddleAlign
+{
+    vertical-align:middle;
 }
 
 .inputSpanWrapperPhone {
@@ -28,6 +50,12 @@
 .input__date {
   width: 100%;
 }
+.noMarginLeft{
+  margin-left: 0;
+}
+.mainPrivacyPolicyCheckBox {
+  margin-top: 25px;
+}
 
 .banner {
   background-image: url(/assets/images/baby-boy-child-159533.jpg);
@@ -35,6 +63,7 @@
 
 .errorMessageMainForm {
   color: red;
+ 
 }
 
 .errorMessageContactForm {
