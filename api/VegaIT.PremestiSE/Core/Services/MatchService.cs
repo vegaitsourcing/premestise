@@ -58,37 +58,48 @@ namespace Core.Services
             //ukoliko nema zahteva koji se moze nakaciti na dolazeci zahtev znaci da nisu ispunjeni uslovi za otpocinjanje kreiranja lanca
             if (potentials.Count() == 0)
                 return;
-            
+
 
             //initial chains
-             List<PendingRequest>  chain = new List<PendingRequest>(1);
+            List<List<PendingRequest>> chains = new List<List<PendingRequest>>(potentials.Count());
 
-                chain.Add(incomingRequest); //incoming ide na prvo mesto
-                chain.Add(potentials.ElementAt(0)); //prvi vezivni po starini na drugo mesto
-                
-            
+            for (var i = 0; i < potentials.Count(); i++)
+            {
+                chains.Add(new List<PendingRequest>()); 
+                chains.ElementAt(i).Add(incomingRequest); //incoming ide na prvo mesto	
+                chains.ElementAt(i).Add(potentials.ElementAt(i)); //prvi vezivni na drugo	
+
+            }
+
+
 
             //if initial two chain elements can meet ends then it is over send them emails
-
+            foreach (List<PendingRequest> chain in chains)
+            {
                 //trenutno imamo samo dva elementa u lancu proveravamo da li je pun krug ranga 2
                 if (chain.First().KindergardenWishIds.First() == chain.Last().FromKindergardenId)
                 {
                     sendRotationalMatchEmails(chain);
+                    return;
                 }
                 else
                 {
                     PopulateChain(allPending, chain, _chainLength);
-                } 
-                                        
+                }
+            }
+
+
 
             //if chain elements len greater than 2 and chain ends can meet send emails to chain participants
-
-                if(chain.Count() > 2 &&
+            foreach (List<PendingRequest> chain in chains)
+            {
+                if (chain.Count() > 2 &&
                     chain.First().KindergardenWishIds.First() ==
                     chain.Last().FromKindergardenId)
-                sendRotationalMatchEmails(chain);
-                    //mail table
-            
+                    sendRotationalMatchEmails(chain);
+                return;
+                //mail table
+            }
 
         }
 
