@@ -38,7 +38,7 @@
         "handlebars": "^4.4.0",
         "js-beautify": "^1.10.2",
         "mkdirp": "^0.5.1",
-        "node-sass": "^4.12.0",
+        "node-sass": "^4.13.1",
         "nodemon": "^1.19.3",
         "postcss-flexbugs-fixes": "^4.1.0",
         "require-dir": "^1.2.0",
