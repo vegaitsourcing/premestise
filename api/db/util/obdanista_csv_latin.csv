@@ -557,11 +557,11 @@ Požarevac,Golubac,Golubac,PU Lasta,Predškolska ustanova Lasta,Kapetan Mišina,
 Čačak,Gornji Milanovac,Gornji Milanovac,PU Sunce,Predškolska ustanova Sunce Objekat II,Železnička,bb,32300,Izdvojena lokacija
 Čačak,Gornji Milanovac,Pranjani,PU Sunce,Predškolska ustanova Sunce objekat u Pranjanima,Pranjani,bb,32308,Izdvojena lokacija
 Čačak,Gornji Milanovac,Rudnik,PU Sunce,Predškolska ustanova Sunce Objekat Rudnik,Rudnik,bb,32313,Izdvojena lokacija
-Jagodina,Despotovac,Despotovac,PU Rada Miljković,Predškolska ustanova ''Rada Miljković'',BELjANIČKA,1,35213,Matična lokacija
-Jagodina,Despotovac,Veliki Popović,PU Rada Miljković,Predškolska ustanova ''Rada Miljković'' Objekat ''Leptirić'''''',Veliki Popović,bb,35223,Izdvojena lokacija
-Jagodina,Despotovac,Jasenovo,PU Rada Miljković,Predškolska ustanova ''Rada Miljković'' Objekat ''Sunce''',Jasenovo,bb,35241,Izdvojena lokacija
-Jagodina,Despotovac,Lomnica,PU Rada Miljković,Predškolska ustanova ''Rada Miljković'' Objekat ''Neven'',Lomnica,bb,35213,Izdvojena lokacija
-Jagodina,Despotovac,Resavica,PU Rada Miljković,Predškolska ustanova ''Rada Miljković'' Objekat ''Zujalica'',Ivo Lole Ribara,bb,35237,Izdvojena lokacija
+Jagodina,Despotovac,Despotovac,PU Rada Miljković,Predškolska ustanova Rada Miljković,BELjANIČKA,1,35213,Matična lokacija
+Jagodina,Despotovac,Veliki Popović,PU Rada Miljković,Predškolska ustanova Rada Miljković Objekat Leptirić,Veliki Popović,bb,35223,Izdvojena lokacija
+Jagodina,Despotovac,Jasenovo,PU Rada Miljković,Predškolska ustanova Rada Miljković Objekat Sunce,Jasenovo,bb,35241,Izdvojena lokacija
+Jagodina,Despotovac,Lomnica,PU Rada Miljković,Predškolska ustanova Rada Miljković Objekat Neven,Lomnica,bb,35213,Izdvojena lokacija
+Jagodina,Despotovac,Resavica,PU Rada Miljković,Predškolska ustanova Rada Miljković Objekat Zujalica,Ivo Lole Ribara,bb,35237,Izdvojena lokacija
 Niš,Dimitrovgrad,Dimitrovgrad,PU 8. septembar,PU8.SEPTEMBAR,Svetosavska,2,18320,Matična lokacija
 Niš,Dimitrovgrad,Dimitrovgrad,PU 8. septembar,Leptirić,Boško Buha,bb,18320,Izdvojena lokacija
 Niš,Dimitrovgrad,Željuša,PU 8. septembar,Kolibri,Željuša,bb,18320,Izdvojena lokacija
@@ -2358,11 +2358,11 @@ Požarevac,Golubac,Golubac,PU Lasta,Predškolska ustanova Lasta,Kapetan Mišina,
 Čačak,Gornji Milanovac,Gornji Milanovac,PU Sunce,Predškolska ustanova Sunce Objekat II,Železnička,bb,32300,Izdvojena lokacija
 Čačak,Gornji Milanovac,Pranjani,PU Sunce,Predškolska ustanova Sunce objekat u Pranjanima,Pranjani,bb,32308,Izdvojena lokacija
 Čačak,Gornji Milanovac,Rudnik,PU Sunce,Predškolska ustanova Sunce Objekat Rudnik,Rudnik,bb,32313,Izdvojena lokacija
-Jagodina,Despotovac,Despotovac,PU Rada Miljković,Predškolska ustanova ''Rada Miljković'',BELjANIČKA,1,35213,Matična lokacija
-Jagodina,Despotovac,Veliki Popović,PU Rada Miljković,Predškolska ustanova ''Rada Miljković'' Objekat ''Leptirić'''''',Veliki Popović,bb,35223,Izdvojena lokacija
-Jagodina,Despotovac,Jasenovo,PU Rada Miljković,Predškolska ustanova ''Rada Miljković'' Objekat ''Sunce''',Jasenovo,bb,35241,Izdvojena lokacija
-Jagodina,Despotovac,Lomnica,PU Rada Miljković,Predškolska ustanova ''Rada Miljković'' Objekat ''Neven'',Lomnica,bb,35213,Izdvojena lokacija
-Jagodina,Despotovac,Resavica,PU Rada Miljković,Predškolska ustanova ''Rada Miljković'' Objekat ''Zujalica'',Ivo Lole Ribara,bb,35237,Izdvojena lokacija
+Jagodina,Despotovac,Despotovac,PU Rada Miljković,Predškolska ustanova Rada Miljković,BELjANIČKA,1,35213,Matična lokacija
+Jagodina,Despotovac,Veliki Popović,PU Rada Miljković,Predškolska ustanova Rada Miljković Objekat Leptirić,Veliki Popović,bb,35223,Izdvojena lokacija
+Jagodina,Despotovac,Jasenovo,PU Rada Miljković,Predškolska ustanova Rada Miljković Objekat Sunce,Jasenovo,bb,35241,Izdvojena lokacija
+Jagodina,Despotovac,Lomnica,PU Rada Miljković,Predškolska ustanova Rada Miljković Objekat Neven,Lomnica,bb,35213,Izdvojena lokacija
+Jagodina,Despotovac,Resavica,PU Rada Miljković,Predškolska ustanova Rada Miljković Objekat Zujalica,Ivo Lole Ribara,bb,35237,Izdvojena lokacija
 Niš,Dimitrovgrad,Dimitrovgrad,PU 8. septembar,PU8.SEPTEMBAR,Svetosavska,2,18320,Matična lokacija
 Niš,Dimitrovgrad,Dimitrovgrad,PU 8. septembar,Leptirić,Boško Buha,bb,18320,Izdvojena lokacija
 Niš,Dimitrovgrad,Željuša,PU 8. septembar,Kolibri,Željuša,bb,18320,Izdvojena lokacija
