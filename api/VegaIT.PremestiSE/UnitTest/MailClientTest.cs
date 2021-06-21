@@ -1,6 +1,7 @@
 ﻿using System.Net.Mail;
 using Core.Clients;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -23,7 +24,8 @@ namespace UnitTest
             section.Setup(x => x.Value).Returns(ToEmail);
             var config = new Mock<IConfiguration>();
             config.Setup(x => x.GetSection(It.IsAny<string>())).Returns(section.Object);
-            _mailClient = new MailClient(factory.Object, config.Object, null);
+            var logger = new Mock<ILogger<MailClient>>();
+            _mailClient = new MailClient(factory.Object, config.Object, null, logger.Object);
         }
 
         //[Fact]

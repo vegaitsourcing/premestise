@@ -1,17 +1,16 @@
-﻿using System;
-using Core.Interfaces.Models;
+﻿using Core.Interfaces.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Persistence.Interfaces.Contracts;
+using Persistence.Interfaces.Entites;
+using System;
 using System.Collections.Generic;
-using System.Net.Mail;
-using System.Text;
 using System.IO;
+using System.Net.Mail;
 using System.Net.Mime;
+using System.Text;
 using Util;
 using Util.Enums;
-using Persistence.Repositories;
-using Persistence.Interfaces.Contracts;
-using Core.Services.Mappers;
-using Persistence.Interfaces.Entites;
 
 namespace Core.Clients
 {
@@ -44,13 +43,15 @@ namespace Core.Clients
         private readonly string _matchTemplatePath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\index.htm";
         private readonly string _bannerPath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\images\\top-banner.jpg";
         private readonly string _footerPath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\images\\logo-footer.png";
+        private readonly ILogger<MailClient> _logger;
 
-        public MailClient(ISmtpClientFactory smtpClientFactory, IConfiguration config, IKindergardenRepository kindergardenRepository)
+        public MailClient(ISmtpClientFactory smtpClientFactory, IConfiguration config, IKindergardenRepository kindergardenRepository, ILogger<MailClient> logger)
         {
             _smtpClientFactory = smtpClientFactory;
             _kindergardenRepository = kindergardenRepository;
             _defaultEmail = config.GetSection("DefaultEmail").Value;
             _environment = config.GetSection("env").Value;
+            _logger = logger;
         }
 
         public void Send(string toEmail, string message)
@@ -106,7 +107,6 @@ namespace Core.Clients
                 mailText = mailText.Replace("[[PHONE_NUMBER]]", request.PhoneNumber);
                 mailText = mailText.Replace("[[URL_ENV]]", _environment);
                 mailText = mailText.Replace("[[FROM_KINDERGARDEN]]", $"- {fromKindergarden.Name}");
-               
                 mailText = mailText.Replace("[[HASHED_ID]]", request.Id);
 
                 StringBuilder toKindergardensBuilder = new StringBuilder();
@@ -202,7 +202,7 @@ namespace Core.Clients
                 using (StreamReader reader = new StreamReader(_circularTemplatePath))
                 {
                     string mailText = reader.ReadToEnd();
-                   
+
                     mailText = mailText.Replace("[[CHAIN_LENGTH]]", validChain.Count.ToString());
                     mailText = mailText.Replace("[[CHILD_GROUP]]", ageGroup);
                     mailText = mailText.Replace("[[HASHED_ID]]", HashId.Encode(validChain[i].Id));
@@ -239,7 +239,6 @@ namespace Core.Clients
                     Send(validChain[i].ParentEmail, new List<AlternateView> { messageAltView, bannerImageAltView, footerImageAltView });
                 }
             }
-            
         }
     }
 }
