@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Persistence.Interfaces.Entites.Exceptions;
 using System;
@@ -12,11 +13,17 @@ namespace VegaIT.PremestiSE
 {
     public class ExceptionHandler : ExceptionFilterAttribute
     {
+        private readonly ILogger<ExceptionHandler> _logger;
 
+        public ExceptionHandler(ILogger<ExceptionHandler> logger)
+        {
+            _logger = logger;
+        }
 
         public override void OnException(ExceptionContext context)
         {
             var exception = context.Exception;
+            _logger.LogError(exception, exception.Message);
 
             if (exception is EntityNotFoundException)
             {

@@ -30,7 +30,6 @@ namespace VegaIT.PremestiSE
             {
                 config.Filters.Add(typeof(ExceptionHandler));
             });
-
             services.AddScoped<IKindergardenService, KindergardenService>();
             services.AddScoped<IMatchService, MatchService>();
             services.AddScoped<IRequestService, RequestService>();
@@ -55,12 +54,11 @@ namespace VegaIT.PremestiSE
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseMvc();
-            
+
             app.Run(async (context) =>
             {
                 context.Response.ContentType = "text/html";

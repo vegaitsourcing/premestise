@@ -25,7 +25,7 @@ namespace UnitTest
             var config = new Mock<IConfiguration>();
             config.Setup(x => x.GetSection(It.IsAny<string>())).Returns(section.Object);
             var logger = new Mock<ILogger<MailClient>>();
-            _mailClient = new MailClient(factory.Object, config.Object, null, logger.Object);
+            _mailClient = new MailClient(factory.Object, config.Object, null);
         }
 
         //[Fact]

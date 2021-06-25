@@ -3,7 +3,9 @@ using System.Net.Mail;
 using Core.Interfaces.Intefaces;
 using Core.Interfaces.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Util;
+
 namespace VegaIT.PremestiSE.Controllers
 {
     [ApiController]
@@ -12,30 +14,34 @@ namespace VegaIT.PremestiSE.Controllers
     {
         private readonly IRequestService _requestService;
         private readonly IMatchService _matchService;
+        private readonly ILogger<RequestController> _logger;
 
-        public RequestController(IRequestService service, IMatchService matchService)
+        public RequestController(IRequestService service, IMatchService matchService, ILogger<RequestController> logger)
         {
             _requestService = service;
             _matchService = matchService;
+            _logger = logger;
         }
 
         [HttpPost]
         public IActionResult Create([FromBody] RequestDto newRequest)
         {
+            _logger.LogTrace("Create request");
             if (!ModelState.IsValid)
             {
+                _logger.LogError("Model Invalid");
                 return BadRequest();
             }
+
             RequestDto result;
             try
             {
                 result = _requestService.CreatePending(newRequest);
-            }
-            catch(SmtpException)
+            } catch(SmtpException e)
             {
+                _logger.LogError(e, e.Message);
                 return BadRequest();
             }
-             
 
             return Created(Request.Host + Request.Path + result.Id, result);
         }
@@ -44,14 +50,32 @@ namespace VegaIT.PremestiSE.Controllers
         [Route("pending")]
         public IActionResult GetAllPending()
         {
-            return Ok(_requestService.GetAllPending());
+            _logger.LogTrace("Get all pending requests");
+            try
+            {
+                return Ok(_requestService.GetAllPending());
+            } catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+            }
+
+            return BadRequest();
         }
 
         [HttpGet]
         [Route("matched")]
         public IActionResult GetAllMatched()
         {
-            return Ok(_requestService.GetAllMatched());
+            _logger.LogTrace("Get all matched requests");
+            try
+            {
+                return Ok(_requestService.GetAllMatched());
+            } catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+            }
+
+            return BadRequest();
         }
 
         [HttpGet]
@@ -66,14 +90,31 @@ namespace VegaIT.PremestiSE.Controllers
         [Route("latest")]
         public IActionResult GetLatest()
         {
-            return Ok(_requestService.GetLatest());
+            _logger.LogTrace("get latest pending request");
+            try
+            {
+                return Ok(_requestService.GetLatest());
+            } catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+            }
+
+            return BadRequest();
         }
 
         [HttpGet]
         [Route("allWishes")]
         public IActionResult GetAllWishes()
         {
-            return Ok(_requestService.GetAllPendingWishes());
+            _logger.LogTrace("Get all wishes");
+            try
+            {
+                return Ok(_requestService.GetAllPendingWishes());
+            }catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+            }
+            return BadRequest();
         }
         /*
         [HttpDelete]

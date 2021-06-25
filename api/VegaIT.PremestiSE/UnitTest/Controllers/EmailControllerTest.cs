@@ -15,7 +15,7 @@ namespace UnitTest
         public EmailControllerTest()
         {
             _matchService = new Mock<IMatchService>();
-            _emailController = new EmailController(_matchService.Object);
+            _emailController = new EmailController(_matchService.Object, null);
         }
 
         [Fact]

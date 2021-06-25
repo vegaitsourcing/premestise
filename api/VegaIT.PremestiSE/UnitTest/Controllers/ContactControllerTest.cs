@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Core.Clients;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using Moq;
 using VegaIT.PremestiSE.Controllers;
@@ -14,11 +15,13 @@ namespace UnitTest
     {
         private readonly ContactController _controller;
         private readonly Mock<IMailClient> _mailClient;
+        private readonly Mock<ILogger<ContactController>> _logger;
         
         public ContactControllerTest()
         {
             _mailClient = new Mock<IMailClient>();
-            _controller = new ContactController(_mailClient.Object, null);
+            _logger = new Mock<ILogger<ContactController>>();
+            _controller = new ContactController(_mailClient.Object, null, _logger.Object);
         }
 
         public void Dispose()

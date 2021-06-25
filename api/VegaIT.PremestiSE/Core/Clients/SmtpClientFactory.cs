@@ -10,8 +10,8 @@ namespace Core.Clients
 
     public class SmtpClientFactory : ISmtpClientFactory
     {
-        public const string DefaultUsername = "premestisecfc3@gmail.com";
-        public const string DefaultPassword = "codeforacause3";
+        public const string DefaultUsername = "n.malocic@vegait.rs";
+        public const string DefaultPassword = "xXYMbrS#e0Sm6DhLyTokQk4z";
         private static readonly NetworkCredential Credential =
             new NetworkCredential(DefaultUsername, DefaultPassword);
 

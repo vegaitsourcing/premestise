@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Util;
 using System;
 using System.Net.Mail;
+using Microsoft.Extensions.Logging;
 
 namespace VegaIT.PremestiSE.Controllers
 {
@@ -11,10 +12,12 @@ namespace VegaIT.PremestiSE.Controllers
     public class EmailController : Controller
     {
         private readonly IMatchService _matchService;
+        private readonly ILogger<EmailController> _logger;
 
-        public EmailController(IMatchService service)
+        public EmailController(IMatchService service, ILogger<EmailController> logger)
         {
             _matchService = service;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -29,6 +32,7 @@ namespace VegaIT.PremestiSE.Controllers
             }
             catch (SmtpException e)
             {
+                _logger.LogError(e, e.Message);
                 return BadRequest();
             }
             
@@ -44,9 +48,10 @@ namespace VegaIT.PremestiSE.Controllers
             {
                 _matchService.ConfirmMatch(decodedId);
             }
-            catch(SmtpException)
+            catch(SmtpException e)
             {
-
+                _logger.LogError(e, e.Message);
+                return BadRequest();
             }
             
             return Ok();
@@ -62,8 +67,9 @@ namespace VegaIT.PremestiSE.Controllers
                 int newId = _matchService.Unmatch(decodedId);
                 _matchService.TryMatch(newId);
             }
-            catch(SmtpException)
+            catch(SmtpException e)
             {
+                _logger.LogError(e, e.Message);
                 return BadRequest();
             }
             

@@ -1,6 +1,5 @@
 ﻿using Core.Interfaces.Models;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Persistence.Interfaces.Contracts;
 using Persistence.Interfaces.Entites;
 using System;
@@ -9,8 +8,10 @@ using System.IO;
 using System.Net.Mail;
 using System.Net.Mime;
 using System.Text;
-using Util;
 using Util.Enums;
+using RazorEngine;
+using RazorEngine.Templating;
+using Core.Services;
 
 namespace Core.Clients
 {
@@ -31,6 +32,7 @@ namespace Core.Clients
         private readonly string _environment;
         private readonly ISmtpClientFactory _smtpClientFactory;
         private readonly IKindergardenRepository _kindergardenRepository;
+        private readonly EmailTemplateService template = new EmailTemplateService();
 
         private const string _unmatchPageUrl = "placeholder";
         private const string _verificationPageUrl = "placeholder";
@@ -43,15 +45,13 @@ namespace Core.Clients
         private readonly string _matchTemplatePath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\index.htm";
         private readonly string _bannerPath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\images\\top-banner.jpg";
         private readonly string _footerPath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\images\\logo-footer.png";
-        private readonly ILogger<MailClient> _logger;
 
-        public MailClient(ISmtpClientFactory smtpClientFactory, IConfiguration config, IKindergardenRepository kindergardenRepository, ILogger<MailClient> logger)
+        public MailClient(ISmtpClientFactory smtpClientFactory, IConfiguration config, IKindergardenRepository kindergardenRepository)
         {
             _smtpClientFactory = smtpClientFactory;
             _kindergardenRepository = kindergardenRepository;
             _defaultEmail = config.GetSection("DefaultEmail").Value;
             _environment = config.GetSection("env").Value;
-            _logger = logger;
         }
 
         public void Send(string toEmail, string message)
@@ -170,8 +170,6 @@ namespace Core.Clients
             mail = mail.Replace("[[MATCHED_REQUEST_ID]]", firstMatch.Id);
             mail = mail.Replace("[[URL_ENV]]", _environment);
 
-
-
             List<AlternateView> mailViews = new List<AlternateView>()
             {
                 // image alternate views
@@ -191,52 +189,62 @@ namespace Core.Clients
             //popuni listu, iz svakog zahteva iz lanca izvuci odakle se zeli premestaj sto ce biti dovoljno za email
             foreach (MatchedRequest request in validChain)
             {
-                fromRequestsKindergardens.Add(
-                        _kindergardenRepository.GetById(request.FromKindergardenId));
+                fromRequestsKindergardens.Add(_kindergardenRepository.GetById(request.FromKindergardenId));
             }
             var groupMapper = new AgeGroupMapper();
             string ageGroup = groupMapper.mapGroupToText(validChain[0].Group);
-
+            List<MatchEmailInformation> emails = new List<MatchEmailInformation>();
+            List<MatchInformation> matches = new List<MatchInformation>();
             for (var i = 0; i < validChain.Count; i++)
+            {
+                MatchInformation current = new MatchInformation();
+                current.FirstParentName = validChain[i].ParentName;
+                current.FirstParentEmail = validChain[i].ParentEmail;
+                current.FirstParentPhone = validChain[i].ParentPhoneNumber;
+                current.FromKindergarden = fromRequestsKindergardens[i].Name;
+
+                if ( i < validChain.Count -1)
+                {
+                    current.SecondParentName = validChain[i + 1].ParentName;
+                    current.SecondParentEmail = validChain[i + 1].ParentEmail;
+                    current.SecondParentPhone = validChain[i + 1].ParentPhoneNumber;
+                    current.ToKindergarden = fromRequestsKindergardens[i + 1].Name;
+                } else 
+                {
+                    current.SecondParentName = validChain[0].ParentName;
+                    current.SecondParentEmail = validChain[0].ParentEmail;
+                    current.SecondParentPhone = validChain[0].ParentPhoneNumber;
+                    current.ToKindergarden = fromRequestsKindergardens[0].Name;
+                }
+                matches.Add(current);
+            }
+
+            foreach (MatchedRequest matchedRequest in validChain)
+            {
+                MatchEmailInformation current = new MatchEmailInformation();
+                current.AgeGroup = ageGroup;
+                current.ChainLength = validChain.Count;
+                current.ToEmail = matchedRequest.ParentEmail;
+                current.Matches = matches;
+                emails.Add(current);
+            }
+
+            foreach (MatchEmailInformation info in emails)
             {
                 using (StreamReader reader = new StreamReader(_circularTemplatePath))
                 {
                     string mailText = reader.ReadToEnd();
 
-                    mailText = mailText.Replace("[[CHAIN_LENGTH]]", validChain.Count.ToString());
-                    mailText = mailText.Replace("[[CHILD_GROUP]]", ageGroup);
-                    mailText = mailText.Replace("[[HASHED_ID]]", HashId.Encode(validChain[i].Id));
-                    mailText = mailText.Replace("[[URL_ENV]]", _environment);
-
-                    mailText = mailText.Replace("[[PERSON_1_NAME]]", validChain[0].ParentName);
-                    mailText = mailText.Replace("[[PERSON_1_EMAIL]]", validChain[0].ParentEmail);
-                    mailText = mailText.Replace("[[PERSON_1_PHONE]]", validChain[0].ParentPhoneNumber);
-
-                    mailText = mailText.Replace("[[PERSON_2_NAME]]", validChain[1].ParentName);
-                    mailText = mailText.Replace("[[PERSON_2_EMAIL]]", validChain[1].ParentEmail);
-                    mailText = mailText.Replace("[[PERSON_2_PHONE]]", validChain[1].ParentPhoneNumber);
-
-                    mailText = mailText.Replace("[[PERSON_3_NAME]]", validChain[2].ParentName);
-                    mailText = mailText.Replace("[[PERSON_3_EMAIL]]", validChain[2].ParentEmail);
-                    mailText = mailText.Replace("[[PERSON_3_PHONE]]", validChain[2].ParentPhoneNumber);
-
-                    mailText = mailText.Replace("[[FROM_KINDERGARDEN_1]]", fromRequestsKindergardens[0].Name);
-                    mailText = mailText.Replace("[[FROM_KINDERGARDEN_2]]", fromRequestsKindergardens[1].Name);
-                    mailText = mailText.Replace("[[FROM_KINDERGARDEN_3]]", fromRequestsKindergardens[2].Name);
-
-
                     AlternateView bannerImageAltView = new AlternateView(_bannerPath, MediaTypeNames.Image.Jpeg);
                     AlternateView footerImageAltView = new AlternateView(_footerPath, MediaTypeNames.Image.Jpeg);
                     bannerImageAltView.TransferEncoding = TransferEncoding.Base64;
                     footerImageAltView.TransferEncoding = TransferEncoding.Base64;
+                    info.TopBannerLogo = $"cid:{bannerImageAltView.ContentId}";
+                    info.FooterLogo = $"cid:{footerImageAltView.ContentId}";
 
-                    mailText = mailText.Replace("[[TOP_BANNER_LOGO_SRC]]", $"cid:{bannerImageAltView.ContentId}");
-                    mailText = mailText.Replace("[[FOOTER_LOGO_SRC]]", $"cid:{footerImageAltView.ContentId}");
-
-                    AlternateView messageAltView = AlternateView.CreateAlternateViewFromString(mailText, null, MediaTypeNames.Text.Html);
-
-
-                    Send(validChain[i].ParentEmail, new List<AlternateView> { messageAltView, bannerImageAltView, footerImageAltView });
+                    var result = Engine.Razor.RunCompile(mailText, "templateKey", typeof(MatchEmailInformation), info);
+                    AlternateView messageAltView = AlternateView.CreateAlternateViewFromString(result, null, MediaTypeNames.Text.Html);
+                    Send(info.ToEmail, new List<AlternateView> { messageAltView, bannerImageAltView, footerImageAltView });
                 }
             }
         }

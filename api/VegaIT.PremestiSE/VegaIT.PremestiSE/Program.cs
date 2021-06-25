@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Serilog;
 
@@ -14,10 +13,10 @@ namespace VegaIT.PremestiSE
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-            .UseSerilog((context, config) => config.ReadFrom.Configuration(context.Configuration))
-            .UseStartup<Startup>()
-            .UseIIS()
-            .CaptureStartupErrors(true)
-            .Build();
+                .UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration))
+                .UseStartup<Startup>()
+                .UseIIS()
+                .CaptureStartupErrors(true)
+                .Build();
     }
 }
