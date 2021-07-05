@@ -25,7 +25,6 @@ namespace VegaIT.PremestiSE.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] ContactFormDto form)
         {
-            throw new System.Exception("Unhendled");
             _logger.LogTrace("Contact");
             if (!ModelState.IsValid)
             {
