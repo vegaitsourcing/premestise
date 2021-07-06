@@ -39,7 +39,7 @@ namespace VegaIT.PremestiSE.Controllers
             _logger.LogError("Cities");
             try
             {
-                return Ok(_kindergardenService.GetAllKindergardenCities());
+                return Ok(_kindergardenService.GetAllActiveCities());
             } catch (Exception e)
             {
                 _logger.LogError(e, e.Message);

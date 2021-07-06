@@ -10,6 +10,8 @@ namespace Core.Interfaces.Intefaces
         IEnumerable<KindergardenDto> GetAll();
         IEnumerable<KindergardenDto> GetToKindergardens(int requestId);
         IEnumerable<string> GetAllKindergardenCities();
+
+        IEnumerable<string> GetAllActiveCities();
         IEnumerable<KindergardenDto> GetKindergardensByCity(string city);
     }
 }

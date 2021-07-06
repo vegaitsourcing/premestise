@@ -60,6 +60,32 @@ namespace Persistence.Repositories
             return kindergardens;
         }
 
+        public IEnumerable<string> GetAllActiveCities()
+        {
+            List<string> cities = new List<string>();
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = _connString;
+                conn.Open();
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = @"SELECT DISTINCT city FROM kindergarden WHERE IsActive = 1;";
+
+                using (SqlDataAdapter dataAdapter = new SqlDataAdapter())
+                {
+                    DataSet dataSet = new DataSet();
+
+                    dataAdapter.SelectCommand = cmd;
+                    dataAdapter.Fill(dataSet, "kindergarden");
+
+                    foreach (DataRow row in dataSet.Tables["kindergarden"].Rows)
+                    {
+                        cities.Add((string)row["city"]);
+                    }
+                }
+            }
+            return cities;
+        }
+
         public List<string> GetAllCities()
         {
             List<string> cities = new List<string>();

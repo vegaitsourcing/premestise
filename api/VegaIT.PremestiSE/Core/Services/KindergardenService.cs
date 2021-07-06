@@ -33,6 +33,11 @@ namespace Core.Services
             return _kindergardenRepository.GetAllCities();
         }
 
+        public IEnumerable<string> GetAllActiveCities()
+        {
+            return _kindergardenRepository.GetAllActiveCities();
+        }
+
         public IEnumerable<KindergardenDto> GetKindergardensByCity(string city)
         {
             KindergardenMapper kindergardenMapper = new KindergardenMapper();

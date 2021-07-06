@@ -9,6 +9,8 @@ namespace Persistence.Interfaces.Contracts
         List<Kindergarden> GetAll();
         List<Kindergarden> GetToByRequestId(int id);
         List<string> GetAllCities();
+
+        IEnumerable<string> GetAllActiveCities();
         List<Kindergarden> GetKindergardensByCity(string city);
     }
 }
