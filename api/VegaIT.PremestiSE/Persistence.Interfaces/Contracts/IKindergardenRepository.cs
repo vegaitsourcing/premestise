@@ -6,6 +6,9 @@ namespace Persistence.Interfaces.Contracts
     public interface IKindergardenRepository
     {
         Kindergarden GetById(int id);
+
+        KindergardenEmailInfo GetForEmailById(int id);
+
         List<Kindergarden> GetAll();
         List<Kindergarden> GetToByRequestId(int id);
         List<string> GetAllCities();

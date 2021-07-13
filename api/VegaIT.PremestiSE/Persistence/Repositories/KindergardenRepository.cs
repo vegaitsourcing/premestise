@@ -176,6 +176,34 @@ namespace Persistence.Repositories
             }
         }
 
+        public KindergardenEmailInfo GetForEmailById(int id)
+        {
+            using (SqlConnection conn = new SqlConnection())
+            {
+                conn.ConnectionString = _connString;
+                conn.Open();
+
+                SqlCommand cmd = conn.CreateCommand();
+
+                cmd.CommandText = @"SELECT k.id, k.name, kc.email FROM kindergarden k INNER JOIN kindergarden_central kc ON k.central = kc.id WHERE k.id=@Id;";
+                cmd.Parameters.Add(new SqlParameter("Id", id));
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (!reader.Read())
+                {
+                    throw new EntityNotFoundException();
+                }
+
+                return new KindergardenEmailInfo
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1),
+                    Email = reader.GetString(2),
+                };
+            }
+        }
+
         public List<Kindergarden> GetKindergardensByCity(string city)
         {
             
