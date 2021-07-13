@@ -26,12 +26,9 @@ namespace UnitTest.Services
             };
             MatchInformation first = new MatchInformation
             {
-                FirstParentEmail = "first@email.com",
-                FirstParentName = "First Parent",
-                FirstParentPhone = "0523412",
-                SecondParentEmail = "second@email.com",
-                SecondParentName = "Second Parent",
-                SecondParentPhone = "05234 234 123",
+                Email = "first@email.com",
+                Name = "First Parent",
+                Phone = "0523412",
                 FromKindergarden = "First Kindergarden",
                 ToKindergarden = "Second kindergarden"
             };
@@ -39,12 +36,9 @@ namespace UnitTest.Services
 
             MatchInformation second = new MatchInformation
             {
-                FirstParentEmail = "Second@email.com",
-                FirstParentName = "Second Parent",
-                FirstParentPhone = "0523412",
-                SecondParentEmail = "Third@email.com",
-                SecondParentName = "Third Parent",
-                SecondParentPhone = "05234 234 123",
+                Email = "Second@email.com",
+                Name = "Second Parent",
+                Phone = "0523412",
                 FromKindergarden = "Second Kindergarden",
                 ToKindergarden = "Third kindergarden"
             };
@@ -52,12 +46,9 @@ namespace UnitTest.Services
 
             MatchInformation third = new MatchInformation
             {
-                FirstParentEmail = "third@email.com",
-                FirstParentName = "third Parent",
-                FirstParentPhone = "0523412",
-                SecondParentEmail = "fourth@email.com",
-                SecondParentName = "Fourth Parent",
-                SecondParentPhone = "05234 234 123",
+                Email = "third@email.com",
+                Name = "third Parent",
+                Phone = "0523412",
                 FromKindergarden = "Third Kindergarden",
                 ToKindergarden = "Fourth kindergarden"
             };
@@ -65,12 +56,9 @@ namespace UnitTest.Services
 
             MatchInformation fouth = new MatchInformation
             {
-                FirstParentEmail = "fourth@email.com",
-                FirstParentName = "fourth Parent",
-                FirstParentPhone = "0523412",
-                SecondParentEmail = "first@email.com",
-                SecondParentName = "First Parent",
-                SecondParentPhone = "05234 234 123",
+                Email = "fourth@email.com",
+                Name = "fourth Parent",
+                Phone = "0523412",
                 FromKindergarden = "Fourth Kindergarden",
                 ToKindergarden = "First kindergarden"
             };

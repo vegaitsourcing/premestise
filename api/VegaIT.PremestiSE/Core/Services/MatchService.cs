@@ -71,8 +71,6 @@ namespace Core.Services
 
             }
 
-
-
             //if initial two chain elements can meet ends then it is over send them emails
             foreach (List<PendingRequest> chain in chains)
             {
@@ -127,89 +125,29 @@ namespace Core.Services
 
         }
 
-
         private void sendRotationalMatchEmails(IEnumerable<PendingRequest> validChain)
         {
             Match addedMatch = null;
-            MatchedRequest firstMatchedRequest = null;
-            MatchedRequest secondMatchedRequest = null;
-            PendingRequest currentPending = null;
-            PendingRequest incomingRequest = validChain.Last();
-            var requestMapper = new RequestMapper();
-            var kindergardenMapper = new KindergardenMapper();
-
-            KindergardenDto fromKindergarden = null;
-            KindergardenDto toKindergarden = null;
-
             List<MatchedRequest> chainRequests = null;
-            RequestDto firstMatchDto = null;
-            RequestDto secondMatchDto = null;
-
-            List<int> directPendingMatchIdsToRemove = new List<int>(2);
             List<int> circularPendingMatchIdsToRemove = new List<int>(12);
-
-            var chainLength = validChain.Count();
-
-
-
-
-            if (chainLength == 2)
-            {
-
-                directPendingMatchIdsToRemove.AddRange(validChain.Select(el => el.Id));
-
-                addedMatch = _matchRepository.Create();
-                firstMatchedRequest = _matchedRequestRepository.Create(validChain.ElementAt(1), addedMatch.Id);
-                secondMatchedRequest = _matchedRequestRepository.Create(validChain.ElementAt(0), addedMatch.Id);
-
-                foreach (int toRemovePendingId in directPendingMatchIdsToRemove)
-                {
-                    _pendingRequestRepository.Delete(toRemovePendingId);
-                }
-
-                fromKindergarden =
-                   kindergardenMapper.DtoFromEntity(
-                       _kindergardenRepository.GetById(firstMatchedRequest.FromKindergardenId));
-                toKindergarden = kindergardenMapper.DtoFromEntity(
-                   _kindergardenRepository.GetById(secondMatchedRequest.FromKindergardenId));
-
-                firstMatchDto = requestMapper.DtoFromEntity(firstMatchedRequest);
-                secondMatchDto = requestMapper.DtoFromEntity(secondMatchedRequest);
-
-
-                _mailClient.SendFoundMatchMessage(firstMatchDto,
-                                                secondMatchDto,
-                                                fromKindergarden,
-                                                toKindergarden);
-
-                
-            }
-
-            if (chainLength > 2)
-            {
-                circularPendingMatchIdsToRemove.AddRange(validChain.Select(el => el.Id));
-
-                chainRequests = new List<MatchedRequest>(validChain.Count());
-                addedMatch = _matchRepository.Create();
-
-                for (var i = 0; i < validChain.Count(); i++)
-                {
-                    chainRequests.Add(_matchedRequestRepository.Create(validChain.ElementAt(i), addedMatch.Id));
-                }
-
-                foreach (int toRemovePendingId in circularPendingMatchIdsToRemove)
-                {
-                    _pendingRequestRepository.Delete(toRemovePendingId);
-                }
-
-                chainRequests.Reverse();
-                _mailClient.SendCircularMatchMessage(chainRequests);
-
-
-
-            }
-
             
+            circularPendingMatchIdsToRemove.AddRange(validChain.Select(el => el.Id));
+            chainRequests = new List<MatchedRequest>(validChain.Count());
+            addedMatch = _matchRepository.Create();
+
+            for (var i = 0; i < validChain.Count(); i++)
+            {
+                chainRequests.Add(_matchedRequestRepository.Create(validChain.ElementAt(i), addedMatch.Id));
+            }
+
+            foreach (int toRemovePendingId in circularPendingMatchIdsToRemove)
+            {
+                _pendingRequestRepository.Delete(toRemovePendingId);
+            }
+
+            chainRequests.Reverse();
+            _mailClient.SendCircularMatchMessage(chainRequests);
+
 
             /// TREBA OBRISATI PENDING ZAHTEVE POSLE MATCHA
 

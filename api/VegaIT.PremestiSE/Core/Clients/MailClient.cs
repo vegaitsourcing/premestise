@@ -12,13 +12,14 @@ using Util.Enums;
 using RazorEngine;
 using RazorEngine.Templating;
 using Core.Services;
+using System.Linq;
 
 namespace Core.Clients
 {
     public interface IMailClient
     {
         void Send(string fromEmail, string message);
-        void Send(string fromEmail, List<AlternateView> altViews);
+        void Send(string fromEmail, List<AlternateView> altViews, IEnumerable<string> ccEmails = null);
         void SendVerificationMessage(RequestDto request, KindergardenDto fromKindergarden, IEnumerable<KindergardenDto> wishes);
         void SendFoundMatchMessage(RequestDto firstMatch, RequestDto secondMatch, KindergardenDto from, KindergardenDto to);
         void SendCircularMatchMessage(List<MatchedRequest> validChain);
@@ -45,6 +46,7 @@ namespace Core.Clients
         private readonly string _matchTemplatePath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\index.htm";
         private readonly string _bannerPath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\images\\top-banner.jpg";
         private readonly string _footerPath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\images\\logo-footer.png";
+        private readonly string _parentTemplatePath = $"{Directory.GetParent(Environment.CurrentDirectory)}\\Core\\Templates\\parent.htm";
 
         public MailClient(ISmtpClientFactory smtpClientFactory, IConfiguration config, IKindergardenRepository kindergardenRepository)
         {
@@ -70,8 +72,10 @@ namespace Core.Clients
             }
         }
 
-        public void Send(string toEmail, List<AlternateView> altViews)
+        public void Send(string toEmail, List<AlternateView> altViews, IEnumerable<string> ccEmails = null)
         {
+            ccEmails = ccEmails ?? Enumerable.Empty<string>();
+
             using (var smtpClient = _smtpClientFactory.CreateDefaultClient())
             {
                 MailAddress receiverEmail = new MailAddress(toEmail);
@@ -80,7 +84,13 @@ namespace Core.Clients
                 {
                     mail.Subject = Subject;
                     foreach (AlternateView altView in altViews)
+                    {
                         mail.AlternateViews.Add(altView);
+                    }
+                    foreach(string cc in ccEmails)
+                    {
+                        mail.CC.Add(cc);
+                    }
                     mail.IsBodyHtml = true;
                     smtpClient.Send(mail);
                 }
@@ -185,51 +195,47 @@ namespace Core.Clients
 
         public void SendCircularMatchMessage(List<MatchedRequest> validChain)
         {
-            List<Kindergarden> fromRequestsKindergardens = new List<Kindergarden>(validChain.Count);
+            List<KindergardenEmailInfo> fromRequestsKindergardens = new List<KindergardenEmailInfo>(validChain.Count);
             //popuni listu, iz svakog zahteva iz lanca izvuci odakle se zeli premestaj sto ce biti dovoljno za email
             foreach (MatchedRequest request in validChain)
             {
-                fromRequestsKindergardens.Add(_kindergardenRepository.GetById(request.FromKindergardenId));
+                fromRequestsKindergardens.Add(_kindergardenRepository.GetForEmailById(request.FromKindergardenId));
             }
+
+            IEnumerable<string> distinctEmails = fromRequestsKindergardens.Select(x => x.Email).Distinct();
             var groupMapper = new AgeGroupMapper();
             string ageGroup = groupMapper.mapGroupToText(validChain[0].Group);
-            List<MatchEmailInformation> emails = new List<MatchEmailInformation>();
+            List<MatchEmailInformation> emailsForKindergarden = new List<MatchEmailInformation>();
             List<MatchInformation> matches = new List<MatchInformation>();
             for (var i = 0; i < validChain.Count; i++)
             {
                 MatchInformation current = new MatchInformation();
-                current.FirstParentName = validChain[i].ParentName;
-                current.FirstParentEmail = validChain[i].ParentEmail;
-                current.FirstParentPhone = validChain[i].ParentPhoneNumber;
+                current.Name = validChain[i].ParentName;
+                current.Email = validChain[i].ParentEmail;
+                current.Phone = validChain[i].ParentPhoneNumber;
                 current.FromKindergarden = fromRequestsKindergardens[i].Name;
 
                 if ( i < validChain.Count -1)
-                {
-                    current.SecondParentName = validChain[i + 1].ParentName;
-                    current.SecondParentEmail = validChain[i + 1].ParentEmail;
-                    current.SecondParentPhone = validChain[i + 1].ParentPhoneNumber;
+                {   
                     current.ToKindergarden = fromRequestsKindergardens[i + 1].Name;
                 } else 
                 {
-                    current.SecondParentName = validChain[0].ParentName;
-                    current.SecondParentEmail = validChain[0].ParentEmail;
-                    current.SecondParentPhone = validChain[0].ParentPhoneNumber;
                     current.ToKindergarden = fromRequestsKindergardens[0].Name;
                 }
                 matches.Add(current);
             }
 
-            foreach (MatchedRequest matchedRequest in validChain)
+            foreach (string kinderGardenEmail in distinctEmails)
             {
                 MatchEmailInformation current = new MatchEmailInformation();
                 current.AgeGroup = ageGroup;
                 current.ChainLength = validChain.Count;
-                current.ToEmail = matchedRequest.ParentEmail;
+                current.ToEmail = kinderGardenEmail;
                 current.Matches = matches;
-                emails.Add(current);
+                emailsForKindergarden.Add(current);
             }
 
-            foreach (MatchEmailInformation info in emails)
+            foreach (MatchEmailInformation info in emailsForKindergarden)
             {
                 using (StreamReader reader = new StreamReader(_circularTemplatePath))
                 {
@@ -242,7 +248,27 @@ namespace Core.Clients
                     info.TopBannerLogo = $"cid:{bannerImageAltView.ContentId}";
                     info.FooterLogo = $"cid:{footerImageAltView.ContentId}";
 
-                    var result = Engine.Razor.RunCompile(mailText, "templateKey", typeof(MatchEmailInformation), info);
+                    var result = Engine.Razor.RunCompile(mailText, Guid.NewGuid().ToString(), typeof(MatchEmailInformation), info);
+                    AlternateView messageAltView = AlternateView.CreateAlternateViewFromString(result, null, MediaTypeNames.Text.Html);
+                    Send(info.ToEmail, new List<AlternateView> { messageAltView, bannerImageAltView, footerImageAltView });
+                }
+            }
+
+            foreach(MatchedRequest request in validChain)
+            {
+                using (StreamReader reader = new StreamReader(_parentTemplatePath))
+                {
+                    string mailText = reader.ReadToEnd();
+                    MatchEmailInformation info = new MatchEmailInformation();
+                    AlternateView bannerImageAltView = new AlternateView(_bannerPath, MediaTypeNames.Image.Jpeg);
+                    AlternateView footerImageAltView = new AlternateView(_footerPath, MediaTypeNames.Image.Jpeg);
+                    bannerImageAltView.TransferEncoding = TransferEncoding.Base64;
+                    footerImageAltView.TransferEncoding = TransferEncoding.Base64;
+                    info.TopBannerLogo = $"cid:{bannerImageAltView.ContentId}";
+                    info.FooterLogo = $"cid:{footerImageAltView.ContentId}";
+                    info.ToEmail = request.ParentEmail;
+
+                    var result = Engine.Razor.RunCompile(mailText, Guid.NewGuid().ToString(), typeof(MatchEmailInformation), info);
                     AlternateView messageAltView = AlternateView.CreateAlternateViewFromString(result, null, MediaTypeNames.Text.Html);
                     Send(info.ToEmail, new List<AlternateView> { messageAltView, bannerImageAltView, footerImageAltView });
                 }
