@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Microsoft.Extensions.Configuration;
+using System.Net;
 using System.Net.Mail;
 
 namespace Core.Clients
@@ -10,10 +11,14 @@ namespace Core.Clients
 
     public class SmtpClientFactory : ISmtpClientFactory
     {
-        public const string DefaultUsername = "premestisecfc3@gmail.com";
-        public const string DefaultPassword = "codeforacause3";
-        private static readonly NetworkCredential Credential =
-            new NetworkCredential(DefaultUsername, DefaultPassword);
+        private readonly NetworkCredential Credential;
+
+        public SmtpClientFactory(IConfiguration config)
+        {
+            string defaultUsername = config.GetSection("DefaultUsername").Value;
+            string defaultPassword = config.GetSection("DefaultPassword").Value;
+            Credential = new NetworkCredential(defaultUsername, defaultPassword);
+        }
 
         public ISmtpClientWrapper CreateDefaultClient()
         {
